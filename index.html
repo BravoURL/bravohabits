@@ -625,42 +625,49 @@ function isActiveToday(hid){
   return def.freq.split('·').some(x=>m[x.trim()]===d);
 }
 
-async function renderUserScreen(){
+function renderUserScreen(){
   const list=document.getElementById('us-list');
+  if(!list)return;
   list.innerHTML='';
-  // Load streaks for all users
-  const today=ts();
-  let streakData={};
-  try{
-    const wLogs=await sb('weight_logs','GET',null,'?order=logged_date.desc&select=user_id,logged_date&limit=200');
-    allUsers.forEach(usr=>{
-      const uw=(wLogs||[]).filter(w=>w.user_id===usr.id).sort((a,b)=>b.logged_date.localeCompare(a.logged_date));
+  if(!allUsers.length){
+    list.innerHTML='<div style="text-align:center;padding:20px 0;font-family:var(--sm);font-size:11px;color:var(--mi);letter-spacing:.06em">No users yet — add one below</div>';
+    return;
+  }
+  allUsers.forEach(function(usr){
+    const a=age(usr.dob);
+    const btn=document.createElement('button');
+    btn.className='us-card';
+    btn.innerHTML='<div class="us-av" style="background:'+(usr.color||'#5C8A4A')+'">'+(usr.initials||'?')+'</div>'
+      +'<div class="us-info">'
+      +'<div class="us-name">'+(usr.name||usr.display_name||'User')+'</div>'
+      +'<div class="us-meta">'+(a?a+' yrs · ':'')+' → '+(usr.target_kg||'–')+' kg</div>'
+      +'</div>';
+    btn.onclick=function(){selectUser(usr.id);};
+    list.appendChild(btn);
+  });
+  // Load streaks async in background - non-blocking
+  sb('weight_logs','GET',null,'?order=logged_date.desc&select=user_id,logged_date&limit=200').then(function(wLogs){
+    const today=ts();
+    allUsers.forEach(function(usr){
+      const uw=(wLogs||[]).filter(function(w){return w.user_id===usr.id;}).sort(function(a,b){return b.logged_date.localeCompare(a.logged_date);});
       let s=0;
       for(let i=0;i<uw.length;i++){
         const exp=new Date(today);exp.setDate(exp.getDate()-i);
         if(uw[i]&&uw[i].logged_date===exp.toISOString().slice(0,10))s++;else break;
       }
-      streakData[usr.id]=s;
+      if(s>0){
+        // Find the card and append streak badge
+        const cards=list.querySelectorAll('.us-card');
+        const idx=allUsers.indexOf(usr);
+        if(cards[idx]){
+          const badge=document.createElement('div');
+          badge.className='us-streak';
+          badge.textContent='🔥 '+s;
+          cards[idx].appendChild(badge);
+        }
+      }
     });
-  }catch(e){}
-
-  allUsers.forEach(usr=>{
-    const a=age(usr.dob);
-    const streak=streakData[usr.id]||0;
-    const btn=document.createElement('button');
-    btn.className='us-card';
-    btn.innerHTML=`<div class="us-av" style="background:${usr.color||'#5C8A4A'}">${usr.initials||'?'}</div>
-      <div class="us-info">
-        <div class="us-name">${usr.name||usr.display_name||'User'}</div>
-        <div class="us-meta">${a?a+' yrs · ':''} → ${usr.target_kg||'–'} kg</div>
-      </div>
-      ${streak>0?`<div class="us-streak">🔥 ${streak}</div>`:''}`;
-    btn.onclick=()=>selectUser(usr.id);
-    list.appendChild(btn);
-  });
-  if(!allUsers.length){
-    list.innerHTML='<div style="text-align:center;padding:20px 0;font-family:var(--sm);font-size:11px;color:var(--mi);letter-spacing:.06em">No users yet — add one below</div>';
-  }
+  }).catch(function(){});
 }
 
 function selectUser(uid){
@@ -1303,7 +1310,7 @@ async function saveNewUser(){
   userHabits[id].push({habit_id:'steps',enabled:true,target_value:obData.steps||6000});
   userHabits[id].push({habit_id:'drinks',enabled:true,target_value:obData.drinksCap||4});
   closeSheet('sh-onboard');
-  await renderUserScreen();
+  renderUserScreen();
   toast((obData.name||'User')+' added. Tap their name to sign in.');
 }
 
@@ -1366,7 +1373,7 @@ async function initApp(){
 // ── BOOT ──────────────────────────────────────────────────────────
 (async()=>{
   try{await loadUsers();}catch(e){console.warn('loadUsers failed:',e);}
-  try{await renderUserScreen();}catch(e){
+  try{renderUserScreen();}catch(e){
     document.getElementById('us-list').innerHTML='<div style="text-align:center;padding:20px;font-family:var(--sm);font-size:11px;color:var(--mi)">Could not load users — check Supabase setup</div>';
   }
   loadSavedUser();
