@@ -2,242 +2,269 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>BravoHabits</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>BravoHabit</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
-
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-
 :root{
-  --black:#0F0F0F;
-  --white:#FAFAF8;
-  --warm:#F5F2ED;
-  --mid:#8A8880;
-  --border:#E8E5E0;
-  --fit:#5C8A4A;
-  --fit-light:#EBF4E6;
-  --fit-dark:#3A6030;
-  --font-serif:'Playfair Display',serif;
-  --font-sans:'DM Sans',sans-serif;
-  --font-mono:'DM Mono',monospace;
-  --nav:60px;
-  --r:14px;
-  --r-sm:10px;
-  --shadow:0 1px 4px rgba(0,0,0,0.06),0 1px 2px rgba(0,0,0,0.04);
-  --shadow-md:0 4px 16px rgba(0,0,0,0.08);
+  --bk:#0F0F0F;--wh:#FAFAF8;--wm:#F5F2ED;--mi:#8A8880;--bo:#E8E5E0;
+  --gr:#5C8A4A;--gl:#EBF4E6;--gd:#3A6030;
+  --re:#9A3A3A;--rl:#FAEAEA;
+  --am:#7A5010;--al:#FFF3E0;
+  --sf:'Playfair Display',serif;--ss:'DM Sans',sans-serif;--sm:'DM Mono',monospace;
+  --nav:62px;--r:14px;--rs:10px;
+  --sh:0 1px 3px rgba(0,0,0,.05),0 1px 2px rgba(0,0,0,.04);
+  --shm:0 6px 24px rgba(0,0,0,.09);
 }
+html,body{background:var(--wh);color:var(--bk);font-family:var(--ss);font-size:15px;line-height:1.5;min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body{padding-bottom:calc(var(--nav)+env(safe-area-inset-bottom,0px))}
 
-html,body{background:var(--white);color:var(--black);font-family:var(--font-sans);font-size:15px;line-height:1.6;min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
-body{padding-bottom:calc(var(--nav) + env(safe-area-inset-bottom,0px))}
+/* ── TYPOGRAPHY HELPERS ── */
+.t-serif{font-family:var(--sf)}
+.t-mono{font-family:var(--sm)}
+.t-mid{color:var(--mi)}
+.t-gr{color:var(--gd)}
+.t-re{color:var(--re)}
+.t-am{color:var(--am)}
 
-/* USER SELECT */
-#user-screen{position:fixed;inset:0;background:var(--white);z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;gap:12px}
-.user-screen-logo{font-family:var(--font-serif);font-size:32px;font-weight:700;letter-spacing:-0.5px;margin-bottom:4px}
-.user-screen-logo span{font-weight:400;opacity:0.4}
-.user-screen-sub{font-family:var(--font-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mid);margin-bottom:20px}
-.user-btn{width:100%;max-width:340px;background:var(--white);border:1px solid var(--border);border-radius:var(--r);padding:16px 18px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:background .15s,transform .1s;box-shadow:var(--shadow)}
-.user-btn:active{background:var(--warm);transform:scale(.98)}
-.user-avatar{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--font-serif);font-size:16px;font-weight:700;flex-shrink:0;color:#fff}
-.user-btn-name{font-family:var(--font-serif);font-size:18px;font-weight:600;color:var(--black)}
-.user-btn-sub{font-family:var(--font-mono);font-size:11px;color:var(--mid);margin-top:2px;letter-spacing:.03em}
+/* ── USER SCREEN ── */
+#us{position:fixed;inset:0;background:var(--wh);z-index:100;display:none;flex-direction:column;align-items:center;padding:56px 24px 40px;overflow-y:auto}
+#us.show{display:flex}
+.us-logo{font-family:var(--sf);font-size:34px;font-weight:700;letter-spacing:-.5px;margin-bottom:4px;align-self:flex-start}
+.us-logo span{font-weight:400;opacity:.35}
+.us-tagline{font-family:var(--sm);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mi);margin-bottom:28px;align-self:flex-start}
+.us-list{width:100%;max-width:380px;display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+.us-card{background:var(--wh);border:1px solid var(--bo);border-radius:var(--r);padding:15px 18px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:all .12s;box-shadow:var(--sh);width:100%;text-align:left}
+.us-card:active{background:var(--wm);transform:scale(.98)}
+.us-av{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--sm);font-size:10px;font-weight:500;color:#fff;flex-shrink:0;letter-spacing:.06em}
+.us-info{flex:1}
+.us-name{font-family:var(--sf);font-size:18px;font-weight:700;margin-bottom:1px}
+.us-meta{font-family:var(--sm);font-size:10px;color:var(--mi);letter-spacing:.04em}
+.us-streak{font-family:var(--sm);font-size:10px;font-weight:500;padding:2px 8px;border-radius:10px;background:var(--gl);color:var(--gd)}
+.us-actions{display:flex;gap:8px;width:100%;max-width:380px}
+.us-act-btn{flex:1;background:var(--wm);border:1px solid var(--bo);border-radius:var(--rs);padding:11px;font-family:var(--sm);font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:var(--mi);cursor:pointer;transition:all .12s;display:flex;align-items:center;justify-content:center;gap:6px}
+.us-act-btn:active{background:var(--bo)}
 
-/* APP BAR */
-.app-bar{position:sticky;top:0;z-index:10;background:rgba(250,250,248,.94);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 20px;height:52px}
-.app-logo{font-family:var(--font-serif);font-size:20px;font-weight:700;letter-spacing:-.3px;color:var(--black)}
-.app-logo span{font-weight:400;opacity:0.4}
-.user-pill{background:var(--warm);border:1px solid var(--border);border-radius:20px;padding:5px 12px 5px 8px;display:flex;align-items:center;gap:7px;cursor:pointer;font-family:var(--font-sans);font-size:13px;font-weight:500;color:var(--black)}
-.user-dot{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff}
-.app-date{font-family:var(--font-mono);font-size:11px;color:var(--mid);letter-spacing:.04em}
+/* ── APP BAR ── */
+.app-bar{position:sticky;top:0;z-index:10;background:rgba(250,250,248,.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--bo);display:flex;align-items:center;justify-content:space-between;padding:0 16px;height:52px}
+.app-logo{font-family:var(--sf);font-size:19px;font-weight:700;letter-spacing:-.2px}
+.app-logo span{font-weight:400;opacity:.35}
+.chip{background:var(--wm);border:1px solid var(--bo);border-radius:20px;padding:5px 12px 5px 7px;display:flex;align-items:center;gap:7px;cursor:pointer;font-family:var(--sm);font-size:10px;font-weight:500;letter-spacing:.04em}
+.chip-av{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--sm);font-size:8px;font-weight:500;color:#fff;letter-spacing:.04em}
+.app-date{font-family:var(--sm);font-size:11px;color:var(--mi);letter-spacing:.04em}
 
-/* BOTTOM NAV */
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;height:calc(var(--nav) + env(safe-area-inset-bottom,0px));background:rgba(250,250,248,.94);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--border);display:flex;align-items:flex-start;padding-top:8px;z-index:20}
-.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;color:var(--mid);font-family:var(--font-mono);font-size:10px;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;padding:4px 0;transition:color .12s}
-.nav-btn.active{color:var(--fit)}
-.nav-icon{font-size:20px;line-height:1}
+/* ── BOTTOM NAV ── */
+.bnav{position:fixed;bottom:0;left:0;right:0;height:calc(var(--nav)+env(safe-area-inset-bottom,0px));background:rgba(250,250,248,.95);backdrop-filter:blur(20px);border-top:1px solid var(--bo);display:flex;align-items:flex-start;padding-top:8px;z-index:20}
+.nb{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;color:var(--mi);font-family:var(--sm);font-size:10px;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;padding:4px 0;transition:color .12s}
+.nb.active{color:var(--gr)}
+.nb-icon{font-size:20px;line-height:1}
 
-/* PAGES */
-.page{display:none;padding:20px 16px;max-width:480px;margin:0 auto}
+/* ── PAGES ── */
+.page{display:none;padding:16px;max-width:480px;margin:0 auto;min-height:70vh}
 .page.active{display:block}
 
-/* CARDS */
-.card{background:var(--white);border:1px solid var(--border);border-radius:var(--r);padding:18px;margin-bottom:12px;box-shadow:var(--shadow)}
-.card-label{font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mid);margin-bottom:10px}
+/* ── CARDS / LAYOUT ── */
+.card{background:var(--wh);border:1px solid var(--bo);border-radius:var(--r);padding:16px 18px;margin-bottom:10px;box-shadow:var(--sh)}
+.slbl{font-family:var(--sm);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mi);margin:16px 0 8px}
+.slbl:first-child{margin-top:0}
+.divider{height:1px;background:var(--bo);margin:12px 0}
 
-/* HERO */
-.hero{border-radius:20px;padding:24px 20px;margin-bottom:16px;text-align:center;border:1px solid var(--border);box-shadow:var(--shadow-md)}
-.hero.on-track{background:var(--fit-light);border-color:rgba(92,138,74,.2)}
-.hero.off-track{background:#FAEAEA;border-color:rgba(184,92,92,.2)}
-.hero.warn{background:#FFF8EC;border-color:rgba(196,119,58,.2)}
-.hero.neutral{background:var(--warm)}
-.hero-badge{display:inline-block;font-family:var(--font-mono);font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;padding:4px 12px;border-radius:20px;margin-bottom:14px;background:rgba(0,0,0,.06);color:var(--mid)}
-.hero-badge.good{background:rgba(92,138,74,.12);color:var(--fit-dark)}
-.hero-badge.bad{background:rgba(184,92,92,.12);color:#8A3A3A}
-.hero-badge.warn{background:rgba(196,119,58,.12);color:#7A5400}
-.hero-kg{font-family:var(--font-serif);font-size:64px;font-weight:300;letter-spacing:-2px;line-height:1;margin-bottom:4px;color:var(--black)}
-.hero-detail{font-size:14px;color:var(--mid);margin-bottom:16px}
-.hero-msg{font-size:14px;line-height:1.6;padding:12px 14px;border-radius:var(--r-sm);text-align:left;background:rgba(0,0,0,.04);color:var(--black)}
-.hero-msg.good{background:rgba(92,138,74,.08);color:var(--fit-dark)}
-.hero-msg.bad{background:rgba(184,92,92,.08);color:#8A3A3A}
-.hero-msg.warn{background:rgba(196,119,58,.08);color:#7A4F00}
+/* ── BUTTONS ── */
+.btn{background:var(--gr);color:#fff;border:none;border-radius:var(--rs);padding:12px 20px;font-family:var(--ss);font-size:14px;font-weight:600;cursor:pointer;transition:all .1s;white-space:nowrap;flex-shrink:0}
+.btn:active{transform:scale(.97)}
+.btn:disabled{opacity:.35;cursor:not-allowed;transform:none!important}
+.btn-sec{background:var(--wm);color:var(--mi);border:1px solid var(--bo);border-radius:var(--rs);padding:11px 18px;font-family:var(--ss);font-size:14px;font-weight:500;cursor:pointer;transition:all .1s}
+.btn-sec:active{background:var(--bo)}
+.btn-row{display:flex;flex-direction:column;gap:10px}
 
-/* STATS */
-.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
-.stat-card{background:var(--warm);border:1px solid var(--border);border-radius:var(--r-sm);padding:14px 8px;text-align:center}
-.stat-num{font-family:var(--font-serif);font-size:24px;font-weight:600;color:var(--black);margin-bottom:3px}
-.stat-lbl{font-family:var(--font-mono);font-size:10px;color:var(--mid);letter-spacing:.06em;text-transform:uppercase}
+/* ── INPUTS ── */
+.inp{background:var(--wm);border:1px solid var(--bo);border-radius:var(--rs);color:var(--bk);font-family:var(--ss);font-size:15px;padding:11px 13px;outline:none;width:100%}
+.inp:focus{border-color:var(--gr)}
+.inp-num{font-family:var(--sf);font-size:22px;text-align:center;-moz-appearance:textfield}
+.inp-num::-webkit-outer-spin-button,.inp-num::-webkit-inner-spin-button{-webkit-appearance:none}
+.inp-lrg{background:var(--wm);border:1px solid var(--bo);border-radius:var(--rs);color:var(--bk);font-family:var(--sf);font-size:26px;padding:12px 14px;outline:none;text-align:center;min-width:0;-moz-appearance:textfield;width:100%}
+.inp-lrg::-webkit-outer-spin-button,.inp-lrg::-webkit-inner-spin-button{-webkit-appearance:none}
+.inp-lrg:focus{border-color:var(--gr)}
+.inp-lrg::placeholder{font-size:16px;font-family:var(--ss);color:var(--mi)}
+.form-row{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}
+.form-lbl{font-family:var(--sm);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--mi)}
 
-/* WEIGHT ENTRY */
-.weight-entry{display:flex;gap:10px;margin-bottom:10px}
-.weight-entry input{flex:1;background:var(--warm);border:1px solid var(--border);border-radius:var(--r-sm);color:var(--black);font-family:var(--font-serif);font-size:22px;font-weight:400;padding:12px 14px;outline:none;text-align:center;min-width:0;-moz-appearance:textfield}
-.weight-entry input::-webkit-outer-spin-button,.weight-entry input::-webkit-inner-spin-button{-webkit-appearance:none}
-.weight-entry input:focus{border-color:var(--fit)}
-.weight-entry input::placeholder{font-size:16px;font-family:var(--font-sans);color:var(--mid)}
+/* ── HERO ── */
+.hero{border-radius:18px;padding:22px 18px;margin-bottom:12px;border:1px solid var(--bo);background:var(--wm)}
+.hero.good{background:var(--gl);border-color:rgba(92,138,74,.2)}
+.hero.warn{background:var(--al);border-color:rgba(122,80,16,.2)}
+.hero.bad{background:var(--rl);border-color:rgba(154,58,58,.2)}
+.hero-badge{font-family:var(--sm);font-size:10px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;font-weight:500;color:var(--mi)}
+.hero.good .hero-badge{color:var(--gd)}
+.hero.warn .hero-badge{color:var(--am)}
+.hero.bad .hero-badge{color:var(--re)}
+.hero-kg{font-family:var(--sf);font-size:58px;font-weight:300;letter-spacing:-2px;line-height:1;margin-bottom:3px}
+.hero-sub{font-family:var(--sm);font-size:11px;color:var(--mi);letter-spacing:.04em;margin-bottom:14px}
+.hero-msg{font-size:13px;line-height:1.7;padding:12px 14px;border-radius:var(--rs);background:rgba(0,0,0,.04)}
+.hero.good .hero-msg{background:rgba(92,138,74,.1);color:var(--gd)}
+.hero.warn .hero-msg{background:rgba(122,80,16,.08);color:var(--am)}
+.hero.bad .hero-msg{background:rgba(154,58,58,.08);color:var(--re)}
 
-/* BUTTONS */
-.btn{background:var(--fit);color:#fff;border:none;border-radius:var(--r-sm);padding:12px 20px;font-family:var(--font-sans);font-size:14px;font-weight:600;cursor:pointer;transition:all .1s;white-space:nowrap;flex-shrink:0}
-.btn:active{transform:scale(.97);opacity:.9}
-.btn:disabled{opacity:.35;cursor:not-allowed;transform:none !important}
-.btn.secondary{background:var(--warm);color:var(--mid);border:1px solid var(--border)}
-.btn.secondary:active{background:var(--border)}
+/* ── STATS ── */
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.stat{background:var(--wm);border-radius:var(--rs);padding:13px 8px;text-align:center;border:1px solid var(--bo)}
+.stat-n{font-family:var(--sf);font-size:22px;font-weight:600;margin-bottom:2px}
+.stat-l{font-family:var(--sm);font-size:9px;letter-spacing:.07em;text-transform:uppercase;color:var(--mi)}
 
-/* CHART */
-.chart-wrap{position:relative;height:180px;margin-bottom:8px}
+/* ── HABITS ── */
+.habit-sec{background:var(--wh);border:1px solid var(--bo);border-radius:var(--r);overflow:hidden;margin-bottom:10px;box-shadow:var(--sh)}
+.habit-row{display:flex;align-items:center;gap:12px;padding:13px 16px;border-bottom:1px solid var(--bo);cursor:pointer;user-select:none;-webkit-user-select:none;transition:background .1s}
+.habit-row:last-of-type{border-bottom:none}
+.habit-row:active{background:var(--wm)}
+.habit-row.locked{opacity:.45;cursor:not-allowed}
+.habit-row.locked:active{background:transparent}
+.hck{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--bo);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .22s}
+.hck.done{background:var(--gr);border-color:var(--gr)}
+@keyframes pop{0%{transform:scale(1.3)}100%{transform:scale(1)}}
+.hck.done{animation:pop .2s ease-out forwards}
+.hck svg{display:none;width:13px;height:13px}
+.hck.done svg{display:block}
+.h-info{flex:1}
+.h-name{font-size:15px;font-weight:500;transition:color .2s}
+.h-name.done{color:var(--mi)}
+.h-freq{font-family:var(--sm);font-size:10px;color:var(--mi);margin-top:1px;letter-spacing:.04em}
+.h-streak{font-family:var(--sm);font-size:10px;font-weight:500;color:var(--gr);margin-top:1px}
+.h-sci{font-size:13px;line-height:1.7;padding:11px 16px 12px 54px;background:var(--gl);display:none;border-top:1px solid rgba(92,138,74,.15);border-left:3px solid var(--gr);color:var(--gd)}
+.h-sci.show{display:block}
+.streak-dots{display:flex;gap:4px;padding:8px 16px 12px;flex-wrap:wrap;border-top:1px solid var(--bo)}
+.s-dot{width:10px;height:10px;border-radius:50%}
 
-/* WEIGHT LOG */
-.weight-log-item{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--border);font-size:14px}
-.weight-log-item:last-child{border-bottom:none}
-.weight-log-date{color:var(--mid);font-family:var(--font-mono);font-size:12px;letter-spacing:.03em}
-.weight-log-kg{font-family:var(--font-serif);font-weight:600;font-size:16px}
-.weight-log-diff{font-size:11px;font-weight:600;padding:2px 8px;border-radius:10px;font-family:var(--font-mono)}
+/* ── DRINKS ── */
+.nip-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.nip-big{font-family:var(--sf);font-size:58px;font-weight:300;letter-spacing:-2px;line-height:1}
+.nip-unit{font-family:var(--sm);font-size:10px;color:var(--mi);letter-spacing:.05em;text-transform:uppercase;margin-top:2px}
+.nip-ctrl{display:flex;flex-direction:column;gap:8px}
+.nip-btn{width:46px;height:46px;border-radius:50%;border:1px solid var(--bo);background:var(--wm);font-size:24px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .1s;font-weight:300;font-family:var(--ss)}
+.nip-btn:active{transform:scale(.91);background:var(--bo)}
+.nip-bar{height:5px;background:var(--bo);border-radius:3px;overflow:hidden;margin-bottom:10px}
+.nip-fill{height:100%;border-radius:3px;background:var(--gr);transition:width .4s cubic-bezier(.34,1.2,.64,1)}
+.nip-sci{font-size:13px;line-height:1.7;padding:12px 14px;border-radius:var(--rs);background:var(--wm);color:var(--mi)}
 
-/* TRAJECTORY */
-.traj-card{text-align:center;padding:22px}
-.traj-projected{font-family:var(--font-serif);font-size:48px;font-weight:300;letter-spacing:-1.5px;margin:6px 0;color:var(--black)}
-.traj-label{font-family:var(--font-mono);font-size:11px;color:var(--mid);letter-spacing:.06em;text-transform:uppercase}
-.traj-pace{font-family:var(--font-mono);font-size:11px;font-weight:500;padding:4px 12px;border-radius:10px;display:inline-block;margin-top:10px;letter-spacing:.04em}
+/* ── WEIGHT ── */
+.w-row{display:flex;gap:10px;margin-bottom:8px}
+.wlog-item{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--bo)}
+.wlog-item:last-child{border-bottom:none}
+.wlog-date{font-family:var(--sm);font-size:11px;color:var(--mi);letter-spacing:.03em}
+.wlog-kg{font-family:var(--sf);font-size:16px;font-weight:600}
+.wlog-diff{font-family:var(--sm);font-size:11px;font-weight:500;padding:2px 8px;border-radius:10px}
+.traj-box{text-align:center;padding:20px 16px}
+.traj-num{font-family:var(--sf);font-size:46px;font-weight:300;letter-spacing:-1.5px;margin:6px 0}
+.traj-lbl{font-family:var(--sm);font-size:10px;color:var(--mi);letter-spacing:.07em;text-transform:uppercase}
+.traj-tag{font-family:var(--sm);font-size:11px;font-weight:500;padding:4px 12px;border-radius:10px;display:inline-block;margin-top:8px;letter-spacing:.04em}
+.bd-row{display:flex;gap:8px;margin-top:10px}
 
-/* HABITS */
-.habit-row{display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid var(--border);cursor:pointer;user-select:none;-webkit-user-select:none;transition:opacity .1s}
-.habit-row:last-child{border-bottom:none}
-.habit-row:active{opacity:.7}
-.habit-check{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .25s}
-.habit-check.done{background:var(--fit);border-color:var(--fit)}
-.habit-check svg{display:none;width:13px;height:13px}
-.habit-check.done svg{display:block}
-.habit-info{flex:1}
-.habit-name{font-size:15px;font-weight:500;color:var(--black);transition:color .2s}
-.habit-name.done{color:var(--mid)}
-.habit-freq{font-family:var(--font-mono);font-size:11px;color:var(--mid);margin-top:2px;letter-spacing:.04em}
+/* ── TEAM ── */
+.tmem{background:var(--wh);border:1px solid var(--bo);border-radius:var(--r);padding:14px 16px;margin-bottom:10px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:background .1s;box-shadow:var(--sh)}
+.tmem:active{background:var(--wm)}
+.tav{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--sm);font-size:10px;font-weight:500;color:#fff;flex-shrink:0;letter-spacing:.06em}
+.tname{font-family:var(--sf);font-size:17px;font-weight:600;margin-bottom:2px}
+.tstats{font-family:var(--sm);font-size:11px;color:var(--mi);letter-spacing:.02em;margin-bottom:5px}
+.tdots{display:flex;gap:4px;flex-wrap:wrap}
+.tdot{width:8px;height:8px;border-radius:50%}
+.tbadge{font-family:var(--sm);font-size:10px;font-weight:500;padding:3px 9px;border-radius:10px;letter-spacing:.04em}
+.tskel{background:var(--wm);border:1px solid var(--bo);border-radius:var(--r);height:76px;margin-bottom:10px}
+@keyframes shimmer{0%{opacity:.5}50%{opacity:1}100%{opacity:.5}}
+.tskel{animation:shimmer 1.4s ease-in-out infinite}
 
-/* DRINK TRACKER */
-.drink-display{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
-.drink-num{font-family:var(--font-serif);font-size:56px;font-weight:300;letter-spacing:-2px;line-height:1}
-.drink-unit{font-family:var(--font-mono);font-size:11px;color:var(--mid);margin-top:4px;letter-spacing:.05em;text-transform:uppercase}
-.drink-controls{display:flex;flex-direction:column;gap:8px}
-.d-btn{width:44px;height:44px;border-radius:50%;border:1px solid var(--border);background:var(--warm);color:var(--black);font-size:22px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .12s;font-weight:300}
-.d-btn:active{transform:scale(.93);background:var(--border)}
-.nip-bar{height:4px;background:var(--border);border-radius:2px;overflow:hidden;margin-bottom:10px}
-.nip-fill{height:100%;border-radius:2px;transition:width .4s cubic-bezier(.34,1.2,.64,1)}
-.drink-note{font-size:13px;line-height:1.6;padding:12px 14px;border-radius:var(--r-sm);background:var(--warm);color:var(--mid)}
+/* ── PROFILE SHEET ── */
+.sheet-ov{position:fixed;inset:0;background:rgba(15,15,15,.3);backdrop-filter:blur(6px);z-index:200;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .22s}
+.sheet-ov.show{opacity:1;pointer-events:all}
+.sheet{background:var(--wh);border-radius:22px 22px 0 0;width:100%;max-width:480px;transform:translateY(100%);transition:transform .28s cubic-bezier(.34,1.05,.64,1);box-shadow:0 -4px 30px rgba(0,0,0,.1);max-height:90vh;display:flex;flex-direction:column;overflow:hidden}
+.sheet-ov.show .sheet{transform:translateY(0)}
+.handle{width:36px;height:4px;background:var(--bo);border-radius:2px;margin:12px auto 0;flex-shrink:0}
+.sheet-head{padding:14px 18px;flex-shrink:0;border-bottom:1px solid var(--bo)}
+.sheet-body{overflow-y:auto;padding:14px 18px 80px;flex:1;-webkit-overflow-scrolling:touch}
+.ss-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.ss{background:var(--wm);border-radius:var(--rs);padding:12px 8px;text-align:center}
+.ss-n{font-family:var(--sf);font-size:20px;font-weight:600}
+.ss-l{font-family:var(--sm);font-size:9px;letter-spacing:.07em;text-transform:uppercase;color:var(--mi);margin-top:2px}
+.day-row{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--bo);align-items:flex-start}
+.day-row:last-child{border-bottom:none}
+.day-lbl{font-family:var(--sm);font-size:11px;color:var(--mi);min-width:56px;padding-top:2px;letter-spacing:.02em}
+.day-kg{font-family:var(--sf);font-size:15px;font-weight:600}
+.day-meta{font-family:var(--sm);font-size:11px;color:var(--mi);margin-top:2px;letter-spacing:.02em}
 
-/* BACKDATE */
-.backdate-row{display:flex;gap:8px;margin-top:10px}
-.backdate-row input[type=date]{flex:1;background:var(--warm);border:1px solid var(--border);border-radius:var(--r-sm);color:var(--black);font-family:var(--font-sans);font-size:14px;padding:10px 12px;outline:none;min-width:0}
-.backdate-row input[type=date]:focus{border-color:var(--fit)}
+/* ── MODALS ── */
+.m-ov{position:fixed;inset:0;background:rgba(15,15,15,.35);backdrop-filter:blur(6px);z-index:300;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .22s}
+.m-ov.show{opacity:1;pointer-events:all}
+.modal{background:var(--wh);border-radius:22px 22px 0 0;padding:26px 20px 44px;width:100%;max-width:480px;transform:translateY(100%);transition:transform .28s cubic-bezier(.34,1.05,.64,1);box-shadow:0 -4px 30px rgba(0,0,0,.1)}
+.m-ov.show .modal{transform:translateY(0)}
+.m-title{font-family:var(--sf);font-size:21px;font-weight:700;margin-bottom:7px}
+.m-sub{font-size:14px;color:var(--mi);line-height:1.65;margin-bottom:18px}
+.tip-box{background:var(--wm);border:1px solid var(--bo);border-radius:var(--rs);padding:13px;margin-bottom:14px;font-size:14px;color:#3A3A38;line-height:1.7}
+.fury-box{background:var(--rl);border:1px solid rgba(154,58,58,.2);border-radius:var(--rs);padding:13px;margin-bottom:14px;font-size:14px;color:var(--re);line-height:1.65}
+.cd-wrap{text-align:center;margin-bottom:14px}
+.cd-ring{width:50px;height:50px;margin:0 auto 6px}
+.cd-ring circle{fill:none;stroke-width:4}
+.cd-ring .trk{stroke:var(--bo)}
+.cd-ring .fl{stroke:var(--gr);stroke-dasharray:132;transform-origin:center;transform:rotate(-90deg);transition:stroke-dashoffset .1s linear}
+.cd-num{font-family:var(--sf);font-size:20px;font-weight:600;color:var(--gr)}
+.cd-lbl{font-family:var(--sm);font-size:10px;color:var(--mi);margin-top:2px;letter-spacing:.04em}
 
-/* TEAM */
-.team-member{background:var(--white);border:1px solid var(--border);border-radius:var(--r);padding:16px 18px;margin-bottom:10px;display:flex;align-items:center;gap:14px;box-shadow:var(--shadow)}
-.member-avatar{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--font-serif);font-size:16px;font-weight:700;flex-shrink:0;color:#fff}
-.member-info{flex:1;min-width:0}
-.member-name{font-family:var(--font-serif);font-size:17px;font-weight:600;color:var(--black)}
-.member-stats{font-family:var(--font-mono);font-size:11px;color:var(--mid);margin-top:3px;letter-spacing:.02em}
-.member-badge{font-family:var(--font-mono);font-size:10px;font-weight:500;padding:3px 9px;border-radius:10px;letter-spacing:.04em}
-.member-habits{display:flex;gap:4px;margin-top:8px;flex-wrap:wrap}
-.h-dot{width:8px;height:8px;border-radius:50%}
+/* ── ONBOARDING ── */
+.ob-step{display:none}
+.ob-step.active{display:block}
+.ob-prog{display:flex;gap:6px;margin-bottom:24px}
+.ob-dot{height:3px;flex:1;background:var(--bo);border-radius:2px;transition:background .3s}
+.ob-dot.done{background:var(--gr)}
+.ob-dot.active{background:var(--gr);opacity:.5}
+.slider-wrap{margin:16px 0}
+.slider-val{font-family:var(--sf);font-size:36px;font-weight:300;text-align:center;margin-bottom:8px}
+.slider-sci{font-size:13px;line-height:1.7;padding:12px 14px;border-radius:var(--rs);background:var(--wm);color:var(--mi);margin-top:10px;min-height:60px;transition:all .2s}
+.slider-sci.happy{background:var(--gl);color:var(--gd)}
+.slider-sci.warn{background:var(--al);color:var(--am)}
+.slider-sci.fury{background:var(--rl);color:var(--re)}
+input[type=range]{-webkit-appearance:none;width:100%;height:4px;background:var(--bo);border-radius:2px;outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;border-radius:50%;background:var(--gr);cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.15)}
+.colour-pick{width:34px;height:34px;border-radius:50%;cursor:pointer;border:3px solid transparent;transition:border-color .15s}
+.colour-pick.sel{border-color:var(--bk)}
+.habit-toggle{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--bo)}
+.habit-toggle:last-child{border-bottom:none}
+.ht-name{font-size:14px;font-weight:500}
+.ht-freq{font-family:var(--sm);font-size:10px;color:var(--mi);letter-spacing:.04em;margin-top:1px}
+.toggle{width:44px;height:26px;background:var(--bo);border-radius:13px;position:relative;transition:background .2s;cursor:pointer;flex-shrink:0}
+.toggle.on{background:var(--gr)}
+.toggle::after{content:'';position:absolute;width:20px;height:20px;background:#fff;border-radius:50%;top:3px;left:3px;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.15)}
+.toggle.on::after{transform:translateX(18px)}
 
-/* SCIENCE */
-.science-item{background:var(--white);border:1px solid var(--border);border-radius:var(--r);margin-bottom:10px;overflow:hidden;box-shadow:var(--shadow)}
-.science-header{display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer}
-.science-tag{font-family:var(--font-mono);font-size:10px;font-weight:500;letter-spacing:.08em;padding:4px 10px;border-radius:6px;text-transform:uppercase;flex-shrink:0;min-width:76px;text-align:center}
-.science-hl{font-family:var(--font-serif);font-size:15px;font-weight:600;flex:1;line-height:1.3;color:var(--black)}
-.science-chev{color:var(--mid);font-size:18px;transition:transform .2s;flex-shrink:0;line-height:1}
-.science-item.open .science-chev{transform:rotate(90deg)}
-.science-body{display:none;padding:0 16px 16px;padding-top:12px;font-size:14px;color:#3A3A38;line-height:1.7;border-top:1px solid var(--border)}
-.science-item.open .science-body{display:block}
-.science-body strong{color:var(--black);font-weight:600}
-
-/* MODAL */
-.modal-overlay{position:fixed;inset:0;background:rgba(15,15,15,.35);backdrop-filter:blur(6px);z-index:200;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .22s}
-.modal-overlay.show{opacity:1;pointer-events:all}
-.modal{background:var(--white);border:1px solid var(--border);border-radius:20px 20px 0 0;padding:28px 20px 44px;width:100%;max-width:480px;transform:translateY(100%);transition:transform .28s cubic-bezier(.34,1.05,.64,1);box-shadow:0 -4px 30px rgba(0,0,0,.1)}
-.modal-overlay.show .modal{transform:translateY(0)}
-.modal-title{font-family:var(--font-serif);font-size:20px;font-weight:600;margin-bottom:6px;color:var(--black)}
-.modal-sub{font-size:14px;color:var(--mid);line-height:1.6;margin-bottom:20px}
-.modal-btns{display:flex;flex-direction:column;gap:10px}
-.tip-card{background:var(--warm);border:1px solid var(--border);border-radius:var(--r-sm);padding:14px;margin-bottom:14px}
-.tip-card p{font-size:14px;color:#3A3A38;line-height:1.7}
-
-/* COUNTDOWN */
-.countdown-wrap{text-align:center;margin-bottom:16px}
-.countdown-ring{width:52px;height:52px;margin:0 auto 6px}
-.countdown-ring circle{fill:none;stroke-width:4}
-.countdown-ring .track{stroke:var(--border)}
-.countdown-ring .fill{stroke:var(--fit);stroke-dasharray:132;transform-origin:center;transform:rotate(-90deg);transition:stroke-dashoffset .1s linear}
-.countdown-num{font-family:var(--font-serif);font-size:20px;font-weight:600;color:var(--fit)}
-.countdown-label{font-family:var(--font-mono);font-size:11px;color:var(--mid);margin-top:2px;letter-spacing:.04em}
-
-/* SETUP BANNER */
-.setup-banner{background:var(--warm);border:1px solid var(--border);border-radius:var(--r);padding:18px;margin-bottom:12px}
-.setup-banner-title{font-family:var(--font-serif);font-size:16px;font-weight:600;color:var(--black);margin-bottom:6px}
-.setup-banner-text{font-size:13px;color:var(--mid);line-height:1.6}
-.setup-banner code{background:var(--border);border-radius:4px;padding:1px 6px;font-family:var(--font-mono);font-size:12px;color:var(--black)}
-
-/* TOAST */
-.toast{position:fixed;bottom:calc(var(--nav) + 16px);left:50%;transform:translateX(-50%) translateY(16px);background:var(--black);border-radius:var(--r-sm);padding:11px 20px;font-size:13px;font-weight:500;color:var(--white);opacity:0;transition:all .22s;pointer-events:none;z-index:999;white-space:nowrap;max-width:90vw;text-align:center}
+/* ── TOAST ── */
+.toast{position:fixed;bottom:calc(var(--nav)+14px);left:50%;transform:translateX(-50%) translateY(14px);background:var(--bk);border-radius:var(--rs);padding:11px 18px;font-size:13px;font-weight:500;color:var(--wh);opacity:0;transition:all .22s;pointer-events:none;z-index:999;white-space:nowrap;max-width:92vw;text-align:center}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-/* MISC */
-.divider{height:1px;background:var(--border);margin:4px 0 14px}
-.empty-state{text-align:center;padding:36px 0;color:var(--mid);font-size:14px;font-family:var(--font-mono);letter-spacing:.05em}
-.loading{text-align:center;padding:40px 0;color:var(--border);font-size:13px;font-family:var(--font-mono)}
-.page-label{font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mid);margin-bottom:14px}
-
-@media(min-width:480px){.page{padding:24px 24px}.app-bar{padding:0 24px}.bottom-nav{justify-content:center}.bottom-nav .nav-btn{max-width:90px}}
+/* ── MISC ── */
+.empty{text-align:center;padding:32px 0;color:var(--mi);font-family:var(--sm);font-size:11px;letter-spacing:.06em}
+.nd-t{font-family:var(--sf);font-size:18px;font-weight:600;margin-bottom:5px}
+.nd-s{font-family:var(--sm);font-size:11px;color:var(--mi);letter-spacing:.05em}
+.spin{width:32px;height:32px;border:3px solid var(--bo);border-top-color:var(--gr);border-radius:50%;animation:rot .8s linear infinite;margin:40px auto}
+@keyframes rot{to{transform:rotate(360deg)}}
+@media(min-width:480px){.page{padding:20px 24px}.app-bar,.bnav{padding:0 24px}}
 </style>
 </head>
 <body>
 
-<!-- USER SELECT -->
-<div id="user-screen">
-  <div class="user-screen-logo"><span>Bravo</span>Habits</div>
-  <div class="user-screen-sub">Who are you?</div>
-  <button class="user-btn" onclick="selectUser('bill')">
-    <div class="user-avatar" style="background:#5C8A4A">B</div>
-    <div class="user-btn-info"><div class="user-btn-name">Bill</div><div class="user-btn-sub">115 → 95 kg · 4,500 steps/day</div></div>
-  </button>
-  <button class="user-btn" onclick="selectUser('leon')">
-    <div class="user-avatar" style="background:#3A6030">L</div>
-    <div class="user-btn-info"><div class="user-btn-name">Leon</div><div class="user-btn-sub">105 kg target · 6,000 steps/day</div></div>
-  </button>
-  <button class="user-btn" onclick="selectUser('greg')">
-    <div class="user-avatar" style="background:#7A6B4E">G</div>
-    <div class="user-btn-info"><div class="user-btn-name">Greg</div><div class="user-btn-sub">105 kg target · 6,000 steps/day</div></div>
-  </button>
-  <button class="user-btn" onclick="selectUser('brent')">
-    <div class="user-avatar" style="background:#0F0F0F">Br</div>
-    <div class="user-btn-info"><div class="user-btn-name">Brent</div><div class="user-btn-sub">96 → 89 kg · 6,000 steps/day</div></div>
-  </button>
+<!-- USER SCREEN -->
+<div id="us" class="show">
+  <div class="us-logo"><span>Bravo</span>Habit</div>
+  <div class="us-tagline">Accountability. No excuses.</div>
+  <div class="us-list" id="us-list"><div class="spin"></div></div>
+  <div class="us-actions">
+    <button class="us-act-btn" onclick="openOnboard()">＋ Add person</button>
+    <button class="us-act-btn" onclick="openSettings()">⚙ Settings</button>
+  </div>
 </div>
 
 <!-- APP BAR -->
 <div class="app-bar">
-  <div class="app-bar-left">
-    <div class="app-logo"><span>Bravo</span>Habits</div>
-    <div class="user-pill" id="user-pill" onclick="switchUser()">
-      <div class="user-dot" id="user-dot"></div>
-      <span id="user-pill-name"></span>
-    </div>
+  <div class="app-logo"><span>Bravo</span>Habit</div>
+  <div class="chip" onclick="switchUser()">
+    <div class="chip-av" id="chip-av"></div>
+    <span id="chip-name"></span>
   </div>
   <div class="app-date" id="app-date"></div>
 </div>
@@ -245,887 +272,1099 @@ body{padding-bottom:calc(var(--nav) + env(safe-area-inset-bottom,0px))}
 <!-- TODAY -->
 <div id="page-today" class="page active">
   <div id="hero" class="hero">
-    <div class="hero-badge" id="hero-badge">TODAY</div>
+    <div class="hero-badge" id="hero-badge">Today</div>
     <div class="hero-kg" id="hero-kg">–</div>
-    <div class="hero-detail" id="hero-detail">loading…</div>
-    <div class="hero-message" id="hero-msg"></div>
+    <div class="hero-sub" id="hero-sub">Log your weight to begin</div>
+    <div class="hero-msg" id="hero-msg">Weigh yourself first thing every morning. Same time, same conditions. The number is just data.</div>
   </div>
   <div class="stats-row">
-    <div class="stat-card"><div class="stat-num" id="s-lost">–</div><div class="stat-lbl">kg lost</div></div>
-    <div class="stat-card"><div class="stat-num" id="s-streak">–</div><div class="stat-lbl">streak</div></div>
-    <div class="stat-card"><div class="stat-num" id="s-habits">–</div><div class="stat-lbl">habits</div></div>
+    <div class="stat"><div class="stat-n" id="s-lost">–</div><div class="stat-l">kg lost</div></div>
+    <div class="stat"><div class="stat-n" id="s-streak">–</div><div class="stat-l">day streak</div></div>
+    <div class="stat"><div class="stat-n" id="s-habits">–</div><div class="stat-l">habits</div></div>
   </div>
+  <div class="slbl">Weight</div>
   <div class="card">
-    <div class="card-label">Today's habits</div>
-    <div id="habit-list"><div class="loading">Loading…</div></div>
+    <div class="w-row">
+      <input class="inp-lrg" type="number" id="w-today" placeholder="e.g. 114.2" step="0.1" min="40" max="250" inputmode="decimal">
+      <button class="btn" onclick="logWeightToday()">Log</button>
+    </div>
+    <div id="w-today-line" style="font-family:var(--sm);font-size:11px;color:var(--mi);letter-spacing:.03em">Not logged today</div>
   </div>
+  <div class="slbl">Habits</div>
+  <div id="habit-list"></div>
+  <div class="slbl">Drinks — nips today</div>
   <div class="card">
-    <div class="card-label">Nips today <span style="font-size:11px;font-weight:400;color:var(--text3);text-transform:none;letter-spacing:0">(1 nip = 1 shot = 30ml)</span></div>
-    <div class="drink-display">
+    <div class="nip-row">
       <div>
-        <div class="drink-num" id="nip-count">0</div>
-        <div class="drink-unit">of 4 nips cap</div>
+        <div class="nip-big" id="nip-num">0</div>
+        <div class="nip-unit">of <span id="nip-cap">4</span> · 1 nip = 1 shot (30ml)</div>
       </div>
-      <div class="drink-controls">
-        <button class="d-btn" onclick="changeNips(1)">+</button>
-        <button class="d-btn" onclick="changeNips(-1)">−</button>
+      <div class="nip-ctrl">
+        <button class="nip-btn" onclick="changeNips(1)">+</button>
+        <button class="nip-btn" onclick="changeNips(-1)">−</button>
       </div>
     </div>
     <div class="nip-bar"><div class="nip-fill" id="nip-fill" style="width:0%"></div></div>
-    <div class="drink-note" id="drink-note"></div>
+    <div class="nip-sci" id="nip-sci">A large wine glass is typically 3–5 nips. Count what you actually poured — not the glass, the pour.</div>
   </div>
 </div>
 
 <!-- WEIGHT -->
 <div id="page-weight" class="page">
-  <div class="card traj-card">
-    <div class="traj-label">Anticipated weight at 14 July</div>
-    <div class="traj-projected" id="traj-kg">–</div>
-    <div class="traj-label">based on current pace</div>
-    <div class="traj-pace" id="traj-pace">–</div>
+  <div class="card traj-box">
+    <div class="traj-lbl">Anticipated weight at target date</div>
+    <div class="traj-num" id="traj-num">–</div>
+    <div class="traj-tag" id="traj-tag" style="background:var(--wm);color:var(--mi)">Log a few weights first</div>
   </div>
   <div class="card">
-    <div class="card-label">Log today's weight</div>
-    <div class="weight-input-row">
-      <input type="number" id="weight-in" placeholder="e.g. 114.2" step="0.1" min="50" max="200" inputmode="decimal">
+    <div class="slbl" style="margin-top:0">Log today</div>
+    <div class="w-row">
+      <input class="inp-lrg" type="number" id="w-in" placeholder="e.g. 114.2" step="0.1" min="40" max="250" inputmode="decimal">
       <button class="btn" onclick="logWeight(null)">Log</button>
     </div>
-    <div id="weight-today-line" style="font-size:13px;color:var(--text3);margin-bottom:4px">Not logged today</div>
+    <div id="w-pg-line" style="font-family:var(--sm);font-size:11px;color:var(--mi);letter-spacing:.03em;margin-bottom:6px">Not logged today</div>
     <div class="divider"></div>
-    <div class="card-label" style="margin-top:4px">Backdate a weight</div>
-    <div class="backdate-row">
-      <input type="date" id="backdate-date" style="flex:.6">
-      <input type="number" id="backdate-kg" placeholder="kg" step="0.1" min="50" max="200" inputmode="decimal"
-        style="flex:.4;background:var(--bg4);border:1px solid var(--border2);border-radius:var(--r-sm);color:var(--text);font-size:16px;padding:10px 12px;outline:none;min-width:0">
-      <button class="btn secondary" onclick="logWeight(document.getElementById('backdate-date').value)" style="padding:10px 14px;font-size:13px">Save</button>
+    <div class="slbl" style="margin-top:0">Backdate</div>
+    <div class="bd-row">
+      <input type="date" id="bd-date" style="flex:.55;background:var(--wm);border:1px solid var(--bo);border-radius:var(--rs);color:var(--bk);font-size:13px;padding:10px;outline:none">
+      <input type="number" id="bd-kg" placeholder="kg" step="0.1" min="40" max="250" inputmode="decimal" style="flex:.3;background:var(--wm);border:1px solid var(--bo);border-radius:var(--rs);color:var(--bk);font-size:14px;padding:10px;outline:none;-moz-appearance:textfield">
+      <button class="btn-sec" onclick="logWeight(document.getElementById('bd-date').value)" style="flex-shrink:0;padding:10px 14px">Save</button>
     </div>
   </div>
   <div class="card">
-    <div class="card-label">Weight log</div>
-    <div id="weight-log-list"><div class="empty-state">No weights logged yet.</div></div>
+    <div class="slbl" style="margin-top:0">Log</div>
+    <div id="w-log"><div class="empty">No weights logged yet</div></div>
   </div>
 </div>
 
 <!-- TEAM -->
 <div id="page-team" class="page">
-  <div class="card-label" style="margin-bottom:12px">Everyone's progress</div>
-  <div id="team-list"><div class="loading">Loading…</div></div>
-</div>
-
-<!-- SCIENCE -->
-<div id="page-science" class="page">
-  <div class="card-label" style="margin-bottom:12px">The six pillars — tap to read</div>
-  <div id="science-list"></div>
+  <div id="team-list"></div>
 </div>
 
 <!-- BOTTOM NAV -->
-<div class="bottom-nav">
-  <button class="nav-btn active" onclick="showPage('today',this)"><div class="nav-icon">⊙</div>Today</button>
-  <button class="nav-btn" onclick="showPage('weight',this)"><div class="nav-icon">↓</div>Weight</button>
-  <button class="nav-btn" onclick="showPage('team',this)"><div class="nav-icon">◎</div>Team</button>
-  <button class="nav-btn" onclick="showPage('science',this)"><div class="nav-icon">◈</div>Science</button>
+<div class="bnav">
+  <button class="nb active" onclick="showPage('today',this)"><div class="nb-icon">⊙</div>Today</button>
+  <button class="nb" onclick="showPage('weight',this)"><div class="nb-icon">↓</div>Weight</button>
+  <button class="nb" onclick="showPage('team',this)"><div class="nb-icon">◎</div>Team</button>
 </div>
 
-<!-- DRINK REMINDER MODAL -->
-<div class="modal-overlay" id="reframe-modal">
+<!-- REFRAME MODAL -->
+<div class="m-ov" id="m-reframe">
   <div class="modal">
-    <div class="modal-title">Before you log that drink…</div>
-    <div class="modal-sub">You haven't done your Reframe task today. That's the most important tool you have right now. Five minutes — then log the drink.</div>
-    <div class="tip-card">
-      <p id="craving-tip"></p>
+    <div class="m-title">Before you log that drink…</div>
+    <div class="m-sub">You haven't done your Reframe task yet today. Five minutes now saves you hours of undoing the damage later.</div>
+    <div class="tip-box" id="craving-tip"></div>
+    <div style="font-size:12px;color:var(--mi);font-style:italic;margin-bottom:14px;line-height:1.6">Tomorrow: do your Reframe task <em>before</em> your first drink. People who complete Reframe before drinking consume on average 40% fewer drinks that day. The neural pathway is freshly rewired.</div>
+    <div class="cd-wrap">
+      <svg class="cd-ring" viewBox="0 0 44 44"><circle class="trk" cx="22" cy="22" r="18"/><circle class="fl" id="cd-fl" cx="22" cy="22" r="18" stroke-dashoffset="0"/></svg>
+      <div class="cd-num" id="cd-n">15</div><div class="cd-lbl">seconds</div>
     </div>
-    <div class="countdown-wrap">
-      <svg class="countdown-ring" viewBox="0 0 44 44">
-        <circle class="track" cx="22" cy="22" r="18"/>
-        <circle class="fill" id="countdown-fill" cx="22" cy="22" r="18" stroke-dashoffset="0"/>
-      </svg>
-      <div class="countdown-num" id="countdown-num">15</div>
-      <div class="countdown-label">seconds before you can proceed</div>
+    <div class="btn-row">
+      <button class="btn" id="rf-done" disabled onclick="markReframeDone()">Done — mark Reframe complete</button>
+      <button class="btn-sec" id="rf-skip" disabled onclick="skipReframe()">Log the drink anyway</button>
     </div>
-    <div class="modal-btns">
-      <button class="btn" id="reframe-done-btn" disabled onclick="markReframeDone()">Done — mark Reframe complete</button>
-      <button class="btn secondary" id="reframe-skip-btn" disabled onclick="skipReframe()">Log the drink anyway</button>
-    </div>
+  </div>
+</div>
+
+<!-- FURY MODAL -->
+<div class="m-ov" id="m-fury">
+  <div class="modal">
+    <div class="m-title" id="fury-t"></div>
+    <div class="fury-box" id="fury-b"></div>
+    <button class="btn" onclick="closeM('m-fury')">Understood</button>
   </div>
 </div>
 
 <!-- HONESTY MODAL -->
-<div class="modal-overlay" id="honesty-modal">
+<div class="m-ov" id="m-honest">
   <div class="modal">
-    <div class="modal-title">Quick check</div>
-    <div class="modal-sub" id="honesty-msg">You've ticked today's weigh-in — but there's no weight logged in the app. Did you actually step on the scale?</div>
-    <div class="modal-btns">
+    <div class="m-title">Hold on.</div>
+    <div class="fury-box">You're ticking weigh-in — but there's no weight logged in the app. Ticking this without a real number is the definition of self-deception. The app cannot help you if the data isn't real. There is no judgement here — but there must be honesty. Log your actual weight first.</div>
+    <div class="btn-row">
       <button class="btn" onclick="goLogWeight()">Log my weight now</button>
-      <button class="btn secondary" onclick="closeModal('honesty-modal')">I'll add it later</button>
+      <button class="btn-sec" onclick="closeM('m-honest')">I'll do it later</button>
     </div>
   </div>
 </div>
 
+<!-- DRINKS CONFIRM MODAL -->
+<div class="m-ov" id="m-drinks-confirm">
+  <div class="modal">
+    <div class="m-title" id="dc-title">Your drinks today</div>
+    <div class="fury-box" id="dc-fury" style="display:none"></div>
+    <div class="tip-box">Be straight with yourself. There's no benefit in fudging these numbers — no one else is punished by your dishonesty, only you. Progress comes from accurate data, not comfortable numbers. If you're not sure, err toward honesty. Baby steps in the right direction beat dishonest leaps every time.</div>
+    <div class="btn-row">
+      <button class="btn" onclick="confirmDrinks(true)">Yes — that's accurate</button>
+      <button class="btn-sec" onclick="confirmDrinks(false)">Actually, let me recount</button>
+    </div>
+  </div>
+</div>
 
 <!-- PROFILE SHEET -->
-<div class="modal-overlay" id="profile-modal">
-  <div class="modal" style="padding:0;border-radius:24px 24px 0 0;overflow:hidden;max-height:88vh;display:flex;flex-direction:column">
-    <div id="profile-header" style="padding:24px 20px 16px;flex-shrink:0">
-      <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px">
-        <div id="profile-avatar" style="width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:#fff;flex-shrink:0"></div>
-        <div style="flex:1">
-          <div id="profile-name" style="font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--black)"></div>
-          <div id="profile-subline" style="font-family:'DM Mono',monospace;font-size:11px;color:var(--mid);margin-top:2px;letter-spacing:.04em"></div>
-        </div>
-        <button onclick="closeModal('profile-modal')" style="background:var(--warm);border:1px solid var(--border);border-radius:50%;width:32px;height:32px;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--mid);flex-shrink:0">×</button>
+<div class="sheet-ov" id="sh-profile">
+  <div class="sheet">
+    <div class="handle"></div>
+    <div class="sheet-head">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div id="ps-av" style="width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--sm);font-size:10px;font-weight:500;color:#fff;flex-shrink:0;letter-spacing:.06em"></div>
+        <div style="flex:1"><div id="ps-name" style="font-family:var(--sf);font-size:20px;font-weight:700"></div><div id="ps-sub" style="font-family:var(--sm);font-size:11px;color:var(--mi);letter-spacing:.03em;margin-top:1px"></div></div>
+        <button onclick="closeSheet('sh-profile')" style="background:var(--wm);border:1px solid var(--bo);border-radius:50%;width:30px;height:30px;cursor:pointer;color:var(--mi);font-size:16px;display:flex;align-items:center;justify-content:center">×</button>
       </div>
-      <div id="profile-stats" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px"></div>
+      <div class="ss-row" id="ps-stats"></div>
     </div>
-    <div style="overflow-y:auto;padding:0 20px 40px;flex:1">
-      <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mid);margin:4px 0 10px">Today</div>
-      <div id="profile-today" style="background:var(--warm);border-radius:var(--r);padding:14px;margin-bottom:16px"></div>
-      <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mid);margin-bottom:10px">Last 7 days</div>
-      <div id="profile-history"></div>
+    <div class="sheet-body" id="ps-body"></div>
+  </div>
+</div>
+
+<!-- ONBOARDING SHEET -->
+<div class="sheet-ov" id="sh-onboard">
+  <div class="sheet">
+    <div class="handle"></div>
+    <div class="sheet-head">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <div style="font-family:var(--sf);font-size:20px;font-weight:700" id="ob-title">Add person</div>
+        <button onclick="closeSheet('sh-onboard')" style="background:var(--wm);border:1px solid var(--bo);border-radius:50%;width:30px;height:30px;cursor:pointer;color:var(--mi);font-size:16px;display:flex;align-items:center;justify-content:center">×</button>
+      </div>
+      <div class="ob-prog" id="ob-prog"></div>
     </div>
+    <div class="sheet-body" id="ob-body"></div>
+  </div>
+</div>
+
+<!-- SETTINGS SHEET -->
+<div class="sheet-ov" id="sh-settings">
+  <div class="sheet">
+    <div class="handle"></div>
+    <div class="sheet-head">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <div style="font-family:var(--sf);font-size:20px;font-weight:700">Settings</div>
+        <button onclick="closeSheet('sh-settings')" style="background:var(--wm);border:1px solid var(--bo);border-radius:50%;width:30px;height:30px;cursor:pointer;color:var(--mi);font-size:16px;display:flex;align-items:center;justify-content:center">×</button>
+      </div>
+    </div>
+    <div class="sheet-body" id="sh-settings-body"><div class="spin"></div></div>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-// ─── CONFIG — REPLACE WITH YOUR VALUES ────────────────────────────
-const SUPA_URL = 'https://xgmnyhpzuwngdngtttux.supabase.co';
-const SUPA_KEY = 'sb_publishable_pTYp1DS4yrzeytovirmEWw_77BulU8_';
-// ──────────────────────────────────────────────────────────────────
+const SU='https://xgmnyhpzuwngdngtttux.supabase.co';
+const SK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhnbW55aHB6dXduZ2RuZ3R0dHV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ0MDYxOTgsImV4cCI6MjA4OTk4MjE5OH0.aQvdjbOSRqQJmBKF-9z7KOXhC2M_gKPZ1m4rQhPZ9eo';
+const TDATE='2026-07-14';
+const NIP_COST=8;
 
-const START_DATE = '2026-03-20';
-const TARGET_DATE = '2026-07-14';
-
-const USERS = {
-  bill:  {name:'Bill', initials:'B', color:'#5C8A4A', textColor:'#fff', startKg:115, targetKg:95,  steps:4500, wakeTime:'7am', workTime:'9am'},
-  leon:  {name:'Leon', initials:'L', color:'#3A6030', textColor:'#fff', startKg:105, targetKg:105, steps:6000, wakeTime:'5am', workTime:'6am'},
-  greg:  {name:'Greg', initials:'G', color:'#FF9F0A', textColor:'#000', startKg:105, targetKg:105, steps:6000, wakeTime:'5am', workTime:'6am'},
-  brent: {name:'Brent',initials:'Br',color:'#BF5AF2', textColor:'#fff', startKg:96,  targetKg:89,  steps:6000, wakeTime:'5am', workTime:'6am'},
+// ── HABIT DEFINITIONS ─────────────────────────────────────────────
+const HABIT_DEFS={
+  sleep:{name:'Lights out by {lights_out}',freq:'Daily',sci:'Sleep regulates ghrelin and leptin — the hormones controlling hunger. Every hour of poor sleep raises cortisol, promotes fat storage and worsens insulin resistance. The later you stay up, the more you eat, drink and undo.'},
+  wake:{name:'Awake by {wake_time}',freq:'Daily',sci:'Cortisol peaks naturally in the morning, priming your prefrontal cortex — your sharpest window for decisions. A disciplined start is a keystone habit that anchors everything else.'},
+  work:{name:'At work by {work_time}',freq:'Weekdays',sci:'Showing up on time signals to yourself — not others — that you are executing. Keystone habits like punctuality create a cascade effect on all other habits that day.'},
+  train:{name:'Attend workout',freq:'Mon · Tue · Thu',sci:'Resistance training elevates your resting metabolic rate for up to 48 hours. Three sessions per week is the minimum effective dose to preserve muscle in a calorie deficit.'},
+  steps:{name:'{steps} steps today',freq:'Daily',sci:'During low-intensity movement, fat is the dominant fuel source. Visceral fat — the dangerous kind around your organs — responds fastest to sustained daily movement.'},
+  reframe:{name:'Reframe daily task',freq:'Daily',sci:'Alcohol suppresses fat oxidation for up to 12 hours after the last drink. Reframe works at the neural pathway level. Five minutes a day compounds into genuine behavioural change.'},
+  weigh:{name:'Weigh in — logged in app',freq:'Daily',sci:'Daily weigh-ins remove the emotional charge of the number. The data becomes a trend, not a verdict. Consistency of measurement is what makes the trajectory visible.'},
+  drinks:{name:'Drinks within cap',freq:'Daily',sci:'Alcohol is the single variable that undermines every other habit simultaneously — fat oxidation, sleep quality, tracking accuracy, insulin sensitivity. The cap exists for your benefit, not as a rule.'},
+  record:{name:'Listen to recordings',freq:'Thu · Fri · Sun',sci:''},
 };
 
-const ALL_HABITS = [
-  {id:'sleep',     name:'Lights out by 11pm',           freq:'Daily',           users:'all'},
-  {id:'wake',      name:'Awake at {wakeTime}',          freq:'Daily',           users:'all'},
-  {id:'work',      name:'At work by {workTime}',         freq:'Weekdays',        users:'all'},
-  {id:'training',  name:'Attend workout',               freq:'Mon · Tue · Thu', users:'all'},
-  {id:'steps',     name:'{steps} steps',                freq:'Daily',           users:'all'},
-  {id:'reframe',   name:'Reframe daily task',           freq:'Daily',           users:'all'},
-  {id:'weigh',     name:'Daily weigh-in — logged in app',freq:'Daily',          users:'all'},
-  {id:'recordings',name:'Listen to recordings',         freq:'Thu · Fri · Sun', users:'all'},
+// ── NIP SCIENCE (per level) ───────────────────────────────────────
+const NIP_SCI=[
+  'Nothing logged yet. A large wine glass is typically 3–5 nips — count the pour, not the glass.',
+  'One nip. Your body handles this comfortably. Liver processing is minimal. No meaningful fat oxidation impact at this level.',
+  'Two nips. Your liver is now prioritising ethanol processing above everything else. Fat burning is paused for the next few hours.',
+  'Three nips. Cortisol is rising. Sleep architecture will be disrupted tonight — you will get less deep sleep regardless of how long you\'re in bed.',
+  'Four nips — at the cap. Fat oxidation is fully suppressed. Sleep will be lighter and shorter. This is the line.',
+  'Five nips — over the cap. Every additional nip compounds the damage. Your liver is under real pressure. Fat burning won\'t resume properly until tomorrow.',
+  'Six nips. Sleep quality tonight will be significantly impaired. Tomorrow\'s decisions, willpower and training will all suffer. Is this worth it?',
+  'Seven nips. You are now drinking at a level that causes measurable inflammation. Your insulin sensitivity drops with every additional drink.',
+  'Eight nips. Your liver is working overtime. Blood glucose regulation is compromised — on insulin, this is a serious risk. Stop.',
+  'Nine nips. This is heavy drinking by any clinical measure. The cumulative physiological cost is significant. You know this.',
+  'Ten nips. At this level, fat loss this week is effectively cancelled. Every other habit you completed today is being undermined right now.',
+  'Eleven nips. This is not accountability — it is documentation of a pattern. The data will not lie to you, even when you lie to yourself.',
+  'Twelve nips. You\'re a grot. No plan survives this kind of night. Tomorrow starts the reset — but it starts tomorrow, which means now, you stop.',
 ];
 
-const CRAVING_TIPS = [
-  "Alcohol cravings peak at around 20 minutes then pass. Your brain is running an old program. You're not thirsty — you're triggered. Wait it out.",
-  "The urge to drink is a neural pathway firing, not a genuine need. Every time you let it pass without acting, that pathway gets weaker. Every time you give in, it gets stronger.",
-  "Your liver prioritises processing alcohol above all else — including burning fat. One drink pauses fat oxidation for up to 12 hours. The craving isn't worth the cost.",
-  "Try this: take 5 slow breaths. Inhale 4 counts, hold 4, exhale 6. Your nervous system physically cannot stay in craving mode while doing controlled breathing.",
-  "What's the actual feeling underneath the craving right now? Stress? Boredom? Habit? Name it. Cravings lose power when you label the emotion behind them.",
-  "You've already done hard things today. The craving is your brain trying to negotiate with you. You don't have to negotiate. Just don't pick up the drink for 20 minutes.",
+// ── AGE-AWARE BARBS (indexed by decade/age bracket) ───────────────
+const AGE_BARBS={
+  '20s':[
+    'At {age}, you have every biological advantage available to a human. The question is whether you\'re using them or squandering them.',
+    'Your metabolism at {age} is the best it will ever be. That\'s not an excuse — it\'s a reason to set a standard now, before it costs twice as much to maintain.',
+    'Is it too much to ask at {age} for some basic life discipline? Asking for literally every future version of you.',
+    'At {age}, the habits you build now compound for decades. The ones you don\'t are also compounding. Choose wisely.',
+    '{age} years old and already making excuses. Interesting choice.',
+  ],
+  '30s':[
+    'In your 30s now. The decade where what you do to your body actually starts to show up on your face. Fun, isn\'t it.',
+    'At {age}, your recovery time is longer, your sleep is worse, and your metabolism is slower than it was. The plan is the answer — not the enemy.',
+    'Is it too much, at {age}, to expect some basic life discipline? Genuinely curious.',
+    'At {age} you sure have some interesting life priorities. The body keeps score whether you\'re watching or not.',
+    'Thirty-something with the habits of someone who hasn\'t noticed their body has an expiry date. Fix it.',
+  ],
+  '40s':[
+    'Forty-something. The decade where ignoring your health stops being consequence-free. Welcome to accountability.',
+    'At {age}, visceral fat accumulates significantly faster. The good news: it also responds faster to the right habits. The plan is the plan.',
+    'In your 40s, your cortisol regulation is less efficient, your muscle mass declines without effort, and sleep becomes more critical than ever. The data is clear.',
+    'Plenty of time left — but less than there was. At {age}, consistency is the only currency that matters.',
+  ],
+  '50s':[
+    'At {age}, every good habit compounds at a rate that would make your younger self jealous. There is still everything to play for.',
+    'The 50s: when the consequences of decades of choices become visible. Also when the right habits have their most dramatic impact. Useful timing.',
+    'In your 50s now. Visceral fat is the specific enemy. Walking, lifting and cutting alcohol have a disproportionate impact at this age. Do the plan.',
+    'At {age}, the science is unambiguous: daily movement, protein, sleep and reduced alcohol reverse biological age markers. The plan is just the science, applied.',
+  ],
+  '60s+':[
+    'At {age}, you are running the most important decade of maintenance your body will ever need. The return on every good habit is exceptional right now.',
+    'The data on health outcomes at your age is clear: the habits in this app are the specific interventions that predict quality of life at 80. Not optional.',
+    'At {age}, visceral fat, insulin resistance and sleep are the three highest-leverage levers available. You\'re working on all three. That is what discipline looks like.',
+    'Every great man is defined by what he does when no one is watching. At {age}, you know this better than anyone.',
+  ],
+};
+
+const CRAVINGS=[
+  'Alcohol cravings peak at 20 minutes then pass. Your brain is running an old program — not a genuine need. Wait it out.',
+  'The urge to drink is a neural pathway firing. Every time you let it pass, that pathway weakens. Every time you give in, it strengthens.',
+  'Your liver prioritises processing alcohol above everything else — including burning fat. One drink pauses fat oxidation for up to 12 hours.',
+  '5 slow breaths: inhale 4 counts, hold 4, exhale 6. Your nervous system physically cannot maintain a craving response during controlled breathing.',
+  'What\'s the actual feeling underneath the craving right now? Stress? Boredom? Habit? Name it. Cravings lose power the moment you identify the emotion.',
+];
+const FURY_LATE=[
+  'It is past 11pm. Logging at this hour confirms the pattern. Late nights elevate cortisol, wreck sleep and make tomorrow harder. This is not about what others think — it is about whether you are lying to yourself.',
+  'Every hour past lights-out costs you the next morning. Ghrelin spikes, leptin drops, insulin sensitivity worsens. Go to bed now.',
+];
+const FURY_ABSENT=[
+  '{days} days without logging. The plan requires daily data. Without it there is no accountability — just intention. Intention without action is nothing. Log it now.',
+  '{days} days gone without a single entry. This is how plans die — not dramatically, but quietly through small omissions that compound. Start today.',
+];
+const AFFIRM=[
+  'Please solemnly confirm that {n} nips is accurate. Did you count every pour? That wine glass might have been 4 nips, not 1. Did you have a roadie? A quiet top-up? Think carefully.',
+  'You know this is nips — not glasses, right? You can\'t pour 4 glasses at 4 nips each and log 4 nips guilt-free. We\'re onto that. Is {n} really the number?',
+  '{n} nips. Before you confirm — stretch your mind back through the evening. Was there anything missed? Honesty here is the whole point. There is no benefit in fudging this.',
 ];
 
-const PILLARS = [
-  {tag:'SLEEP', color:'#0A84FF', hl:'Lights out by 11pm.',body:'Sleep is when your body regulates <strong>ghrelin and leptin</strong> — the hormones controlling hunger and satiety. Cut sleep short and ghrelin spikes, leptin drops — you wake up hungrier with weaker impulse control. Poor sleep worsens <strong>insulin resistance</strong> and raises cortisol, directly promoting fat storage. Alcohol fragments sleep architecture, suppressing deep restorative stages where fat is mobilised. Every late night is a metabolic cost.'},
-  {tag:'TRAINING', color:'#30D158', hl:'Every session. On time.',body:'Resistance training triggers <strong>muscle protein synthesis</strong> and elevates your resting metabolic rate for up to 48 hours post-session. Muscle is metabolically expensive — the more you carry, the more you burn at rest. In a calorie deficit, training is what tells your body to burn <em>fat</em>, not muscle. <strong>Three sessions a week is the minimum effective dose.</strong> Consistency compounds.'},
-  {tag:'MOVEMENT', color:'#FF9F0A', hl:'Walk daily. Hit your step target.',body:'Your body stores fat subcutaneously (under the skin) and <strong>viscerally</strong> (around the organs). Visceral fat drives a protruding belly and is metabolically dangerous — but it responds fastest to a sustained deficit. During low-intensity activity, <strong>fat is the dominant fuel source</strong>. Walking after meals blunts post-meal glucose spikes by up to 30%. Steps are a required daily output, not a bonus.'},
-  {tag:'NUTRITION', color:'#FF453A', hl:'Weigh your food. Track what goes in.',body:'Research consistently shows people underestimate intake by <strong>20–40%</strong>. That margin alone eliminates any deficit. Alcohol has its own calorie budget — it doesn\'t come out of food. <strong>1 nip = 1 shot = 30ml.</strong> A glass of wine with 5 shots poured in is 5 nips, not 1. Count what you actually consumed. Mounjaro suppresses appetite and improves insulin sensitivity — use the reduced hunger.'},
-  {tag:'REFRAME', color:'#BF5AF2', hl:'Open the app. Do the daily task.',body:'Alcohol suppresses <strong>fat oxidation for up to 12 hours</strong> after consumption — your body deprioritises fat burning to process ethanol first. It raises cortisol, fragments sleep, and impairs the tracking accuracy the deficit depends on. On insulin, alcohol also inhibits <strong>gluconeogenesis</strong>, blocking emergency glucose release. Hard cap: 4 nips per day. No exceptions. Reframe rewires the neural pathway, not just the intention. Non-negotiable.'},
-  {tag:'MORNING', color:'#FF9F0A', hl:'Rise. Routine. Move.',body:'Cortisol peaks naturally in the morning, priming alertness and decision-making. Your <strong>prefrontal cortex is sharpest</strong> in the hour after waking — that\'s when the day\'s behavioural architecture is set. A structured morning routine anchors every other habit that follows. The days you skip the morning are the days every other habit is harder.'},
-];
+// ── STATE ─────────────────────────────────────────────────────────
+let me=null,allUsers=[],userHabits={},todayH={},todayNips=0,weightLogs=[],pendingNip=false,cdTimer=null;
 
-// ─── STATE ────────────────────────────────────────────────────────
-let currentUser = null;
-let todayHabits = {};
-let todayNips = 0;
-let weightLogs = [];
-let allTeamData = {};
-let pendingNipAdd = false;
+// ── UTILS ─────────────────────────────────────────────────────────
+const ts=()=>new Date().toISOString().slice(0,10);
+const fmt=d=>new Date(d+'T00:00:00').toLocaleDateString('en-AU',{weekday:'short',day:'numeric',month:'short'});
+const dBetween=(d1,d2)=>Math.round((new Date(d2)-new Date(d1))/86400000);
+const isLate=()=>{const h=new Date().getHours();return h>=23||h<4;};
+const age=dob=>{if(!dob)return null;const d=new Date(dob),n=new Date();let a=n.getFullYear()-d.getFullYear();if(n<new Date(n.getFullYear(),d.getMonth(),d.getDate()))a--;return a;};
+const ageBracket=a=>{if(!a)return null;if(a<30)return '20s';if(a<40)return '30s';if(a<50)return '40s';if(a<60)return '50s';return '60s+';};
+function getBarb(usr){
+  const a=age(usr.dob);if(!a)return null;
+  const bracket=ageBracket(a);
+  const barbs=AGE_BARBS[bracket]||AGE_BARBS['30s'];
+  const b=barbs[Math.floor(Date.now()/86400000)%barbs.length];
+  return b.replace(/{age}/g,a);
+}
+const u=()=>allUsers.find(x=>x.id===me)||{};
 
-function ts(){return new Date().toISOString().slice(0,10)}
-function fmt(d){return new Date(d+'T00:00:00').toLocaleDateString('en-AU',{weekday:'short',day:'numeric',month:'short'})}
-function weeksFrom(d1,d2){return (new Date(d2)-new Date(d1))/(7*24*3600*1000)}
-function daysBetween(d1,d2){return Math.round((new Date(d2)-new Date(d1))/(24*3600*1000))}
-
-// ─── SUPABASE ─────────────────────────────────────────────────────
-async function sb(table, method='GET', body=null, params=''){
-  const url = `${SUPA_URL}/rest/v1/${table}${params}`;
-  const opts = {
-    method,
-    headers:{
-      'apikey': SUPA_KEY,
-      'Authorization': `Bearer ${SUPA_KEY}`,
-      'Content-Type': 'application/json',
-      'Prefer': method==='POST'?'resolution=merge-duplicates,return=representation':'',
-    }
-  };
-  if(body) opts.body = JSON.stringify(body);
-  const r = await fetch(url, opts);
-  if(!r.ok && method!=='DELETE'){
-    const err = await r.text();
-    throw new Error(err);
-  }
-  if(method==='DELETE') return null;
-  const text = await r.text();
-  return text ? JSON.parse(text) : null;
+// ── SUPABASE ──────────────────────────────────────────────────────
+async function sb(table,method,body,params){
+  method=method||'GET';params=params||'';
+  const r=await fetch(SU+'/rest/v1/'+table+params,{
+    method,headers:{'apikey':SK,'Authorization':'Bearer '+SK,'Content-Type':'application/json',
+      'Prefer':method==='POST'?'resolution=merge-duplicates,return=representation':''},
+    body:body?JSON.stringify(body):null
+  });
+  if(!r.ok&&method!=='DELETE')throw new Error(await r.text());
+  const t=await r.text();return t?JSON.parse(t):null;
 }
 
-// ─── USER MANAGEMENT ─────────────────────────────────────────────
-function selectUser(uid){
-  currentUser = uid;
-  document.cookie = `bf_user=${uid};max-age=${365*24*3600};path=/;samesite=strict`;
-  document.getElementById('user-screen').style.display='none';
-  initApp();
-}
-
-function loadSavedUser(){
-  const c = document.cookie.split(';').find(x=>x.trim().startsWith('bf_user='));
-  if(c) currentUser = c.trim().split('=')[1];
-}
-
-function switchUser(){
-  document.getElementById('user-screen').style.display='flex';
-}
-
-function updateUserUI(){
-  const u = USERS[currentUser];
-  const dot = document.getElementById('user-dot');
-  dot.style.background = u.color;
-  dot.style.color = u.textColor;
-  dot.textContent = u.initials;
-  document.getElementById('user-pill-name').textContent = u.name;
-}
-
-// ─── HABITS ───────────────────────────────────────────────────────
-function getHabitsForUser(uid){
-  const u = USERS[uid];
-  return ALL_HABITS.map(h=>({
-    ...h,
-    name: h.name
-      .replace('{wakeTime}', u.wakeTime)
-      .replace('{workTime}', u.workTime)
-      .replace('{steps}', u.steps.toLocaleString()),
-  }));
-}
-
-function isHabitActiveToday(habitId){
-  const day = new Date().getDay();
-  const freq = ALL_HABITS.find(h=>h.id===habitId)?.freq||'';
-  if(freq==='Daily') return true;
-  const dayMap = {Mon:1,Tue:2,Wed:3,Thu:4,Fri:5,Sat:6,Sun:0};
-  return freq.split('·').some(d=>dayMap[d.trim()]===day);
-}
-
-async function loadTodayHabits(){
+// ── USERS ─────────────────────────────────────────────────────────
+async function loadUsers(){
   try{
-    const data = await sb('habit_logs','GET',null,
-      `?user_id=eq.${currentUser}&logged_date=eq.${ts()}&select=habit_id,completed`);
-    todayHabits = {};
-    (data||[]).forEach(r=>todayHabits[r.habit_id]=r.completed);
-  }catch(e){todayHabits={};}
+    const d=await sb('users');
+    allUsers=(d&&d.length)?d.sort((a,b)=>{
+      // Sort by DOB ascending (oldest first)
+      if(!a.dob&&!b.dob)return 0;
+      if(!a.dob)return 1;if(!b.dob)return -1;
+      return new Date(a.dob)-new Date(b.dob);
+    }):[];
+  }catch(e){allUsers=[];}
 }
 
-async function toggleHabit(habitId, el){
-  const wasCompleted = !!todayHabits[habitId];
-  const nowCompleted = !wasCompleted;
-
-  // Weigh-in check: if ticking weigh but no weight logged today
-  if(habitId==='weigh' && nowCompleted){
-    const todayLogged = weightLogs.some(w=>w.logged_date===ts());
-    if(!todayLogged){
-      document.getElementById('honesty-modal').classList.add('show');
-      return;
-    }
-  }
-
-  todayHabits[habitId] = nowCompleted;
-  el.querySelector('.habit-check').classList.toggle('done', nowCompleted);
-  el.querySelector('.habit-name').classList.toggle('done', nowCompleted);
-
+async function loadUserHabits(){
+  if(!me)return;
   try{
-    await sb('habit_logs','POST',{
-      user_id: currentUser,
-      logged_date: ts(),
-      habit_id: habitId,
-      completed: nowCompleted,
+    const d=await sb('user_habits','GET',null,'?user_id=eq.'+me+'&enabled=eq.true');
+    userHabits[me]=(d||[]);
+  }catch(e){userHabits[me]=[];}
+}
+
+function getUserHabits(uid){
+  const uh=userHabits[uid]||[];
+  const usr=allUsers.find(x=>x.id===uid)||{};
+  return uh.map(h=>{
+    const def=HABIT_DEFS[h.habit_id];if(!def)return null;
+    const cap=h.target_value||4;
+    return {
+      id:h.habit_id,
+      name:def.name
+        .replace('{lights_out}',usr.lights_out||'11pm')
+        .replace('{wake_time}',usr.wake_time||'6am')
+        .replace('{work_time}',usr.work_time||'9am')
+        .replace('{steps}',(h.target_value||6000).toLocaleString()),
+      freq:def.freq,sci:def.sci,target:h.target_value
+    };
+  }).filter(Boolean);
+}
+
+function isActiveToday(hid){
+  const d=new Date().getDay();
+  const def=HABIT_DEFS[hid]||{freq:'Daily'};
+  if(def.freq==='Daily')return true;
+  const m={Mon:1,Tue:2,Wed:3,Thu:4,Fri:5,Sat:6,Sun:0};
+  return def.freq.split('·').some(x=>m[x.trim()]===d);
+}
+
+async function renderUserScreen(){
+  const list=document.getElementById('us-list');
+  list.innerHTML='';
+  // Load streaks for all users
+  const today=ts();
+  let streakData={};
+  try{
+    const wLogs=await sb('weight_logs','GET',null,'?order=logged_date.desc&select=user_id,logged_date&limit=200');
+    allUsers.forEach(usr=>{
+      const uw=(wLogs||[]).filter(w=>w.user_id===usr.id).sort((a,b)=>b.logged_date.localeCompare(a.logged_date));
+      let s=0;
+      for(let i=0;i<uw.length;i++){
+        const exp=new Date(today);exp.setDate(exp.getDate()-i);
+        if(uw[i]&&uw[i].logged_date===exp.toISOString().slice(0,10))s++;else break;
+      }
+      streakData[usr.id]=s;
     });
   }catch(e){}
 
-  updateHabitStats();
+  allUsers.forEach(usr=>{
+    const a=age(usr.dob);
+    const streak=streakData[usr.id]||0;
+    const btn=document.createElement('button');
+    btn.className='us-card';
+    btn.innerHTML=`<div class="us-av" style="background:${usr.color||'#5C8A4A'}">${usr.initials||'?'}</div>
+      <div class="us-info">
+        <div class="us-name">${usr.name||usr.display_name||'User'}</div>
+        <div class="us-meta">${a?a+' yrs · ':''} → ${usr.target_kg||'–'} kg</div>
+      </div>
+      ${streak>0?`<div class="us-streak">🔥 ${streak}</div>`:''}`;
+    btn.onclick=()=>selectUser(usr.id);
+    list.appendChild(btn);
+  });
+  if(!allUsers.length){
+    list.innerHTML='<div style="text-align:center;padding:20px 0;font-family:var(--sm);font-size:11px;color:var(--mi);letter-spacing:.06em">No users yet — add one below</div>';
+  }
 }
 
-function renderHabits(){
-  const habits = getHabitsForUser(currentUser);
-  const list = document.getElementById('habit-list');
-  list.innerHTML = '';
-  const u = USERS[currentUser];
+function selectUser(uid){
+  me=uid;
+  document.cookie='bh_user='+uid+';max-age='+(365*86400)+';path=/;samesite=strict';
+  document.getElementById('us').classList.remove('show');
+  initApp();
+}
+function switchUser(){document.getElementById('us').classList.add('show');}
+function loadSavedUser(){const c=document.cookie.split(';').find(x=>x.trim().startsWith('bh_user='));if(c)me=c.trim().split('=')[1];}
+
+function updateChip(){
+  const usr=u();
+  document.getElementById('chip-av').style.background=usr.color||'#5C8A4A';
+  document.getElementById('chip-av').textContent=usr.initials||'?';
+  document.getElementById('chip-name').textContent=usr.name||usr.display_name||'';
+}
+
+// ── NAVIGATION ────────────────────────────────────────────────────
+function showPage(id,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  if(btn)btn.classList.add('active');
+  if(id==='team')loadTeam();
+  if(id==='weight')renderWeightPage();
+}
+function toast(msg,dur=2800){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),dur);
+}
+function closeM(id){
+  document.getElementById(id).classList.remove('show');
+  if(id==='m-reframe'&&cdTimer){clearInterval(cdTimer);cdTimer=null;}
+}
+function closeSheet(id){document.getElementById(id).classList.remove('show');}
+
+// ── HABIT STREAKS ─────────────────────────────────────────────────
+async function getHabitStreaks(){
+  try{
+    const logs=await sb('habit_logs','GET',null,'?user_id=eq.'+me+'&order=logged_date.desc&select=logged_date,habit_id,completed&limit=300');
+    const streaks={};
+    const habits=getUserHabits(me).filter(h=>isActiveToday(h.id));
+    habits.forEach(h=>{
+      let s=0;
+      const hLogs=(logs||[]).filter(l=>l.habit_id===h.id&&l.completed).map(l=>l.logged_date).sort((a,b)=>b.localeCompare(a));
+      for(let i=0;i<hLogs.length;i++){
+        const exp=new Date(ts());exp.setDate(exp.getDate()-i);
+        if(hLogs[i]===exp.toISOString().slice(0,10))s++;else break;
+      }
+      streaks[h.id]=s;
+    });
+    return streaks;
+  }catch(e){return {};}
+}
+
+// ── HABITS ────────────────────────────────────────────────────────
+async function loadTodayHabits(){
+  try{
+    const d=await sb('habit_logs','GET',null,'?user_id=eq.'+me+'&logged_date=eq.'+ts()+'&select=habit_id,completed');
+    todayH={};(d||[]).forEach(r=>{todayH[r.habit_id]=r.completed;});
+  }catch(e){todayH={};}
+}
+
+async function renderHabits(){
+  const list=document.getElementById('habit-list');
+  list.innerHTML='';
+  const habits=getUserHabits(me).filter(h=>isActiveToday(h.id));
+  const streaks=await getHabitStreaks();
+  const usr=u();
 
   habits.forEach(h=>{
-    const active = isHabitActiveToday(h.id);
-    if(!active) return;
-    const done = !!todayHabits[h.id];
-    const row = document.createElement('div');
-    row.className = 'habit-row';
-    row.innerHTML = `
-      <div class="habit-check ${done?'done':''}">
-        <svg viewBox="0 0 14 14" fill="none"><polyline points="2,7 6,11 12,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </div>
-      <div class="habit-info">
-        <div class="habit-name ${done?'done':''}">${h.name}</div>
-        <div class="habit-freq">${h.freq}</div>
+    const done=!!todayH[h.id];
+    const streak=streaks[h.id]||0;
+    const locked=h.id==='weigh'&&!done;// checked in toggle
+
+    const sec=document.createElement('div');sec.className='habit-sec';
+
+    const row=document.createElement('div');row.className='habit-row';
+    row.innerHTML=`<div class="hck ${done?'done':''}"><svg viewBox="0 0 14 14" fill="none"><polyline points="2,7 6,11 12,3" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="h-info">
+        <div class="h-name ${done?'done':''}">${h.name}</div>
+        <div class="h-freq">${h.freq}</div>
+        ${streak>0?`<div class="h-streak">🔥 ${streak} day streak</div>`:''}
       </div>`;
-    row.onclick = ()=> toggleHabit(h.id, row);
-    list.appendChild(row);
+    row.onclick=()=>toggleHabit(h.id,row,h);
+    sec.appendChild(row);
+
+    // Streak dots (last 7 days)
+    const dotsDiv=document.createElement('div');dotsDiv.className='streak-dots';
+    for(let i=6;i>=0;i--){
+      const dot=document.createElement('div');dot.className='s-dot';
+      dot.style.background=streak>i?'var(--gr)':'var(--bo)';
+      dotsDiv.appendChild(dot);
+    }
+    sec.appendChild(dotsDiv);
+
+    if(h.sci){
+      const sci=document.createElement('div');
+      sci.className='h-sci'+(done?' show':'');
+      sci.id='sci-'+h.id;
+      // Inject age barb into science if available
+      const barb=getBarb(usr);
+      sci.textContent=h.sci+(barb&&Math.random()>.6?' '+barb:'');
+      sec.appendChild(sci);
+    }
+    list.appendChild(sec);
   });
+  updateStats();
 }
 
-function updateHabitStats(){
-  const habits = getHabitsForUser(currentUser).filter(h=>isHabitActiveToday(h.id));
-  const done = habits.filter(h=>todayHabits[h.id]).length;
-  document.getElementById('s-habits').textContent = `${done}/${habits.length}`;
-  document.getElementById('s-habits').className = `stat-num ${done===habits.length?'':''}`;
-  document.getElementById('s-habits').style.color = done===habits.length?'var(--green)':done>=habits.length*.6?'var(--amber)':'var(--text)';
+async function toggleHabit(id,row,h){
+  const now=!todayH[id];
+
+  if(id==='weigh'&&now){
+    const logged=weightLogs.some(w=>w.logged_date===ts());
+    if(!logged){document.getElementById('m-honest').classList.add('show');return;}
+  }
+  if(id==='drinks'&&now){openDrinksConfirm();return;}
+  if(isLate()&&(id==='sleep'||id==='wake')){
+    document.getElementById('fury-t').textContent="It's past lights-out.";
+    document.getElementById('fury-b').textContent=FURY_LATE[Math.floor(Math.random()*FURY_LATE.length)];
+    document.getElementById('m-fury').classList.add('show');
+    if(id==='sleep')return;
+  }
+
+  todayH[id]=now;
+  const check=row.querySelector('.hck');const name=row.querySelector('.h-name');
+  check.classList.toggle('done',now);name.classList.toggle('done',now);
+  const sci=document.getElementById('sci-'+id);
+  if(sci)now?sci.classList.add('show'):sci.classList.remove('show');
+  try{await sb('habit_logs','POST',{user_id:me,logged_date:ts(),habit_id:id,completed:now});}catch(e){}
+  const active=getUserHabits(me).filter(h=>isActiveToday(h.id));
+  const doneC=active.filter(h=>todayH[h.id]).length;
+  if(doneC===active.length){toast('All done. That is what execution looks like.');document.getElementById('hero').classList.add('good');}
+  else if(now)toast('Logged.');
+  updateStats();
 }
 
-// ─── DRINKS ───────────────────────────────────────────────────────
+function updateStats(){
+  const active=getUserHabits(me).filter(h=>isActiveToday(h.id));
+  const done=active.filter(h=>todayH[h.id]).length;
+  const el=document.getElementById('s-habits');
+  el.textContent=done+'/'+active.length;
+  el.style.color=done===active.length?'var(--gr)':done>=Math.ceil(active.length*.6)?'var(--am)':'var(--bk)';
+}
+
+// ── DRINKS ────────────────────────────────────────────────────────
 async function loadTodayNips(){
-  try{
-    const data = await sb('drink_logs','GET',null,
-      `?user_id=eq.${currentUser}&logged_date=eq.${ts()}&select=nips`);
-    todayNips = data?.[0]?.nips || 0;
-  }catch(e){todayNips=0;}
+  try{const d=await sb('drink_logs','GET',null,'?user_id=eq.'+me+'&logged_date=eq.'+ts()+'&select=nips');todayNips=(d&&d[0])?d[0].nips:0;}
+  catch(e){todayNips=0;}
   renderNips();
 }
-
-function startCountdown(){
-  const doneBtn = document.getElementById('reframe-done-btn');
-  const skipBtn = document.getElementById('reframe-skip-btn');
-  const numEl = document.getElementById('countdown-num');
-  const fillEl = document.getElementById('countdown-fill');
-  const labelEl = document.querySelector('.countdown-label');
-  doneBtn.disabled = true;
-  skipBtn.disabled = true;
-  numEl.style.color = 'var(--blue)';
-  fillEl.style.stroke = 'var(--blue)';
-  labelEl.textContent = 'seconds before you can proceed';
-  if(countdownTimer) clearInterval(countdownTimer);
-  let secs = 15;
-  const circumference = 2 * Math.PI * 18;
-  function tick(){
-    numEl.textContent = secs;
-    fillEl.style.strokeDashoffset = circumference * (1 - secs/15);
-    if(secs <= 0){
-      clearInterval(countdownTimer);
-      doneBtn.disabled = false;
-      skipBtn.disabled = false;
-      numEl.textContent = '✓';
-      numEl.style.color = 'var(--green)';
-      fillEl.style.stroke = 'var(--fit)';
-      labelEl.textContent = 'You can proceed now';
-    }
-    secs--;
-  }
-  tick();
-  countdownTimer = setInterval(tick, 1000);
-}
-
-let countdownTimer = null;
 
 async function changeNips(delta){
-  const newNips = Math.max(0, Math.min(20, todayNips + delta));
-  if(delta > 0 && !todayHabits['reframe']){
-    pendingNipAdd = true;
-    document.getElementById('craving-tip').textContent = CRAVING_TIPS[Math.floor(Math.random()*CRAVING_TIPS.length)];
-    document.getElementById('reframe-modal').classList.add('show');
+  if(delta>0&&isLate()){
+    document.getElementById('fury-t').textContent='Adding drinks after lights-out?';
+    document.getElementById('fury-b').textContent=FURY_LATE[Math.floor(Math.random()*FURY_LATE.length)];
+    document.getElementById('m-fury').classList.add('show');
+  }
+  const uh=userHabits[me]||[];
+  const hasReframe=(uh.find(h=>h.habit_id==='reframe'))||false;
+  if(delta>0&&hasReframe&&!todayH['reframe']){
+    pendingNip=true;
+    document.getElementById('craving-tip').textContent=CRAVINGS[Math.floor(Math.random()*CRAVINGS.length)];
     startCountdown();
+    document.getElementById('m-reframe').classList.add('show');
     return;
   }
-  await saveNips(newNips);
+  await saveNips(Math.max(0,Math.min(20,todayNips+delta)));
 }
 
-async function saveNips(n){
-  todayNips = n;
-  renderNips();
-  try{
-    await sb('drink_logs','POST',{user_id:currentUser,logged_date:ts(),nips:n});
-  }catch(e){}
-}
-
-async function markReframeDone(){
-  todayHabits['reframe'] = true;
-  try{
-    await sb('habit_logs','POST',{user_id:currentUser,logged_date:ts(),habit_id:'reframe',completed:true});
-  }catch(e){}
-  renderHabits();
-  updateHabitStats();
-  closeModal('reframe-modal');
-  if(pendingNipAdd){
-    pendingNipAdd = false;
-    await saveNips(Math.min(20, todayNips + 1));
-  }
-  showToast('Reframe marked done.');
-}
-
-async function skipReframe(){
-  closeModal('reframe-modal');
-  if(pendingNipAdd){
-    pendingNipAdd = false;
-    await saveNips(Math.min(20, todayNips + 1));
-  }
-}
+async function saveNips(n){todayNips=n;renderNips();try{await sb('drink_logs','POST',{user_id:me,logged_date:ts(),nips:n});}catch(e){}}
 
 function renderNips(){
-  const n = todayNips;
-  const el = document.getElementById('nip-count');
-  el.textContent = n;
-  el.style.color = n > 4 ? 'var(--red)' : n === 4 ? 'var(--amber)' : 'var(--text)';
-
-  const fill = document.getElementById('nip-fill');
-  fill.style.width = Math.min(100, (n/4)*100) + '%';
-  fill.style.background = n > 4 ? '#B85C5C' : n === 4 ? '#C4773A' : 'var(--fit)';
-
-  const note = document.getElementById('drink-note');
-  if(n === 0){
-    note.style.color = 'var(--text3)';
-    note.textContent = '1 nip = 1 shot (30ml). A large wine glass is often 4–6 nips. Measure what you actually pour.';
-  } else if(n < 4){
-    note.style.color = 'var(--text2)';
-    note.textContent = `${4-n} nip${4-n!==1?'s':''} remaining. Alcohol suppresses fat burning for up to 12 hours after the last drink.`;
-  } else if(n === 4){
-    note.style.color = 'var(--amber)';
-    note.textContent = "At the cap. Fat oxidation is fully suppressed right now. This is the line — don't cross it.";
-  } else {
-    note.style.color = 'var(--red)';
-    note.textContent = `${n} nips logged — ${n-4} over the daily cap. On insulin, alcohol blocks emergency glucose release. This compounds every other effort you've made today.`;
-  }
+  const n=todayNips;
+  const usr=u();const cap=(userHabits[me]||[]).find(h=>h.habit_id==='drinks');
+  const capVal=cap?cap.target_value||4:4;
+  document.getElementById('nip-cap').textContent=capVal;
+  const el=document.getElementById('nip-num');
+  el.textContent=n;el.style.color=n>capVal?'var(--re)':n===capVal?'var(--am)':'var(--bk)';
+  const fill=document.getElementById('nip-fill');
+  fill.style.width=Math.min(100,(n/capVal)*100)+'%';
+  fill.style.background=n>capVal?'var(--re)':n===capVal?'#C4773A':'var(--gr)';
+  const sci=document.getElementById('nip-sci');
+  sci.textContent=NIP_SCI[Math.min(n,NIP_SCI.length-1)];
+  sci.style.color=n>capVal?'var(--re)':n===capVal?'var(--am)':'var(--mi)';
+  sci.style.background=n>capVal?'var(--rl)':n===capVal?'var(--al)':'var(--wm)';
 }
 
-// ─── WEIGHT ───────────────────────────────────────────────────────
-async function loadWeightLogs(){
+function openDrinksConfirm(){
+  const n=todayNips;
+  document.getElementById('dc-title').textContent='Your drinks today: '+n+' nip'+(n!==1?'s':'');
+  const fury=document.getElementById('dc-fury');
+  sb('drink_logs','GET',null,'?user_id=eq.'+me+'&order=logged_date.desc&limit=4&select=nips').then(logs=>{
+    const cons=(logs||[]).filter(l=>l.nips===4).length;
+    if(cons>=3&&n===4){fury.style.display='block';fury.textContent='Every single day this week: exactly 4 nips. Remarkably consistent. Please solemnly affirm this is accurate. Did you count every pour? Did you forget a roadie? Honest question.';}
+    else if(n>4){fury.style.display='block';fury.textContent=AFFIRM[Math.floor(Math.random()*AFFIRM.length)].replace(/{n}/g,n);}
+    else{fury.style.display='none';}
+    document.getElementById('m-drinks-confirm').classList.add('show');
+  }).catch(()=>{fury.style.display='none';document.getElementById('m-drinks-confirm').classList.add('show');});
+}
+
+async function confirmDrinks(confirmed){
+  closeM('m-drinks-confirm');
+  if(confirmed){
+    todayH['drinks']=true;
+    try{await sb('habit_logs','POST',{user_id:me,logged_date:ts(),habit_id:'drinks',completed:true});}catch(e){}
+    renderHabits();updateStats();
+    toast(todayNips<=4?'Within cap. Logged.':'Over the cap — logged honestly. That matters.');
+  }else{toast('Take another look at your count.');}
+}
+
+// ── REFRAME ───────────────────────────────────────────────────────
+function startCountdown(){
+  const dB=document.getElementById('rf-done');const sB=document.getElementById('rf-skip');
+  const nE=document.getElementById('cd-n');const fE=document.getElementById('cd-fl');
+  const lbl=document.querySelector('.cd-lbl');
+  dB.disabled=true;sB.disabled=true;nE.style.color='var(--gr)';fE.style.stroke='var(--gr)';lbl.textContent='seconds';
+  if(cdTimer)clearInterval(cdTimer);
+  let s=15;const C=2*Math.PI*18;
+  const tick=()=>{nE.textContent=s;fE.style.strokeDashoffset=C*(1-s/15);if(s<=0){clearInterval(cdTimer);dB.disabled=false;sB.disabled=false;nE.textContent='OK';lbl.textContent='you can proceed';}s--;};
+  tick();cdTimer=setInterval(tick,1000);
+}
+async function markReframeDone(){
+  todayH['reframe']=true;
+  try{await sb('habit_logs','POST',{user_id:me,logged_date:ts(),habit_id:'reframe',completed:true});}catch(e){}
+  renderHabits();closeM('m-reframe');
+  if(pendingNip){pendingNip=false;await saveNips(Math.min(20,todayNips+1));}
+  toast('Reframe complete.');
+}
+async function skipReframe(){closeM('m-reframe');if(pendingNip){pendingNip=false;await saveNips(Math.min(20,todayNips+1));}}
+
+// ── WEIGHT ────────────────────────────────────────────────────────
+async function loadWeights(){try{const d=await sb('weight_logs','GET',null,'?user_id=eq.'+me+'&order=logged_date.desc&limit=90');weightLogs=d||[];}catch(e){weightLogs=[];}}
+
+async function logWeightToday(){
+  const inp=document.getElementById('w-today');const v=parseFloat(inp.value);
+  if(!v||v<40||v>250){toast('Enter a valid weight');return;}
+  if(isLate()){document.getElementById('fury-t').textContent='Logging weight after lights-out?';document.getElementById('fury-b').textContent=FURY_LATE[0];document.getElementById('m-fury').classList.add('show');}
   try{
-    const data = await sb('weight_logs','GET',null,
-      `?user_id=eq.${currentUser}&order=logged_date.desc&limit=30`);
-    weightLogs = data || [];
-  }catch(e){weightLogs=[];}
+    await sb('weight_logs','POST',{user_id:me,logged_date:ts(),weight_kg:+v.toFixed(1)});
+    inp.value='';await loadWeights();renderHero();
+    document.getElementById('w-today-line').textContent='Today: '+v.toFixed(1)+' kg';
+    if(!todayH['weigh']){todayH['weigh']=true;await sb('habit_logs','POST',{user_id:me,logged_date:ts(),habit_id:'weigh',completed:true});renderHabits();}
+    toast(v.toFixed(1)+' kg logged.');
+  }catch(e){toast('Could not save — check connection');}
 }
 
 async function logWeight(dateOverride){
-  const inputEl = document.getElementById(dateOverride ? 'backdate-kg' : 'weight-in');
-  const v = parseFloat(inputEl.value);
-  if(!v||v<40||v>250){showToast('Enter a valid weight');return;}
-  const date = dateOverride || ts();
-
+  const inp=document.getElementById(dateOverride?'bd-kg':'w-in');const v=parseFloat(inp.value);
+  if(!v||v<40||v>250){toast('Enter a valid weight');return;}
+  const date=dateOverride||ts();
+  if(!dateOverride&&isLate()){document.getElementById('fury-t').textContent='Logging weight after lights-out?';document.getElementById('fury-b').textContent=FURY_LATE[0];document.getElementById('m-fury').classList.add('show');}
   try{
-    await sb('weight_logs','POST',{user_id:currentUser,logged_date:date,weight_kg:+v.toFixed(1)});
-    inputEl.value = '';
-    if(dateOverride) document.getElementById('backdate-date').value = '';
-    await loadWeightLogs();
-    renderWeightPage();
-    renderHero();
-    showToast(`${v.toFixed(1)} kg logged for ${fmt(date)}`);
-    // If today's weight just got logged and weigh habit ticked, acknowledge
-    if(date===ts() && !todayHabits['weigh']){
-      todayHabits['weigh']=true;
-      await sb('habit_logs','POST',{user_id:currentUser,logged_date:ts(),habit_id:'weigh',completed:true});
-      renderHabits();updateHabitStats();
-    }
-  }catch(e){showToast('Could not save — check connection');}
+    await sb('weight_logs','POST',{user_id:me,logged_date:date,weight_kg:+v.toFixed(1)});
+    inp.value='';if(dateOverride)document.getElementById('bd-date').value='';
+    await loadWeights();renderHero();renderWeightPage();
+    if(date===ts()&&!todayH['weigh']){todayH['weigh']=true;await sb('habit_logs','POST',{user_id:me,logged_date:ts(),habit_id:'weigh',completed:true});renderHabits();}
+    toast(v.toFixed(1)+' kg logged.');
+  }catch(e){toast('Could not save — check connection');}
 }
 
 function renderWeightPage(){
-  const u = USERS[currentUser];
-  const todayW = weightLogs.find(w=>w.logged_date===ts());
-  document.getElementById('weight-today-line').textContent = todayW
-    ? `Today: ${todayW.weight_kg} kg`
-    : 'Not logged today';
+  const usr=u();
+  const tw=weightLogs.find(w=>w.logged_date===ts());
+  document.getElementById('w-pg-line').textContent=tw?'Today: '+tw.weight_kg+' kg':'Not logged today';
+  const bd=document.getElementById('bd-date');if(!bd.value)bd.value=ts();
+  const sorted=[...weightLogs].sort((a,b)=>a.logged_date.localeCompare(b.logged_date));
+  const tNum=document.getElementById('traj-num');const tTag=document.getElementById('traj-tag');
+  const tDate=usr.target_date||TDATE;
 
-  // Set backdate default to today
-  const bd = document.getElementById('backdate-date');
-  if(!bd.value) bd.value = ts();
+  if(sorted.length>=2){
+    const recent=sorted.filter(w=>dBetween(w.logged_date,ts())<=14);
+    let pace=0;
+    if(recent.length>=2){const f=recent[0],l=recent[recent.length-1];const days=dBetween(f.logged_date,l.logged_date);if(days>0)pace=(f.weight_kg-l.weight_kg)/days;}
+    const latest=sorted[sorted.length-1];
+    if(pace>0){
+      const raw=+(latest.weight_kg-pace*dBetween(ts(),tDate)).toFixed(1);
+      const proj=Math.max(raw,usr.target_kg||0);
+      tNum.textContent=proj.toFixed(1)+' kg';
+      tNum.style.color=proj<=(usr.target_kg||0)?'var(--gr)':proj<=(usr.target_kg||0)+3?'var(--am)':'var(--re)';
+      if(proj<=(usr.target_kg||0)){tTag.textContent='On track to hit '+(usr.target_kg||'–')+' kg';tTag.style.background='var(--gl)';tTag.style.color='var(--gd)';}
+      else{const over=+(proj-(usr.target_kg||0)).toFixed(1);tTag.textContent=over+' kg above target at this pace';tTag.style.background='var(--rl)';tTag.style.color='var(--re)';}
+    }else{tNum.textContent='–';tTag.textContent='No downward trend yet';tTag.style.background='var(--al)';tTag.style.color='var(--am)';}
+  }else{tNum.textContent='–';tTag.textContent='Log a few weights first';tTag.style.background='var(--wm)';tTag.style.color='var(--mi)';}
 
-  // Trajectory calculation
-  const sorted = [...weightLogs].sort((a,b)=>a.logged_date.localeCompare(b.logged_date));
-  const list = document.getElementById('weight-log-list');
-
-  if(sorted.length === 0){
-    list.innerHTML = '<div class="empty-state">No weights logged yet.</div>';
-    document.getElementById('traj-kg').textContent = '–';
-    document.getElementById('traj-pace').textContent = 'Log some weights first';
-    document.getElementById('traj-pace').style.background = 'var(--bg4)';
-    document.getElementById('traj-pace').style.color = 'var(--text3)';
-    return;
-  }
-
-  // Pace: use last 2 weeks of data if available
-  const recentSorted = sorted.filter(w=>daysBetween(w.logged_date,ts())<=14);
-  let paceKgPerDay = 0;
-  if(recentSorted.length >= 2){
-    const first = recentSorted[0], last = recentSorted[recentSorted.length-1];
-    const days = daysBetween(first.logged_date, last.logged_date);
-    if(days > 0) paceKgPerDay = (first.weight_kg - last.weight_kg) / days;
-  }
-
-  const latest = sorted[sorted.length-1];
-  const daysToTarget = daysBetween(ts(), TARGET_DATE);
-  const projected = +(latest.weight_kg - paceKgPerDay * daysToTarget).toFixed(1);
-  const trajEl = document.getElementById('traj-kg');
-  const paceEl = document.getElementById('traj-pace');
-  trajEl.textContent = paceKgPerDay > 0 ? projected.toFixed(1) + ' kg' : '–';
-
-  if(paceKgPerDay <= 0){
-    paceEl.textContent = 'No downward trend yet';
-    paceEl.style.background = 'rgba(255,159,10,.15)';
-    paceEl.style.color = 'var(--amber)';
-  } else {
-    const diff = projected - u.targetKg;
-    if(diff <= 0){
-      paceEl.textContent = `On pace — ${Math.abs(diff).toFixed(1)} kg ahead of target`;
-      paceEl.style.background = 'rgba(48,209,88,.12)';
-      paceEl.style.color = 'var(--green)';
-    } else {
-      paceEl.textContent = `${diff.toFixed(1)} kg above target at this pace`;
-      paceEl.style.background = 'rgba(255,69,58,.12)';
-      paceEl.style.color = 'var(--red)';
-    }
-  }
-  trajEl.style.color = paceKgPerDay > 0 && projected <= u.targetKg ? 'var(--fit)' : projected <= u.targetKg + 2 ? '#C4773A' : '#B85C5C';
-
-  // Log list
-  const displayLogs = [...sorted].reverse().slice(0, 20);
-  list.innerHTML = '';
-  displayLogs.forEach((w,i) => {
-    const prev = displayLogs[i+1];
-    const diff = prev ? +(w.weight_kg - prev.weight_kg).toFixed(1) : null;
-    const isToday = w.logged_date === ts();
-    const row = document.createElement('div');
-    row.className = 'weight-log-item';
-    let diffHtml = '';
-    if(diff !== null){
-      const cls = diff < 0 ? 'background:var(--fit-light);color:var(--fit-dark)' : diff > 0 ? 'background:#FAEAEA;color:#8A3A3A' : 'background:var(--warm);color:var(--mid)';
-      diffHtml = `<span class="weight-log-diff" style="${cls}">${diff > 0 ? '+' : ''}${diff}</span>`;
-    }
-    row.innerHTML = `
-      <span class="weight-log-date">${isToday ? 'Today' : fmt(w.logged_date)}</span>
-      <span class="weight-log-kg">${w.weight_kg} kg</span>
-      ${diffHtml}`;
-    list.appendChild(row);
+  const logEl=document.getElementById('w-log');
+  const display=[...weightLogs].sort((a,b)=>b.logged_date.localeCompare(a.logged_date)).slice(0,20);
+  if(!display.length){logEl.innerHTML='<div class="empty">No weights logged yet</div>';return;}
+  logEl.innerHTML='';
+  display.forEach((w,i)=>{
+    const prev=display[i+1];const diff=prev?+(w.weight_kg-prev.weight_kg).toFixed(1):null;
+    const row=document.createElement('div');row.className='wlog-item';
+    let dh='';
+    if(diff!==null){const c=diff<0?'background:var(--gl);color:var(--gd)':diff>0?'background:var(--rl);color:var(--re)':'background:var(--wm);color:var(--mi)';dh=`<span class="wlog-diff" style="${c}">${diff>0?'+':''}${diff}</span>`;}
+    row.innerHTML=`<span class="wlog-date">${w.logged_date===ts()?'Today':fmt(w.logged_date)}</span><span class="wlog-kg">${w.weight_kg} kg</span>${dh}`;
+    logEl.appendChild(row);
   });
 }
 
-// ─── HERO ─────────────────────────────────────────────────────────
 function renderHero(){
-  const u = USERS[currentUser];
-  const latest = weightLogs.length > 0
-    ? [...weightLogs].sort((a,b)=>b.logged_date.localeCompare(a.logged_date))[0]
-    : null;
+  const usr=u();
+  const hero=document.getElementById('hero');const badge=document.getElementById('hero-badge');
+  const kgEl=document.getElementById('hero-kg');const sub=document.getElementById('hero-sub');const msg=document.getElementById('hero-msg');
+  const sorted=[...weightLogs].sort((a,b)=>b.logged_date.localeCompare(a.logged_date));
+  const latest=sorted[0]||null;
+  const barb=getBarb(usr);
 
-  const badge = document.getElementById('hero-badge');
-  const kgEl = document.getElementById('hero-kg');
-  const detail = document.getElementById('hero-detail');
-  const msg = document.getElementById('hero-msg');
-  const hero = document.getElementById('hero');
-  const uColor = u.color;
+  if(weightLogs.length>0){
+    const gap=dBetween(sorted[0].logged_date,ts());
+    if(gap>=3){
+      document.getElementById('fury-t').textContent=gap+' days without logging.';
+      document.getElementById('fury-b').textContent=FURY_ABSENT[Math.floor(Math.random()*FURY_ABSENT.length)].replace(/{days}/g,gap);
+      document.getElementById('m-fury').classList.add('show');
+    }
+  }
 
   if(!latest){
-    hero.style.background = 'var(--bg3)';
-    hero.style.border = '1px solid var(--border)';
-    badge.dataset.x = 'var(--bg4)';badge.dataset.y = 'var(--text3)';badge.textContent = 'TRACKING';
-    kgEl.textContent = '–';kgEl.style.color = 'var(--text)';
-    detail.textContent = 'Log your weight to begin tracking';detail.style.color='var(--text3)';
-    msg.textContent = 'Weigh yourself first thing every morning — same time, no clothes, before eating. The number is just data.';
-    msg.style.background='var(--bg4)';msg.style.color='var(--text2)';
-    document.getElementById('s-lost').textContent = '–';
-    document.getElementById('s-streak').textContent = '–';
+    hero.className='hero';badge.textContent='No data yet';badge.style.color='var(--mi)';
+    kgEl.textContent='–';kgEl.style.color='var(--bk)';
+    sub.textContent='Log your weight to begin tracking';
+    msg.textContent=(barb||'Weigh yourself first thing every morning. Same time, same conditions. The number is just data.')+' Consistency of measurement is what makes the trajectory visible.';
+    document.getElementById('s-lost').textContent='–';document.getElementById('s-streak').textContent='–';
     return;
   }
 
-  const current = latest.weight_kg;
-  const lost = +(u.startKg - current).toFixed(1);
+  const cur=latest.weight_kg;const lost=+(usr.start_kg-cur).toFixed(1);
+  const tDate=usr.target_date||TDATE;
+  const totalDays=dBetween(usr.created_at?usr.created_at.slice(0,10):'2026-03-20',tDate);
+  const elap=dBetween(usr.created_at?usr.created_at.slice(0,10):'2026-03-20',ts());
+  const exp=+(usr.start_kg-(usr.start_kg-usr.target_kg)*(elap/totalDays)).toFixed(1);
+  const diff=+(cur-exp).toFixed(1);
+  kgEl.textContent=cur.toFixed(1);
+  const lostEl=document.getElementById('s-lost');lostEl.textContent=lost>0?lost.toFixed(1):'0.0';lostEl.style.color=lost>0?'var(--gr)':'var(--bk)';
 
-  // Expected weight by now (linear from start date)
-  const totalDays = daysBetween(START_DATE, TARGET_DATE);
-  const elapsedDays = daysBetween(START_DATE, ts());
-  const totalLoss = u.startKg - u.targetKg;
-  const expectedCurrent = +(u.startKg - (totalLoss * elapsedDays / totalDays)).toFixed(1);
-  const diff = +(current - expectedCurrent).toFixed(1);
+  let streak=0;
+  for(let i=0;i<sorted.length;i++){const ex2=new Date(ts());ex2.setDate(ex2.getDate()-i);if(sorted[i]&&sorted[i].logged_date===ex2.toISOString().slice(0,10))streak++;else break;}
+  const stEl=document.getElementById('s-streak');stEl.textContent=streak;stEl.style.color=streak>=7?'var(--gr)':streak>=3?'var(--am)':'var(--bk)';
 
-  kgEl.textContent = current.toFixed(1);
-  document.getElementById('s-lost').textContent = lost >= 0 ? lost.toFixed(1) : '0.0';
-  document.getElementById('s-lost').style.color = lost > 0 ? 'var(--fit)' : 'var(--mid)';
-
-  if(diff <= -2){
-    hero.style.background = 'rgba(48,209,88,.08)';
-    hero.style.border = '1px solid rgba(48,209,88,.2)';
-    badge.dataset.x = 'rgba(48,209,88,.15)';badge.style.color='var(--green)';badge.textContent='AHEAD OF TARGET';badge.className='hero-badge good';
-    kgEl.style.color = 'var(--green)';
-    detail.textContent = `${Math.abs(diff).toFixed(1)} kg ahead of target pace`;detail.style.color='var(--green)';
-    msg.style.background='rgba(48,209,88,.08)';msg.style.color='#a8e6c0';
-    msg.textContent = `Genuinely impressive. ${Math.abs(diff).toFixed(1)} kg ahead of where you need to be. This is what consistent days look like. Keep doing exactly this.`;
-  } else if(diff <= 0){
-    hero.style.background = 'rgba(48,209,88,.06)';
-    hero.style.border = '1px solid rgba(48,209,88,.15)';
-    badge.dataset.x = 'rgba(48,209,88,.12)';badge.style.color='var(--green)';badge.textContent='ON TRACK';badge.className='hero-badge good';
-    kgEl.style.color = 'var(--text)';
-    detail.textContent = `Right on target pace`;detail.style.color='var(--green)';
-    msg.style.background='rgba(48,209,88,.07)';msg.style.color='#a8e6c0';
-    msg.textContent = `On track and trending right. The goal doesn't require perfection — just consistency. You've got it.`;
-  } else if(diff <= 1.5){
-    hero.style.background = 'rgba(255,159,10,.06)';
-    hero.style.border = '1px solid rgba(255,159,10,.2)';
-    badge.dataset.x = 'rgba(255,159,10,.12)';badge.style.color='var(--amber)';badge.textContent='SLIGHTLY BEHIND';badge.className='hero-badge warn';
-    kgEl.style.color = 'var(--amber)';
-    detail.textContent = `${diff.toFixed(1)} kg behind target pace`;detail.style.color='var(--amber)';
-    msg.style.background='rgba(255,159,10,.08)';msg.style.color='#f5cc7a';
-    msg.textContent = `${diff.toFixed(1)} kg behind pace — not a crisis, but the gap compounds quickly if ignored. One tight week closes it. What needs to tighten?`;
-  } else {
-    hero.style.background = 'rgba(255,69,58,.06)';
-    hero.style.border = '1px solid rgba(255,69,58,.2)';
-    badge.dataset.x = 'rgba(255,69,58,.12)';badge.style.color='var(--red)';badge.textContent='OFF TRACK';badge.className='hero-badge bad';
-    kgEl.style.color = 'var(--red)';
-    detail.textContent = `${diff.toFixed(1)} kg behind target pace`;detail.style.color='var(--red)';
-    msg.style.background='rgba(255,69,58,.08)';msg.style.color='#f5a49b';
-    msg.textContent = `${diff.toFixed(1)} kg behind where the plan needs you. One week of drift doesn't end the goal — but every additional day makes recovery harder. The plan is still there. Get back on it today.`;
+  if(diff<=-2){
+    hero.className='hero good';badge.textContent='Ahead of target';kgEl.style.color='var(--gd)';
+    sub.textContent=Math.abs(diff).toFixed(1)+' kg ahead of target pace';
+    msg.textContent='Ahead by '+Math.abs(diff).toFixed(1)+' kg. That is the compound effect of consistent days. Keep this up.';
+  }else if(diff<=0){
+    hero.className='hero good';badge.textContent='On track';kgEl.style.color='var(--gd)';
+    sub.textContent='Right on target pace';
+    msg.textContent='On track. Every day you hold this line, your target gets closer. The maths is working.'+(barb?' — '+barb:'');
+  }else if(diff<=2){
+    hero.className='hero warn';badge.textContent='Slightly behind';kgEl.style.color='var(--am)';
+    sub.textContent=diff.toFixed(1)+' kg behind target pace';
+    msg.textContent=diff.toFixed(1)+' kg behind pace. Not a crisis yet — one clean week closes this. Tighten the habits today.'+(barb?' '+barb:'');
+  }else{
+    hero.className='hero bad';badge.textContent='Off track';kgEl.style.color='var(--re)';
+    sub.textContent=diff.toFixed(1)+' kg behind target pace';
+    msg.textContent=diff.toFixed(1)+' kg behind where the plan needs you. This does not fix itself. Identify what slipped and fix it today.'+(barb?' '+barb:'');
   }
-
-  // Streak
-  let streak = 0;
-  const sortedW = [...weightLogs].sort((a,b)=>b.logged_date.localeCompare(a.logged_date));
-  for(let i=0;i<sortedW.length;i++){
-    const expected = new Date(ts());expected.setDate(expected.getDate()-i);
-    if(sortedW[i]?.logged_date === expected.toISOString().slice(0,10)) streak++;
-    else break;
-  }
-  document.getElementById('s-streak').textContent = streak;
-  document.getElementById('s-streak').style.color = streak >= 7 ? 'var(--fit)' : streak >= 3 ? 'var(--fit-dark)' : 'var(--mid)';
 }
 
-// ─── TEAM ─────────────────────────────────────────────────────────
-let teamCache = {};
-
-async function loadTeamData(){
-  const list = document.getElementById('team-list');
-  list.innerHTML = '<div class="loading">Loading…</div>';
+// ── TEAM ──────────────────────────────────────────────────────────
+async function loadTeam(){
+  const list=document.getElementById('team-list');
+  list.innerHTML='';
+  allUsers.forEach(()=>{const sk=document.createElement('div');sk.className='tskel';list.appendChild(sk);});
   try{
-    const [weights, habits, drinks] = await Promise.all([
-      sb('weight_logs','GET',null,`?order=logged_date.desc&select=user_id,logged_date,weight_kg`),
-      sb('habit_logs','GET',null,`?logged_date=eq.${ts()}&select=user_id,habit_id,completed`),
-      sb('drink_logs','GET',null,`?logged_date=eq.${ts()}&select=user_id,nips`),
+    const [weights,habits,drinks]=await Promise.all([
+      sb('weight_logs','GET',null,'?order=logged_date.desc&select=user_id,logged_date,weight_kg'),
+      sb('habit_logs','GET',null,'?logged_date=eq.'+ts()+'&select=user_id,habit_id,completed'),
+      sb('drink_logs','GET',null,'?logged_date=eq.'+ts()+'&select=user_id,nips'),
     ]);
-    teamCache = {weights:weights||[], habits:habits||[], drinks:drinks||[]};
-    list.innerHTML = '';
-    ['bill','leon','greg','brent'].forEach(uid=>{
-      const u = USERS[uid];
-      const uWeights = (weights||[]).filter(w=>w.user_id===uid).sort((a,b)=>b.logged_date.localeCompare(a.logged_date));
-      const latestW = uWeights[0];
-      const uHabits = (habits||[]).filter(h=>h.user_id===uid&&h.completed);
-      const uDrinks = (drinks||[]).find(d=>d.user_id===uid);
-      const totalH = getHabitsForUser(uid).filter(h=>isHabitActiveToday(h.id)).length;
-      const doneH = uHabits.length;
-      const nips = uDrinks?.nips || 0;
-      const lost = latestW ? +(u.startKg - latestW.weight_kg).toFixed(1) : null;
-
-      const nipColor = nips>4?'#8A3A3A':nips===4?'#7A5400':'var(--fit-dark)';
-      const nipBg = nips>4?'#FAEAEA':nips===4?'#FFF8EC':'var(--fit-light)';
-      const habitsAllDone = doneH === totalH && totalH > 0;
-
-      // Build habit dot row
-      const habitDots = getHabitsForUser(uid).filter(h=>isHabitActiveToday(h.id)).map(h=>{
-        const done = uHabits.some(x=>x.habit_id===h.id);
-        return `<div style="width:8px;height:8px;border-radius:50%;background:${done?u.color:'var(--border)'}"></div>`;
+    list.innerHTML='';
+    allUsers.forEach(usr=>{
+      const uid=usr.id;
+      const uw=[...(weights||[]).filter(w=>w.user_id===uid)].sort((a,b)=>b.logged_date.localeCompare(a.logged_date));
+      const latest=uw[0];const uh=(habits||[]).filter(h=>h.user_id===uid&&h.completed);
+      const ud=(drinks||[]).find(d=>d.user_id===uid);
+      const uhDefs=userHabits[uid]||[];const totalH=uhDefs.filter(h=>isActiveToday(h.habit_id)).length;
+      const doneH=uh.length;const nips=(ud&&ud.nips)||0;
+      const lost=latest?+(usr.start_kg-latest.weight_kg).toFixed(1):null;
+      const nipC=nips>4?'var(--re)':nips===4?'var(--am)':'var(--gd)';
+      const nipBg=nips>4?'var(--rl)':nips===4?'var(--al)':'var(--gl)';
+      const daysSince=latest?dBetween(latest.logged_date,ts()):null;
+      const absent=daysSince!==null&&daysSince>1?' · '+daysSince+'d absent':'';
+      const noData=!latest&&doneH===0&&nips===0;
+      const statsTxt=noData?'Nothing logged yet':(latest?latest.weight_kg+' kg':'–')+(lost&&lost>0?' · ↓'+lost.toFixed(1)+' kg':'')+' · '+doneH+'/'+totalH+' habits'+absent;
+      const dots=uhDefs.filter(h=>isActiveToday(h.habit_id)).map(h=>{
+        const done=uh.some(x=>x.habit_id===h.habit_id);
+        return `<div class="tdot" style="background:${done?usr.color:'var(--bo)'}"></div>`;
       }).join('');
-
-      const card = document.createElement('div');
-      card.className = 'team-member';
-      card.style.cursor = 'pointer';
-      card.innerHTML = `
-        <div style="width:48px;height:48px;border-radius:50%;background:${u.color};display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:#fff;flex-shrink:0">${u.initials}</div>
+      const card=document.createElement('div');card.className='tmem';
+      card.innerHTML=`<div class="tav" style="background:${usr.color||'#5C8A4A'}">${usr.initials||'?'}</div>
         <div style="flex:1;min-width:0">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:3px">
-            <div style="font-family:'Playfair Display',serif;font-size:17px;font-weight:600;color:var(--black)">${u.name}</div>
-            <span style="font-family:'DM Mono',monospace;font-size:10px;font-weight:500;padding:3px 9px;border-radius:10px;background:${nipBg};color:${nipColor};letter-spacing:.04em">${nips} nips</span>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px">
+            <div class="tname">${usr.name||usr.display_name}</div>
+            <span class="tbadge" style="background:${nipBg};color:${nipC}">${nips} nips</span>
           </div>
-          <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--mid);letter-spacing:.02em;margin-bottom:6px">
-            ${latestW ? latestW.weight_kg+' kg' : 'no weight'} &nbsp;·&nbsp; ${lost!==null&&lost>0?'↓'+lost.toFixed(1)+' kg':'–'} &nbsp;·&nbsp; ${doneH}/${totalH} habits${habitsAllDone?' ✓':''}
-          </div>
-          <div style="display:flex;gap:4px;flex-wrap:wrap">${habitDots}</div>
+          <div class="tstats">${statsTxt}</div>
+          <div class="tdots">${dots}</div>
         </div>
-        <div style="color:var(--border);font-size:18px;margin-left:4px">›</div>`;
-      card.onclick = () => openProfile(uid);
+        <div style="color:var(--bo);font-size:18px;margin-left:4px">›</div>`;
+      card.onclick=()=>openProfile(uid);
       list.appendChild(card);
     });
-  }catch(e){
-    list.innerHTML = `<div style="text-align:center;padding:32px 0">
-      <div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:600;color:var(--black);margin-bottom:8px">Could not load team data</div>
-      <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--mid);letter-spacing:.05em">Check your Supabase setup and connection</div>
-    </div>`;
-  }
+  }catch(e){list.innerHTML='<div style="text-align:center;padding:32px 0"><div class="nd-t">Could not load</div><div class="nd-s">Check your connection</div></div>';}
 }
 
+// ── PROFILE SHEET ─────────────────────────────────────────────────
 async function openProfile(uid){
-  const u = USERS[uid];
-  document.getElementById('profile-avatar').style.background = u.color;
-  document.getElementById('profile-avatar').textContent = u.initials;
-  document.getElementById('profile-name').textContent = u.name;
+  const usr=allUsers.find(x=>x.id===uid)||{};
+  document.getElementById('ps-av').style.background=usr.color||'#5C8A4A';
+  document.getElementById('ps-av').textContent=usr.initials||'?';
+  document.getElementById('ps-name').textContent=usr.name||usr.display_name||'';
+  document.getElementById('ps-sub').textContent='Target: '+(usr.target_kg||'–')+' kg · '+(usr.target_date||TDATE);
+  document.getElementById('ps-body').innerHTML='<div class="spin"></div>';
+  document.getElementById('sh-profile').classList.add('show');
+  try{
+    const [weights,habits,drinks]=await Promise.all([
+      sb('weight_logs','GET',null,'?user_id=eq.'+uid+'&order=logged_date.desc&limit=14&select=logged_date,weight_kg'),
+      sb('habit_logs','GET',null,'?user_id=eq.'+uid+'&order=logged_date.desc&select=logged_date,habit_id,completed'),
+      sb('drink_logs','GET',null,'?user_id=eq.'+uid+'&order=logged_date.desc&limit=14&select=logged_date,nips'),
+    ]);
+    const latest=[...(weights||[])].sort((a,b)=>b.logged_date.localeCompare(a.logged_date))[0];
+    const lost=latest?+(usr.start_kg-latest.weight_kg).toFixed(1):null;
+    const tDate=usr.target_date||TDATE;
+    const totalD=dBetween(usr.created_at?usr.created_at.slice(0,10):'2026-03-20',tDate);
+    const elap=dBetween(usr.created_at?usr.created_at.slice(0,10):'2026-03-20',ts());
+    const exp2=+(usr.start_kg-(usr.start_kg-usr.target_kg)*(elap/totalD)).toFixed(1);
+    const diff2=latest?+(latest.weight_kg-exp2).toFixed(1):null;
+    const stC=diff2===null?'var(--mi)':diff2<0?'var(--gd)':diff2<2?'var(--am)':'var(--re)';
+    const stT=diff2===null?'No data':diff2<0?'Ahead of pace':diff2<2?'Slightly behind':'Behind target';
+    document.getElementById('ps-stats').innerHTML=
+      `<div class="ss"><div class="ss-n">${latest?latest.weight_kg:'–'}</div><div class="ss-l">kg now</div></div>`+
+      `<div class="ss"><div class="ss-n" style="color:${lost&&lost>0?'var(--gr)':'var(--mi)'}">${lost&&lost>0?'↓'+lost.toFixed(1):'–'}</div><div class="ss-l">kg lost</div></div>`+
+      `<div class="ss"><div class="ss-n" style="font-size:14px;color:${stC};margin-top:4px;line-height:1.2">${stT}</div><div class="ss-l">vs pace</div></div>`;
 
-  // Load last 7 days of data for this user
-  const [weights, habits, drinks] = await Promise.all([
-    sb('weight_logs','GET',null,`?user_id=eq.${uid}&order=logged_date.desc&limit=14&select=logged_date,weight_kg`),
-    sb('habit_logs','GET',null,`?user_id=eq.${uid}&order=logged_date.desc&select=logged_date,habit_id,completed`),
-    sb('drink_logs','GET',null,`?user_id=eq.${uid}&order=logged_date.desc&limit=7&select=logged_date,nips`),
-  ]);
+    const hasData=(weights||[]).length>0||(habits||[]).length>0||(drinks||[]).length>0;
+    if(!hasData){document.getElementById('ps-body').innerHTML='<div style="text-align:center;margin-top:28px"><div class="nd-t">No data yet</div><div class="nd-s">Nothing logged for '+(usr.name||'this user')+'</div></div>';return;}
 
-  const latestW = (weights||[]).sort((a,b)=>b.logged_date.localeCompare(a.logged_date))[0];
-  const lost = latestW ? +(u.startKg - latestW.weight_kg).toFixed(1) : null;
-  const totalDays = daysBetween('2026-03-20','2026-07-14');
-  const elapsedDays = daysBetween('2026-03-20', ts());
-  const expectedKg = +(u.startKg - (u.startKg-u.targetKg)*(elapsedDays/totalDays)).toFixed(1);
-  const diff = latestW ? +(latestW.weight_kg - expectedKg).toFixed(1) : null;
-  const statusColor = diff===null?'var(--mid)':diff<0?'var(--fit-dark)':diff<1.5?'#C4773A':'#B85C5C';
-  const statusText = diff===null?'No data':diff<0?'Ahead of target':diff<1.5?'Slightly behind':'Behind target';
+    // Drink trend
+    const thisW=(drinks||[]).slice(0,7).reduce((a,b)=>a+(b.nips||0),0);
+    const lastW=(drinks||[]).slice(7,14).reduce((a,b)=>a+(b.nips||0),0);
+    const nipDiff=thisW-lastW;const costSaved=Math.abs(nipDiff)*NIP_COST;
+    let drinkTrend='';
+    if((drinks||[]).length>=7){
+      if(nipDiff<-2)drinkTrend=`<div style="background:var(--gl);border-radius:var(--rs);padding:12px 14px;margin-bottom:12px;font-size:13px;line-height:1.7;color:var(--gd)">Down ${Math.abs(nipDiff)} nips vs last week. $${costSaved} less spent. At this rate, approximately ${Math.round(Math.abs(nipDiff)*0.03*52)} fewer litres of alcohol per year — your liver processes roughly one litre less toxin for every 33 nips cut.</div>`;
+      else if(nipDiff>2)drinkTrend=`<div style="background:var(--rl);border-radius:var(--rs);padding:12px 14px;margin-bottom:12px;font-size:13px;line-height:1.7;color:var(--re)">Up ${nipDiff} nips vs last week. $${costSaved} more spent. Trending in the wrong direction — this directly undermines fat loss, sleep and insulin sensitivity.</div>`;
+    }
 
-  document.getElementById('profile-subline').textContent = `Target: ${u.targetKg} kg by 14 Jul`;
-  document.getElementById('profile-stats').innerHTML = `
-    <div style="background:var(--warm);border-radius:var(--r-sm);padding:12px 8px;text-align:center">
-      <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:600;color:var(--black)">${latestW?latestW.weight_kg:'–'}</div>
-      <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--mid);margin-top:2px;letter-spacing:.05em;text-transform:uppercase">kg now</div>
-    </div>
-    <div style="background:var(--warm);border-radius:var(--r-sm);padding:12px 8px;text-align:center">
-      <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:600;color:${lost>0?'var(--fit)':'var(--mid)'}">${lost!==null&&lost>0?'↓'+lost.toFixed(1):'–'}</div>
-      <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--mid);margin-top:2px;letter-spacing:.05em;text-transform:uppercase">kg lost</div>
-    </div>
-    <div style="background:var(--warm);border-radius:var(--r-sm);padding:12px 8px;text-align:center">
-      <div style="font-family:'Playfair Display',serif;font-size:14px;font-weight:600;color:${statusColor};line-height:1.2;margin-top:4px">${statusText}</div>
-      <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--mid);margin-top:4px;letter-spacing:.05em;text-transform:uppercase">vs target</div>
-    </div>`;
-
-  // Today's detail
-  const todayHabits = (habits||[]).filter(h=>h.logged_date===ts());
-  const todayDrinks = (drinks||[]).find(d=>d.logged_date===ts());
-  const todayWeight = (weights||[]).find(w=>w.logged_date===ts());
-  const allHabits = getHabitsForUser(uid).filter(h=>isHabitActiveToday(h.id));
-  const habitRows = allHabits.map(h=>{
-    const done = todayHabits.some(x=>x.habit_id===h.id&&x.completed);
-    return `<div style="display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border)">
-      <div style="width:18px;height:18px;border-radius:50%;background:${done?u.color:'var(--border)'};display:flex;align-items:center;justify-content:center;flex-shrink:0">
-        ${done?'<svg width="10" height="10" viewBox="0 0 14 14" fill="none"><polyline points="2,7 6,11 12,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>':''}
-      </div>
-      <span style="font-size:14px;color:${done?'var(--black)':'var(--mid)'}">${h.name}</span>
-    </div>`;
-  }).join('');
-
-  const nipsToday = todayDrinks?.nips || 0;
-  const nipColor = nipsToday>4?'#8A3A3A':nipsToday===4?'#7A5400':'var(--fit-dark)';
-  const nipBg = nipsToday>4?'#FAEAEA':nipsToday===4?'#FFF8EC':'var(--fit-light)';
-
-  document.getElementById('profile-today').innerHTML = `
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-      <span style="font-size:14px;color:var(--mid)">Weight</span>
-      <span style="font-family:'Playfair Display',serif;font-size:16px;font-weight:600">${todayWeight?todayWeight.weight_kg+' kg':'Not logged'}</span>
-    </div>
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-      <span style="font-size:14px;color:var(--mid)">Drinks</span>
-      <span style="font-family:'DM Mono',monospace;font-size:12px;padding:3px 10px;border-radius:10px;background:${nipBg};color:${nipColor}">${nipsToday} nips</span>
-    </div>
-    ${habitRows}`;
-
-  // 7-day history
-  const days7 = [];
-  for(let i=0;i<7;i++){
-    const d = new Date(); d.setDate(d.getDate()-i);
-    days7.push(d.toISOString().slice(0,10));
-  }
-
-  const historyHTML = days7.map(date=>{
-    const w = (weights||[]).find(x=>x.logged_date===date);
-    const d = (drinks||[]).find(x=>x.logged_date===date);
-    const hDone = (habits||[]).filter(x=>x.logged_date===date&&x.completed).length;
-    const hTotal = getHabitsForUser(uid).length;
-    const isToday = date===ts();
-    const nips = d?.nips||0;
-    const nipC = nips>4?'#8A3A3A':nips===4?'#7A5400':'var(--mid)';
-    return `<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)">
-      <div style="min-width:70px;font-family:'DM Mono',monospace;font-size:11px;color:var(--mid);letter-spacing:.03em">${isToday?'Today':new Date(date+'T00:00:00').toLocaleDateString('en-AU',{weekday:'short',day:'numeric',month:'short'})}</div>
-      <div style="flex:1;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-        <span style="font-family:'Playfair Display',serif;font-size:14px;font-weight:600;color:${w?'var(--black)':'var(--border)'}">${w?w.weight_kg+' kg':'–'}</span>
-        <span style="font-family:'DM Mono',monospace;font-size:11px;color:${nipC}">${nips} nips</span>
-        <span style="font-family:'DM Mono',monospace;font-size:11px;color:var(--mid)">${hDone}/${hTotal} habits</span>
-      </div>
-    </div>`;
-  }).join('');
-
-  document.getElementById('profile-history').innerHTML = historyHTML;
-  document.getElementById('profile-modal').classList.add('show');
+    const days=[];for(let i=0;i<7;i++){const dd=new Date();dd.setDate(dd.getDate()-i);days.push(dd.toISOString().slice(0,10));}
+    let body=drinkTrend+'<div style="font-family:var(--sm);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mi);margin-bottom:8px">Last 7 days</div>';
+    const uhDefs=userHabits[uid]||[];
+    days.forEach(date=>{
+      const w=(weights||[]).find(x=>x.logged_date===date);
+      const d=(drinks||[]).find(x=>x.logged_date===date);
+      const hDone=(habits||[]).filter(x=>x.logged_date===date&&x.completed).length;
+      const hAll=uhDefs.length;
+      const nips=(d&&d.nips)||0;const nipC=nips>4?'var(--re)':nips===4?'var(--am)':'var(--mi)';
+      const isToday=date===ts();
+      const noEntry=!w&&!d&&hDone===0;
+      body+=`<div class="day-row"><div class="day-lbl">${isToday?'Today':new Date(date+'T00:00:00').toLocaleDateString('en-AU',{weekday:'short',day:'numeric'})}</div><div style="flex:1">${noEntry?`<div style="font-family:var(--sm);font-size:11px;color:var(--bo);letter-spacing:.04em">Nothing logged</div>`:`<div class="day-kg">${w?w.weight_kg+' kg':'–'}</div><div class="day-meta">${nips>0?`<span style="color:${nipC}">${nips} nips</span> · `:''}${hDone}/${hAll} habits</div>`}</div></div>`;
+    });
+    document.getElementById('ps-body').innerHTML=body;
+  }catch(e){document.getElementById('ps-body').innerHTML='<div style="text-align:center;padding:28px 0"><div class="nd-t">Could not load</div></div>';}
 }
 
-// ─── SCIENCE ──────────────────────────────────────────────────────
-function renderScience(){
-  const list = document.getElementById('science-list');
-  PILLARS.forEach(p=>{
-    const el = document.createElement('div');
-    el.className = 'science-item';
-    el.innerHTML = `
-      <div class="science-header" onclick="this.parentElement.classList.toggle('open')">
-        <div class="science-tag" style="background:${p.color}20;color:${p.color}">${p.tag}</div>
-        <div class="science-hl">${p.hl}</div>
-        <div class="science-chev">›</div>
+// ── ONBOARDING ────────────────────────────────────────────────────
+let obData={};const OB_STEPS=['basics','dob','habits','targets'];
+function openOnboard(){
+  obData={habits:{},colour:'#5C8A4A'};
+  document.getElementById('ob-title').textContent='Add person';
+  document.getElementById('sh-onboard').classList.add('show');
+  renderObStep(0);
+}
+function renderObStep(idx){
+  const prog=document.getElementById('ob-prog');prog.innerHTML='';
+  OB_STEPS.forEach((s,i)=>{const d=document.createElement('div');d.className='ob-dot'+(i<idx?' done':i===idx?' active':'');prog.appendChild(d);});
+  const body=document.getElementById('ob-body');body.innerHTML='';
+  if(idx===0){
+    body.innerHTML=`
+      <div class="form-row"><div class="form-lbl">Full name</div><input class="inp" id="ob-name" placeholder="e.g. Sarah"></div>
+      <div class="form-row"><div class="form-lbl">Initials (shown on avatar, e.g. SWW)</div><input class="inp" id="ob-ini" placeholder="SWW" maxlength="4"></div>
+      <div class="form-row"><div class="form-lbl">Avatar colour</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px" id="ob-colours">
+          ${['#5C8A4A','#3A6030','#4A7C8E','#7A6B4E','#6B5C8A','#8A4A4A','#0F0F0F'].map(c=>`<div class="colour-pick${obData.colour===c?' sel':''}" data-c="${c}" style="background:${c}" onclick="obPickColour(this)"></div>`).join('')}
+        </div>
+        <input type="hidden" id="ob-colour" value="${obData.colour}">
       </div>
-      <div class="science-body">${p.body}</div>`;
-    list.appendChild(el);
+      <div class="form-row"><div class="form-lbl">Do they have a Reframe account?</div>
+        <label style="display:flex;align-items:center;gap:10px;cursor:pointer;padding:10px 0">
+          <div class="toggle${obData.hasReframe!==false?' on':''}" id="ob-reframe-toggle" onclick="this.classList.toggle('on');obData.hasReframe=this.classList.contains('on');document.getElementById('ob-reframe-lbl').textContent=obData.hasReframe?'Yes — include Reframe habit':'No — skip Reframe habit'"></div>
+          <span style="font-size:14px" id="ob-reframe-lbl">${obData.hasReframe!==false?'Yes — include Reframe habit':'No — skip Reframe habit'}</span>
+        </label>
+      </div>
+      <button class="btn" style="width:100%" onclick="obNext(0)">Continue</button>`;
+    obData.hasReframe=true;
+    document.getElementById('ob-reframe-toggle').addEventListener('click',function(){
+      document.getElementById('ob-reframe-lbl').textContent=this.classList.contains('on')?'Yes — include Reframe habit':'No — skip Reframe habit';
+    });
+  }else if(idx===1){
+    body.innerHTML=`
+      <div style="font-size:14px;color:var(--mi);line-height:1.7;margin-bottom:20px">Date of birth unlocks age-aware commentary — personalised science and the occasional well-targeted barb. Optional but strongly recommended.</div>
+      <div class="form-row"><div class="form-lbl">Date of birth</div><input type="date" class="inp" id="ob-dob" value="${obData.dob||''}"></div>
+      <div style="display:flex;gap:10px">
+        <button class="btn-sec" onclick="renderObStep(0)">Back</button>
+        <button class="btn" style="flex:1" onclick="obNext(1)">Continue</button>
+      </div>`;
+  }else if(idx===2){
+    const a=obData.dob?age(obData.dob):null;
+    body.innerHTML=`
+      <div style="font-size:14px;color:var(--mi);line-height:1.7;margin-bottom:20px">Pick the habits that matter. Each one comes with the science behind it. They can be changed in Settings later.</div>
+      <div id="ob-habit-list"></div>
+      <div class="slbl" style="margin-top:16px">Daily steps target</div>
+      <div class="slider-wrap">
+        <div class="slider-val" id="ob-steps-val">${(obData.steps||6000).toLocaleString()}</div>
+        <input type="range" min="2000" max="10000" step="500" value="${obData.steps||6000}" oninput="obStepsSlide(this.value)">
+        <div class="slider-sci" id="ob-steps-sci"></div>
+      </div>
+      <div class="slbl">Daily drinks cap (nips)</div>
+      <div class="slider-wrap">
+        <div class="slider-val" id="ob-drinks-val">${obData.drinksCap||4}</div>
+        <input type="range" min="0" max="12" step="1" value="${obData.drinksCap||4}" oninput="obDrinksSlide(this.value)">
+        <div class="slider-sci" id="ob-drinks-sci"></div>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:16px">
+        <button class="btn-sec" onclick="renderObStep(1)">Back</button>
+        <button class="btn" style="flex:1" onclick="obNext(2)">Continue</button>
+      </div>`;
+    // Render habit toggles
+    const habitList=document.getElementById('ob-habit-list');
+    Object.entries(HABIT_DEFS).forEach(([id,def])=>{
+      if(id==='steps'||id==='drinks')return;// handled by sliders
+      if(id==='reframe'&&!obData.hasReframe)return;
+      const enabled=obData.habits[id]!==false;
+      const row=document.createElement('div');row.className='habit-toggle';
+      row.innerHTML=`<div><div class="ht-name">${def.name.replace(/\{[^}]+\}/g,'…')}</div><div class="ht-freq">${def.freq}</div></div><div class="toggle${enabled?' on':''}" onclick="obToggleHabit('${id}',this)"></div>`;
+      habitList.appendChild(row);
+      if(obData.habits[id]===undefined)obData.habits[id]=true;
+    });
+    obStepsSlide(obData.steps||6000);
+    obDrinksSlide(obData.drinksCap||4);
+  }else if(idx===3){
+    body.innerHTML=`
+      <div class="form-row"><div class="form-lbl">Starting weight (kg)</div><input class="inp inp-num" type="number" id="ob-start" placeholder="e.g. 95" step="0.1" inputmode="decimal" value="${obData.startKg||''}" oninput="obData.startKg=this.value"></div>
+      <div class="form-row"><div class="form-lbl">Target weight (kg)</div><input class="inp inp-num" type="number" id="ob-target" placeholder="e.g. 80" step="0.1" inputmode="decimal" value="${obData.targetKg||''}" oninput="obData.targetKg=this.value"></div>
+      <div class="form-row"><div class="form-lbl">Target date</div><input type="date" class="inp" id="ob-tdate" value="${obData.targetDate||TDATE}" oninput="obData.targetDate=this.value"></div>
+      <div style="display:flex;gap:10px;margin-top:8px">
+        <button class="btn-sec" onclick="renderObStep(2)">Back</button>
+        <button class="btn" style="flex:1" onclick="saveNewUser()">Add to BravoHabit</button>
+      </div>`;
+  }
+}
+function obPickColour(el){document.querySelectorAll('.colour-pick').forEach(x=>x.classList.remove('sel'));el.classList.add('sel');obData.colour=el.dataset.c;document.getElementById('ob-colour').value=el.dataset.c;}
+function obToggleHabit(id,tog){tog.classList.toggle('on');obData.habits[id]=tog.classList.contains('on');}
+function obStepsSlide(v){
+  v=parseInt(v);obData.steps=v;document.getElementById('ob-steps-val').textContent=v.toLocaleString();
+  const sci=document.getElementById('ob-steps-sci');
+  if(v<4000){sci.className='slider-sci warn';sci.textContent=`${v} steps is a start — but research shows sedentary adults (under 5,000 steps/day) have significantly higher visceral fat, cardiovascular risk and insulin resistance. The body was designed to move. Do you want to be Mediocre Joe or Disciplined Daryl?`;}
+  else if(v<6000){sci.className='slider-sci';sci.textContent=`${v} steps/day keeps you in the active range. Healthy adults your age typically average 7,000–8,500 steps. You're within range — consider stretching the target.`;}
+  else if(v<8000){sci.className='slider-sci happy';sci.textContent=`${v} steps/day puts you in the genuinely active category. At this level, visceral fat responds measurably, insulin sensitivity improves and metabolic rate stays elevated throughout the day.`;}
+  else{sci.className='slider-sci happy';sci.textContent=`${v} steps/day. Excellent. This level is associated with significantly better cardiovascular outcomes, lower all-cause mortality and sustained fat loss independent of diet. This is the right call.`;}
+}
+function obDrinksSlide(v){
+  v=parseInt(v);obData.drinksCap=v;document.getElementById('ob-drinks-val').textContent=v;
+  const sci=document.getElementById('ob-drinks-sci');
+  if(v===0){sci.className='slider-sci happy';sci.textContent='Zero nips. Your liver, your sleep, your fat metabolism and your insulin sensitivity will all thank you. This is the highest-leverage single change available to most people.';}
+  else if(v<=2){sci.className='slider-sci happy';sci.textContent=`A cap of ${v} nips/day is a genuinely disciplined target. At this level, fat oxidation impact is minimal and sleep quality remains largely intact. Smart.`;}
+  else if(v<=4){sci.className='slider-sci';sci.textContent=`${v} nips/day. This is the working cap — meaningful accountability without extreme restriction. Note: a standard large glass of wine is 3–5 nips. Count the pour, not the glass.`;}
+  else if(v<=6){sci.className='slider-sci warn';sci.textContent=`${v} nips/day suppresses fat oxidation for most of the day and meaningfully disrupts sleep architecture. You can set this as your cap, but know that the science is clear on the cost.`;}
+  else{sci.className='slider-sci fury';sci.textContent=`${v} nips/day is heavy drinking by any clinical definition. This will undermine every other habit in the app. Are you certain this is the target you want to set for yourself?`;}
+}
+function obNext(idx){
+  if(idx===0){
+    const name=document.getElementById('ob-name').value.trim();
+    const ini=document.getElementById('ob-ini').value.trim().toUpperCase();
+    if(!name||!ini){toast('Please enter a name and initials');return;}
+    obData.name=name;obData.ini=ini;obData.colour=document.getElementById('ob-colour').value||'#5C8A4A';
+  }else if(idx===1){
+    obData.dob=document.getElementById('ob-dob').value||null;
+  }else if(idx===2){
+    // Steps and drinks captured by sliders
+  }
+  renderObStep(idx+1);
+}
+async function saveNewUser(){
+  const startKg=parseFloat(document.getElementById('ob-start').value);
+  const targetKg=parseFloat(document.getElementById('ob-target').value);
+  const targetDate=document.getElementById('ob-tdate').value||TDATE;
+  if(!startKg||!targetKg){toast('Please enter start and target weights');return;}
+  const id=(obData.name||'user').toLowerCase().replace(/[^a-z0-9]/g,'')+'_'+Date.now().toString(36);
+  try{
+    // First try with all columns (requires migration-v2.sql to have been run)
+    let saved=false;
+    try{
+      await sb('users','POST',{
+        id,display_name:obData.name,start_kg:startKg,target_kg:targetKg,target_date:targetDate,
+        daily_steps:obData.steps||6000,wake_time:'6am',work_time:'9am',
+        initials:obData.ini,color:obData.colour,dob:obData.dob||null,has_reframe:obData.hasReframe!==false
+      });
+      saved=true;
+    }catch(e1){
+      // Fall back to base columns only (migration not yet run)
+      await sb('users','POST',{
+        id,display_name:obData.name,start_kg:startKg,target_kg:targetKg,target_date:targetDate,
+        daily_steps:obData.steps||6000,wake_time:'6am',work_time:'9am'
+      });
+      saved=true;
+    }
+    if(!saved)throw new Error('Could not save user');
+
+    // Save habit preferences (requires user_habits table)
+    try{
+      const habitInserts=[];
+      Object.entries(obData.habits||{}).forEach(([hid,enabled])=>{
+        if(hid==='steps'||hid==='drinks')return;
+        habitInserts.push({user_id:id,habit_id:hid,enabled:!!enabled,target_value:null});
+      });
+      habitInserts.push({user_id:id,habit_id:'steps',enabled:true,target_value:obData.steps||6000});
+      habitInserts.push({user_id:id,habit_id:'drinks',enabled:true,target_value:obData.drinksCap||4});
+      for(const h of habitInserts){try{await sb('user_habits','POST',h);}catch(e){}}
+    }catch(e){}// user_habits may not exist yet — non-fatal
+
+    // Add to local state regardless
+    allUsers.push({
+      id,name:obData.name,display_name:obData.name,
+      initials:obData.ini||'?',color:obData.colour||'#5C8A4A',
+      start_kg:startKg,target_kg:targetKg,target_date:targetDate,
+      dob:obData.dob||null,has_reframe:obData.hasReframe!==false,
+      daily_steps:obData.steps||6000
+    });
+    // Seed local user habits so app works immediately
+    userHabits[id]=Object.entries(obData.habits||{})
+      .filter(([hid,en])=>en&&hid!=='steps'&&hid!=='drinks')
+      .map(([hid])=>({habit_id:hid,enabled:true,target_value:null}));
+    userHabits[id].push({habit_id:'steps',enabled:true,target_value:obData.steps||6000});
+    userHabits[id].push({habit_id:'drinks',enabled:true,target_value:obData.drinksCap||4});
+
+    closeSheet('sh-onboard');
+    await renderUserScreen();
+    toast((obData.name||'User')+' added to BravoHabit.');
+  }catch(e){
+    toast('Error: '+e.message.slice(0,60));
+  }
+}
+
+// ── SETTINGS ──────────────────────────────────────────────────────
+function openSettings(){
+  document.getElementById('sh-settings').classList.add('show');
+  const body=document.getElementById('sh-settings-body');body.innerHTML='';
+  allUsers.forEach(usr=>{
+    const sec=document.createElement('div');
+    sec.style.marginBottom='28px';
+    sec.innerHTML=`<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+      <div style="width:36px;height:36px;border-radius:50%;background:${usr.color||'#5C8A4A'};display:flex;align-items:center;justify-content:center;font-family:var(--sm);font-size:10px;font-weight:500;color:#fff;letter-spacing:.06em">${usr.initials||'?'}</div>
+      <div style="font-family:var(--sf);font-size:17px;font-weight:700">${usr.name||usr.display_name}</div>
+    </div>
+    <div class="form-row"><div class="form-lbl">Target weight (kg)</div><input class="inp inp-num" type="number" id="set-tgt-${usr.id}" value="${usr.target_kg||''}" step="0.1" inputmode="decimal"></div>
+    <div class="form-row"><div class="form-lbl">Target date</div><input type="date" class="inp" id="set-tdate-${usr.id}" value="${usr.target_date||TDATE}"></div>
+    <div class="form-row"><div class="form-lbl">Daily steps</div><input class="inp inp-num" type="number" id="set-steps-${usr.id}" value="${usr.daily_steps||6000}" inputmode="numeric"></div>
+    <button class="btn" style="width:100%;margin-bottom:8px" onclick="saveSettings('${usr.id}')">Save ${usr.name||'settings'}</button>
+    <div style="height:1px;background:var(--bo);margin-top:8px"></div>`;
+    body.appendChild(sec);
   });
 }
-
-// ─── NAVIGATION ───────────────────────────────────────────────────
-function showPage(id, btn){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-  document.getElementById('page-'+id).classList.add('active');
-  if(btn) btn.classList.add('active');
-  if(id==='team') loadTeamData();
-  if(id==='weight'){renderWeightPage();}
+async function saveSettings(uid){
+  const tgt=parseFloat(document.getElementById('set-tgt-'+uid).value);
+  const tdate=document.getElementById('set-tdate-'+uid).value;
+  const steps=parseInt(document.getElementById('set-steps-'+uid).value);
+  if(!tgt){toast('Enter a valid target');return;}
+  try{
+    await sb('users','POST',{id:uid,target_kg:tgt,target_date:tdate||TDATE,daily_steps:steps});
+    const usr=allUsers.find(x=>x.id===uid);
+    if(usr){usr.target_kg=tgt;usr.target_date=tdate;usr.daily_steps=steps;}
+    // Update user_habits steps target
+    if(steps)await sb('user_habits','POST',{user_id:uid,habit_id:'steps',enabled:true,target_value:steps}).catch(()=>{});
+    toast('Settings saved.');
+    renderUserScreen();
+  }catch(e){toast('Could not save — check connection');}
 }
-
-// ─── MODALS / TOAST ───────────────────────────────────────────────
 
 function goLogWeight(){
-  closeModal('honesty-modal');
+  closeM('m-honest');
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));
   document.getElementById('page-weight').classList.add('active');
-  const weightNav = document.querySelector('.nav-btn:nth-child(2)');
-  if(weightNav) weightNav.classList.add('active');
+  const btn=document.querySelector('.nb:nth-child(2)');if(btn)btn.classList.add('active');
   renderWeightPage();
 }
-function closeModal(id){
-  document.getElementById(id).classList.remove('show');
-  if(id==='reframe-modal' && countdownTimer){clearInterval(countdownTimer);countdownTimer=null;}
-}
-function showToast(msg){
-  const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),2600);
-}
 
-// ─── DATE ────────────────────────────────────────────────────────
-function renderDate(){
-  document.getElementById('app-date').textContent = new Date().toLocaleDateString('en-AU',{weekday:'short',day:'numeric',month:'short'});
-}
-
-// ─── INIT ─────────────────────────────────────────────────────────
 async function initApp(){
-  updateUserUI();
-  renderDate();
-  renderScience();
-
-  await Promise.all([loadTodayHabits(), loadTodayNips(), loadWeightLogs()]);
-  renderHabits();
-  updateHabitStats();
-  renderNips();
-  renderHero();
+  updateChip();
+  document.getElementById('app-date').textContent=new Date().toLocaleDateString('en-AU',{weekday:'short',day:'numeric',month:'short'});
+  document.getElementById('bd-date').value=ts();
+  await loadUserHabits();
+  await Promise.all([loadTodayHabits(),loadTodayNips(),loadWeights()]);
+  await renderHabits();renderNips();renderHero();
+  const tw=weightLogs.find(w=>w.logged_date===ts());
+  if(tw)document.getElementById('w-today-line').textContent='Today: '+tw.weight_kg+' kg';
 }
 
-// Boot
-loadSavedUser();
-if(currentUser){
-  document.getElementById('user-screen').style.display='none';
-  initApp();
-}
+// ── BOOT ──────────────────────────────────────────────────────────
+(async()=>{
+  await loadUsers();
+  await renderUserScreen();
+  loadSavedUser();
+  if(me&&allUsers.find(x=>x.id===me)){
+    document.getElementById('us').classList.remove('show');
+    initApp();
+  }
+})();
 </script>
 </body>
 </html>
