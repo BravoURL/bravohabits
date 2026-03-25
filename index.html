@@ -544,6 +544,13 @@ const AFFIRM=[
 // ── STATE ─────────────────────────────────────────────────────────
 let me=null,allUsers=[],userHabits={},todayH={},todayNips=0,weightLogs=[],pendingNip=false,cdTimer=null;
 
+const SEED_USERS=[
+  {id:'bill', name:'Bill', display_name:'Bill', initials:'AWW',color:'#5C8A4A',start_kg:115,target_kg:95, target_date:'2026-07-14',daily_steps:4500,wake_time:'7am',work_time:'9am',dob:'1964-04-10'},
+  {id:'leon', name:'Leon', display_name:'Leon', initials:'LRW',color:'#3A6030',start_kg:105,target_kg:105,target_date:'2026-07-14',daily_steps:6000,wake_time:'5am',work_time:'6am',dob:'1989-02-25'},
+  {id:'greg', name:'Greg', display_name:'Greg', initials:'GTW',color:'#7A6B4E',start_kg:105,target_kg:105,target_date:'2026-07-14',daily_steps:6000,wake_time:'5am',work_time:'6am',dob:'1993-03-12'},
+  {id:'brent',name:'Brent',display_name:'Brent',initials:'BWW',color:'#4A7C8E',start_kg:96, target_kg:89, target_date:'2026-07-14',daily_steps:6000,wake_time:'5am',work_time:'6am',dob:'1995-01-26'},
+];
+
 // ── UTILS ─────────────────────────────────────────────────────────
 const ts=()=>new Date().toISOString().slice(0,10);
 const fmt=d=>new Date(d+'T00:00:00').toLocaleDateString('en-AU',{weekday:'short',day:'numeric',month:'short'});
@@ -575,12 +582,21 @@ async function sb(table,method,body,params){
 // ── USERS ─────────────────────────────────────────────────────────
 async function loadUsers(){
   try{
+    // Timeout after 5 seconds
+    const timeout=new Promise((_,reject)=>setTimeout(()=>reject(new Error('timeout')),5000));
     let d=null;
     try{
-      d=await sb('users','GET',null,'?select=id,display_name,start_kg,target_kg,target_date,daily_steps,wake_time,work_time,initials,color,dob,has_reframe&order=dob.asc');
+      d=await Promise.race([
+        sb('users','GET',null,'?select=id,display_name,start_kg,target_kg,target_date,daily_steps,wake_time,work_time,initials,color,dob,has_reframe&order=dob.asc'),
+        timeout
+      ]);
     }catch(e1){
-      // Columns may not exist yet — fall back to base columns
-      d=await sb('users','GET',null,'?select=id,display_name,start_kg,target_kg,target_date,daily_steps,wake_time,work_time');
+      try{
+        d=await Promise.race([
+          sb('users','GET',null,'?select=id,display_name,start_kg,target_kg,target_date,daily_steps,wake_time,work_time'),
+          new Promise((_,reject)=>setTimeout(()=>reject(new Error('timeout')),5000))
+        ]);
+      }catch(e2){d=null;}
     }
     allUsers=(d&&d.length)?d.sort((a,b)=>{
       // Sort by DOB ascending (oldest first)
@@ -588,7 +604,7 @@ async function loadUsers(){
       if(!a.dob)return 1;if(!b.dob)return -1;
       return new Date(a.dob)-new Date(b.dob);
     }):[];
-  }catch(e){allUsers=[];}
+  }catch(e){console.warn('loadUsers failed, using seeds:',e.message);allUsers=SEED_USERS.slice();}
 }
 
 async function loadUserHabits(){
@@ -1300,3 +1316,72 @@ async function saveNewUser(){
 }
 
 
+
+// ── SETTINGS ──────────────────────────────────────────────────────
+function openSettings(){
+  document.getElementById('sh-settings').classList.add('show');
+  var body=document.getElementById('sh-settings-body');body.innerHTML='';
+  allUsers.forEach(function(usr){
+    var sec=document.createElement('div');sec.style.marginBottom='28px';
+    sec.innerHTML='<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">'
+      +'<div style="width:36px;height:36px;border-radius:50%;background:'+(usr.color||'#5C8A4A')+';display:flex;align-items:center;justify-content:center;font-family:var(--sm);font-size:10px;font-weight:500;color:#fff;letter-spacing:.06em">'+(usr.initials||'?')+'</div>'
+      +'<div style="font-family:var(--sf);font-size:17px;font-weight:700">'+(usr.name||usr.display_name)+'</div></div>'
+      +'<div class="form-row"><div class="form-lbl">Target weight (kg)</div><input class="inp inp-num" type="number" id="set-tgt-'+usr.id+'" value="'+(usr.target_kg||'')+'" step="0.1" inputmode="decimal"></div>'
+      +'<div class="form-row"><div class="form-lbl">Target date</div><input type="date" class="inp" id="set-tdate-'+usr.id+'" value="'+(usr.target_date||TDATE)+'"></div>'
+      +'<div class="form-row"><div class="form-lbl">Daily steps</div><input class="inp inp-num" type="number" id="set-steps-'+usr.id+'" value="'+(usr.daily_steps||6000)+'" inputmode="numeric"></div>'
+      +'<button class="btn" style="width:100%;margin-bottom:8px" onclick="saveSettings(\''+usr.id+'\')">Save '+(usr.name||'settings')+'</button>'
+      +'<div style="height:1px;background:var(--bo);margin-top:8px"></div>';
+    body.appendChild(sec);
+  });
+}
+
+async function saveSettings(uid){
+  var tgt=parseFloat(document.getElementById('set-tgt-'+uid).value);
+  var tdate=document.getElementById('set-tdate-'+uid).value;
+  var steps=parseInt(document.getElementById('set-steps-'+uid).value);
+  if(!tgt){toast('Enter a valid target');return;}
+  try{
+    await sb('users','POST',{id:uid,target_kg:tgt,target_date:tdate||TDATE,daily_steps:steps});
+    var usr=allUsers.find(function(x){return x.id===uid;});
+    if(usr){usr.target_kg=tgt;usr.target_date=tdate;usr.daily_steps=steps;}
+    toast('Settings saved.');
+    renderUserScreen();
+  }catch(e){toast('Could not save — '+e.message.slice(0,40));}
+}
+
+function goLogWeight(){
+  closeM('m-honest');
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
+  document.querySelectorAll('.nb').forEach(function(b){b.classList.remove('active');});
+  document.getElementById('page-weight').classList.add('active');
+  var btn=document.querySelector('.nb:nth-child(2)');if(btn)btn.classList.add('active');
+  renderWeightPage();
+}
+
+async function initApp(){
+  updateChip();
+  document.getElementById('app-date').textContent=new Date().toLocaleDateString('en-AU',{weekday:'short',day:'numeric',month:'short'});
+  document.getElementById('bd-date').value=ts();
+  await loadUserHabits();
+  await Promise.all([loadTodayHabits(),loadTodayNips(),loadWeights()]);
+  renderHabits();renderNips();renderHero();
+  var tw=weightLogs.find(function(w){return w.logged_date===ts();});
+  if(tw)document.getElementById('w-today-line').textContent='Today: '+tw.weight_kg+' kg';
+}
+
+// ── BOOT ──────────────────────────────────────────────────────────
+allUsers=SEED_USERS.slice();
+renderUserScreen();
+loadSavedUser();
+if(me&&allUsers.find(function(x){return x.id===me;})){
+  document.getElementById('us').classList.remove('show');
+  initApp();
+}
+// Refresh from Supabase in background
+loadUsers().then(function(){
+  renderUserScreen();
+}).catch(function(e){console.warn('Supabase load failed, using seeds:',e.message);});
+
+</script>
+</body>
+</html>
