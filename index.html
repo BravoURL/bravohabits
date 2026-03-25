@@ -575,7 +575,13 @@ async function sb(table,method,body,params){
 // ── USERS ─────────────────────────────────────────────────────────
 async function loadUsers(){
   try{
-    const d=await sb('users');
+    let d=null;
+    try{
+      d=await sb('users','GET',null,'?select=id,display_name,start_kg,target_kg,target_date,daily_steps,wake_time,work_time,initials,color,dob,has_reframe&order=dob.asc');
+    }catch(e1){
+      // Columns may not exist yet — fall back to base columns
+      d=await sb('users','GET',null,'?select=id,display_name,start_kg,target_kg,target_date,daily_steps,wake_time,work_time');
+    }
     allUsers=(d&&d.length)?d.sort((a,b)=>{
       // Sort by DOB ascending (oldest first)
       if(!a.dob&&!b.dob)return 0;
@@ -1240,65 +1246,67 @@ function obNext(idx){
   renderObStep(idx+1);
 }
 async function saveNewUser(){
-  const startKg=parseFloat(document.getElementById('ob-start').value);
-  const targetKg=parseFloat(document.getElementById('ob-target').value);
-  const targetDate=document.getElementById('ob-tdate').value||TDATE;
-  if(!startKg||!targetKg){toast('Please enter start and target weights');return;}
-  const id=(obData.name||'user').toLowerCase().replace(/[^a-z0-9]/g,'')+'_'+Date.now().toString(36);
+  var startEl=document.getElementById('ob-start');
+  var targetEl=document.getElementById('ob-target');
+  var tdateEl=document.getElementById('ob-tdate');
+  var startKg=parseFloat(startEl?startEl.value:obData.startKg);
+  var targetKg=parseFloat(targetEl?targetEl.value:obData.targetKg);
+  var targetDate=(tdateEl&&tdateEl.value)?tdateEl.value:(obData.targetDate||TDATE);
+  if(!startKg||isNaN(startKg)){toast('Enter a starting weight');return;}
+  if(!targetKg||isNaN(targetKg)){toast('Enter a target weight');return;}
+  var btn=document.querySelector('#ob-body button.btn');
+  if(btn){btn.disabled=true;btn.textContent='Saving…';}
+  var id=(obData.name||'user').toLowerCase().replace(/[^a-z0-9]/g,'')+'_'+Date.now().toString(36);
   try{
-    // First try with all columns (requires migration-v2.sql to have been run)
-    let saved=false;
-    try{
-      await sb('users','POST',{
-        id,display_name:obData.name,start_kg:startKg,target_kg:targetKg,target_date:targetDate,
-        daily_steps:obData.steps||6000,wake_time:'6am',work_time:'9am',
-        initials:obData.ini,color:obData.colour,dob:obData.dob||null,has_reframe:obData.hasReframe!==false
-      });
-      saved=true;
-    }catch(e1){
-      // Fall back to base columns only (migration not yet run)
-      await sb('users','POST',{
-        id,display_name:obData.name,start_kg:startKg,target_kg:targetKg,target_date:targetDate,
-        daily_steps:obData.steps||6000,wake_time:'6am',work_time:'9am'
-      });
-      saved=true;
-    }
-    if(!saved)throw new Error('Could not save user');
-
-    // Save habit preferences (requires user_habits table)
-    try{
-      const habitInserts=[];
-      Object.entries(obData.habits||{}).forEach(([hid,enabled])=>{
-        if(hid==='steps'||hid==='drinks')return;
-        habitInserts.push({user_id:id,habit_id:hid,enabled:!!enabled,target_value:null});
-      });
-      habitInserts.push({user_id:id,habit_id:'steps',enabled:true,target_value:obData.steps||6000});
-      habitInserts.push({user_id:id,habit_id:'drinks',enabled:true,target_value:obData.drinksCap||4});
-      for(const h of habitInserts){try{await sb('user_habits','POST',h);}catch(e){}}
-    }catch(e){}// user_habits may not exist yet — non-fatal
-
-    // Add to local state regardless
-    allUsers.push({
-      id,name:obData.name,display_name:obData.name,
+    await sb('users','POST',{
+      id:id,display_name:obData.name,start_kg:startKg,target_kg:targetKg,
+      target_date:targetDate,daily_steps:obData.steps||6000,
+      wake_time:'6am',work_time:'9am',
       initials:obData.ini||'?',color:obData.colour||'#5C8A4A',
-      start_kg:startKg,target_kg:targetKg,target_date:targetDate,
-      dob:obData.dob||null,has_reframe:obData.hasReframe!==false,
-      daily_steps:obData.steps||6000
+      dob:obData.dob||null,has_reframe:obData.hasReframe!==false
     });
-    // Seed local user habits so app works immediately
-    userHabits[id]=Object.entries(obData.habits||{})
-      .filter(([hid,en])=>en&&hid!=='steps'&&hid!=='drinks')
-      .map(([hid])=>({habit_id:hid,enabled:true,target_value:null}));
-    userHabits[id].push({habit_id:'steps',enabled:true,target_value:obData.steps||6000});
-    userHabits[id].push({habit_id:'drinks',enabled:true,target_value:obData.drinksCap||4});
-
-    closeSheet('sh-onboard');
-    await renderUserScreen();
-    toast((obData.name||'User')+' added to BravoHabit.');
-  }catch(e){
-    toast('Error: '+e.message.slice(0,60));
+  }catch(e1){
+    try{
+      await sb('users','POST',{
+        id:id,display_name:obData.name,start_kg:startKg,target_kg:targetKg,
+        target_date:targetDate,daily_steps:obData.steps||6000,
+        wake_time:'6am',work_time:'9am'
+      });
+    }catch(e2){
+      if(btn){btn.disabled=false;btn.textContent='Add to BravoHabit';}
+      toast('DB error: '+e2.message.slice(0,60));
+      return;
+    }
   }
+  try{
+    var inserts=[];
+    Object.keys(obData.habits||{}).forEach(function(hid){
+      if(hid==='steps'||hid==='drinks')return;
+      inserts.push({user_id:id,habit_id:hid,enabled:!!obData.habits[hid],target_value:null});
+    });
+    inserts.push({user_id:id,habit_id:'steps',enabled:true,target_value:obData.steps||6000});
+    inserts.push({user_id:id,habit_id:'drinks',enabled:true,target_value:obData.drinksCap||4});
+    for(var i=0;i<inserts.length;i++){try{await sb('user_habits','POST',inserts[i]);}catch(e){}}
+  }catch(e){}
+  allUsers.push({
+    id:id,name:obData.name,display_name:obData.name,
+    initials:obData.ini||'?',color:obData.colour||'#5C8A4A',
+    start_kg:startKg,target_kg:targetKg,target_date:targetDate,
+    dob:obData.dob||null,has_reframe:obData.hasReframe!==false,
+    daily_steps:obData.steps||6000
+  });
+  userHabits[id]=[];
+  Object.keys(obData.habits||{}).forEach(function(hid){
+    if(obData.habits[hid]&&hid!=='steps'&&hid!=='drinks')
+      userHabits[id].push({habit_id:hid,enabled:true,target_value:null});
+  });
+  userHabits[id].push({habit_id:'steps',enabled:true,target_value:obData.steps||6000});
+  userHabits[id].push({habit_id:'drinks',enabled:true,target_value:obData.drinksCap||4});
+  closeSheet('sh-onboard');
+  await renderUserScreen();
+  toast((obData.name||'User')+' added. Tap their name to sign in.');
 }
+
 
 // ── SETTINGS ──────────────────────────────────────────────────────
 function openSettings(){
@@ -1357,12 +1365,14 @@ async function initApp(){
 
 // ── BOOT ──────────────────────────────────────────────────────────
 (async()=>{
-  await loadUsers();
-  await renderUserScreen();
+  try{await loadUsers();}catch(e){console.warn('loadUsers failed:',e);}
+  try{await renderUserScreen();}catch(e){
+    document.getElementById('us-list').innerHTML='<div style="text-align:center;padding:20px;font-family:var(--sm);font-size:11px;color:var(--mi)">Could not load users — check Supabase setup</div>';
+  }
   loadSavedUser();
-  if(me&&allUsers.find(x=>x.id===me)){
+  if(me&&allUsers.find(function(x){return x.id===me;})){
     document.getElementById('us').classList.remove('show');
-    initApp();
+    try{await initApp();}catch(e){console.error('initApp failed:',e);}
   }
 })();
 </script>
