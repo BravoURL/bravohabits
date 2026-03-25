@@ -1253,135 +1253,50 @@ function obNext(idx){
   renderObStep(idx+1);
 }
 async function saveNewUser(){
+  console.log('saveNewUser start', JSON.stringify(obData));
   var startEl=document.getElementById('ob-start');
   var targetEl=document.getElementById('ob-target');
   var tdateEl=document.getElementById('ob-tdate');
+  console.log('elements:', startEl, targetEl, tdateEl);
   var startKg=parseFloat(startEl?startEl.value:obData.startKg);
   var targetKg=parseFloat(targetEl?targetEl.value:obData.targetKg);
   var targetDate=(tdateEl&&tdateEl.value)?tdateEl.value:(obData.targetDate||TDATE);
+  console.log('values:', startKg, targetKg, targetDate);
   if(!startKg||isNaN(startKg)){toast('Enter a starting weight');return;}
   if(!targetKg||isNaN(targetKg)){toast('Enter a target weight');return;}
   var btn=document.querySelector('#ob-body button.btn');
   if(btn){btn.disabled=true;btn.textContent='Saving…';}
   var id=(obData.name||'user').toLowerCase().replace(/[^a-z0-9]/g,'')+'_'+Date.now().toString(36);
+  console.log('new user id:', id);
+  var payload={
+    id:id, display_name:obData.name, start_kg:startKg, target_kg:targetKg,
+    target_date:targetDate, daily_steps:obData.steps||6000,
+    wake_time:'6am', work_time:'9am'
+  };
+  console.log('posting payload:', JSON.stringify(payload));
   try{
-    await sb('users','POST',{
-      id:id,display_name:obData.name,start_kg:startKg,target_kg:targetKg,
-      target_date:targetDate,daily_steps:obData.steps||6000,
-      wake_time:'6am',work_time:'9am',
-      initials:obData.ini||'?',color:obData.colour||'#5C8A4A',
-      dob:obData.dob||null,has_reframe:obData.hasReframe!==false
-    });
-  }catch(e1){
-    try{
-      await sb('users','POST',{
-        id:id,display_name:obData.name,start_kg:startKg,target_kg:targetKg,
-        target_date:targetDate,daily_steps:obData.steps||6000,
-        wake_time:'6am',work_time:'9am'
-      });
-    }catch(e2){
-      if(btn){btn.disabled=false;btn.textContent='Add to BravoHabit';}
-      toast('DB error: '+e2.message.slice(0,60));
-      return;
-    }
+    var result=await sb('users','POST',payload);
+    console.log('user saved OK:', result);
+  }catch(e){
+    console.error('sb users POST failed:', e.message, e);
+    if(btn){btn.disabled=false;btn.textContent='Add to BravoHabit';}
+    toast('Save failed: '+e.message.slice(0,80));
+    return;
   }
-  try{
-    var inserts=[];
-    Object.keys(obData.habits||{}).forEach(function(hid){
-      if(hid==='steps'||hid==='drinks')return;
-      inserts.push({user_id:id,habit_id:hid,enabled:!!obData.habits[hid],target_value:null});
-    });
-    inserts.push({user_id:id,habit_id:'steps',enabled:true,target_value:obData.steps||6000});
-    inserts.push({user_id:id,habit_id:'drinks',enabled:true,target_value:obData.drinksCap||4});
-    for(var i=0;i<inserts.length;i++){try{await sb('user_habits','POST',inserts[i]);}catch(e){}}
-  }catch(e){}
+  console.log('adding to allUsers local');
   allUsers.push({
-    id:id,name:obData.name,display_name:obData.name,
-    initials:obData.ini||'?',color:obData.colour||'#5C8A4A',
-    start_kg:startKg,target_kg:targetKg,target_date:targetDate,
-    dob:obData.dob||null,has_reframe:obData.hasReframe!==false,
-    daily_steps:obData.steps||6000
+    id:id, name:obData.name, display_name:obData.name,
+    initials:obData.ini||'?', color:obData.colour||'#5C8A4A',
+    start_kg:startKg, target_kg:targetKg, target_date:targetDate,
+    dob:obData.dob||null, daily_steps:obData.steps||6000
   });
   userHabits[id]=[];
-  Object.keys(obData.habits||{}).forEach(function(hid){
-    if(obData.habits[hid]&&hid!=='steps'&&hid!=='drinks')
-      userHabits[id].push({habit_id:hid,enabled:true,target_value:null});
-  });
-  userHabits[id].push({habit_id:'steps',enabled:true,target_value:obData.steps||6000});
-  userHabits[id].push({habit_id:'drinks',enabled:true,target_value:obData.drinksCap||4});
+  console.log('closing sheet');
   closeSheet('sh-onboard');
+  console.log('rendering user screen');
   renderUserScreen();
+  console.log('done - showing toast');
   toast((obData.name||'User')+' added. Tap their name to sign in.');
 }
 
 
-// ── SETTINGS ──────────────────────────────────────────────────────
-function openSettings(){
-  document.getElementById('sh-settings').classList.add('show');
-  const body=document.getElementById('sh-settings-body');body.innerHTML='';
-  allUsers.forEach(usr=>{
-    const sec=document.createElement('div');
-    sec.style.marginBottom='28px';
-    sec.innerHTML=`<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
-      <div style="width:36px;height:36px;border-radius:50%;background:${usr.color||'#5C8A4A'};display:flex;align-items:center;justify-content:center;font-family:var(--sm);font-size:10px;font-weight:500;color:#fff;letter-spacing:.06em">${usr.initials||'?'}</div>
-      <div style="font-family:var(--sf);font-size:17px;font-weight:700">${usr.name||usr.display_name}</div>
-    </div>
-    <div class="form-row"><div class="form-lbl">Target weight (kg)</div><input class="inp inp-num" type="number" id="set-tgt-${usr.id}" value="${usr.target_kg||''}" step="0.1" inputmode="decimal"></div>
-    <div class="form-row"><div class="form-lbl">Target date</div><input type="date" class="inp" id="set-tdate-${usr.id}" value="${usr.target_date||TDATE}"></div>
-    <div class="form-row"><div class="form-lbl">Daily steps</div><input class="inp inp-num" type="number" id="set-steps-${usr.id}" value="${usr.daily_steps||6000}" inputmode="numeric"></div>
-    <button class="btn" style="width:100%;margin-bottom:8px" onclick="saveSettings('${usr.id}')">Save ${usr.name||'settings'}</button>
-    <div style="height:1px;background:var(--bo);margin-top:8px"></div>`;
-    body.appendChild(sec);
-  });
-}
-async function saveSettings(uid){
-  const tgt=parseFloat(document.getElementById('set-tgt-'+uid).value);
-  const tdate=document.getElementById('set-tdate-'+uid).value;
-  const steps=parseInt(document.getElementById('set-steps-'+uid).value);
-  if(!tgt){toast('Enter a valid target');return;}
-  try{
-    await sb('users','POST',{id:uid,target_kg:tgt,target_date:tdate||TDATE,daily_steps:steps});
-    const usr=allUsers.find(x=>x.id===uid);
-    if(usr){usr.target_kg=tgt;usr.target_date=tdate;usr.daily_steps=steps;}
-    // Update user_habits steps target
-    if(steps)await sb('user_habits','POST',{user_id:uid,habit_id:'steps',enabled:true,target_value:steps}).catch(()=>{});
-    toast('Settings saved.');
-    renderUserScreen();
-  }catch(e){toast('Could not save — check connection');}
-}
-
-function goLogWeight(){
-  closeM('m-honest');
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));
-  document.getElementById('page-weight').classList.add('active');
-  const btn=document.querySelector('.nb:nth-child(2)');if(btn)btn.classList.add('active');
-  renderWeightPage();
-}
-
-async function initApp(){
-  updateChip();
-  document.getElementById('app-date').textContent=new Date().toLocaleDateString('en-AU',{weekday:'short',day:'numeric',month:'short'});
-  document.getElementById('bd-date').value=ts();
-  await loadUserHabits();
-  await Promise.all([loadTodayHabits(),loadTodayNips(),loadWeights()]);
-  await renderHabits();renderNips();renderHero();
-  const tw=weightLogs.find(w=>w.logged_date===ts());
-  if(tw)document.getElementById('w-today-line').textContent='Today: '+tw.weight_kg+' kg';
-}
-
-// ── BOOT ──────────────────────────────────────────────────────────
-(async()=>{
-  try{await loadUsers();}catch(e){console.warn('loadUsers failed:',e);}
-  try{renderUserScreen();}catch(e){
-    document.getElementById('us-list').innerHTML='<div style="text-align:center;padding:20px;font-family:var(--sm);font-size:11px;color:var(--mi)">Could not load users — check Supabase setup</div>';
-  }
-  loadSavedUser();
-  if(me&&allUsers.find(function(x){return x.id===me;})){
-    document.getElementById('us').classList.remove('show');
-    try{await initApp();}catch(e){console.error('initApp failed:',e);}
-  }
-})();
-</script>
-</body>
-</html>
