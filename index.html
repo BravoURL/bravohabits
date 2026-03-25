@@ -361,6 +361,30 @@ body{padding-bottom:calc(var(--nav) + env(safe-area-inset-bottom,0px))}
   </div>
 </div>
 
+
+<!-- PROFILE SHEET -->
+<div class="modal-overlay" id="profile-modal">
+  <div class="modal" style="padding:0;border-radius:24px 24px 0 0;overflow:hidden;max-height:88vh;display:flex;flex-direction:column">
+    <div id="profile-header" style="padding:24px 20px 16px;flex-shrink:0">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px">
+        <div id="profile-avatar" style="width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:#fff;flex-shrink:0"></div>
+        <div style="flex:1">
+          <div id="profile-name" style="font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--black)"></div>
+          <div id="profile-subline" style="font-family:'DM Mono',monospace;font-size:11px;color:var(--mid);margin-top:2px;letter-spacing:.04em"></div>
+        </div>
+        <button onclick="closeModal('profile-modal')" style="background:var(--warm);border:1px solid var(--border);border-radius:50%;width:32px;height:32px;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--mid);flex-shrink:0">×</button>
+      </div>
+      <div id="profile-stats" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px"></div>
+    </div>
+    <div style="overflow-y:auto;padding:0 20px 40px;flex:1">
+      <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mid);margin:4px 0 10px">Today</div>
+      <div id="profile-today" style="background:var(--warm);border-radius:var(--r);padding:14px;margin-bottom:16px"></div>
+      <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mid);margin-bottom:10px">Last 7 days</div>
+      <div id="profile-history"></div>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -874,20 +898,10 @@ function renderHero(){
 }
 
 // ─── TEAM ─────────────────────────────────────────────────────────
+let teamCache = {};
+
 async function loadTeamData(){
   const list = document.getElementById('team-list');
-  if(SUPA_URL.includes('YOUR_SUPABASE') || SUPA_KEY.includes('YOUR_SUPABASE')){
-    list.innerHTML = `<div class="setup-banner">
-      <div class="setup-banner-title">Supabase setup required</div>
-      <div class="setup-banner-text">
-        The Team tab syncs data across everyone's devices — but it needs your Supabase credentials first.<br><br>
-        Open <code>index.html</code> in a text editor, find these two lines and replace with your values from Supabase → Settings → API:<br><br>
-        <code>https://xgmnyhpzuwngdngtttux.supabase.co</code><br>
-        <code>sb_publishable_pTYp1DS4yrzeytovirmEWw_77BulU8_</code>
-      </div>
-    </div>`;
-    return;
-  }
   list.innerHTML = '<div class="loading">Loading…</div>';
   try{
     const [weights, habits, drinks] = await Promise.all([
@@ -895,6 +909,7 @@ async function loadTeamData(){
       sb('habit_logs','GET',null,`?logged_date=eq.${ts()}&select=user_id,habit_id,completed`),
       sb('drink_logs','GET',null,`?logged_date=eq.${ts()}&select=user_id,nips`),
     ]);
+    teamCache = {weights:weights||[], habits:habits||[], drinks:drinks||[]};
     list.innerHTML = '';
     ['bill','leon','greg','brent'].forEach(uid=>{
       const u = USERS[uid];
@@ -902,37 +917,142 @@ async function loadTeamData(){
       const latestW = uWeights[0];
       const uHabits = (habits||[]).filter(h=>h.user_id===uid&&h.completed);
       const uDrinks = (drinks||[]).find(d=>d.user_id===uid);
-      const totalHabitsToday = getHabitsForUser(uid).filter(h=>isHabitActiveToday(h.id)).length;
-      const doneHabits = uHabits.length;
+      const totalH = getHabitsForUser(uid).filter(h=>isHabitActiveToday(h.id)).length;
+      const doneH = uHabits.length;
       const nips = uDrinks?.nips || 0;
       const lost = latestW ? +(u.startKg - latestW.weight_kg).toFixed(1) : null;
-      const card = document.createElement('div');
-      card.className = 'team-member';
+
+      const nipColor = nips>4?'#8A3A3A':nips===4?'#7A5400':'var(--fit-dark)';
+      const nipBg = nips>4?'#FAEAEA':nips===4?'#FFF8EC':'var(--fit-light)';
+      const habitsAllDone = doneH === totalH && totalH > 0;
+
+      // Build habit dot row
       const habitDots = getHabitsForUser(uid).filter(h=>isHabitActiveToday(h.id)).map(h=>{
         const done = uHabits.some(x=>x.habit_id===h.id);
-        return `<div class="h-dot" style="background:${done?u.color:'var(--bg5)'}"></div>`;
+        return `<div style="width:8px;height:8px;border-radius:50%;background:${done?u.color:'var(--border)'}"></div>`;
       }).join('');
-      const nipColor = nips>4?'var(--red)':nips===4?'var(--amber)':'var(--green)';
-      const nipBg = nips>4?'rgba(255,59,48,.1)':nips===4?'rgba(255,149,0,.1)':'rgba(52,199,89,.1)';
+
+      const card = document.createElement('div');
+      card.className = 'team-member';
+      card.style.cursor = 'pointer';
       card.innerHTML = `
-        <div class="member-avatar" style="background:${u.color}">${u.initials}</div>
-        <div class="member-info">
-          <div style="display:flex;align-items:center;justify-content:space-between">
-            <div class="member-name">${u.name}</div>
-            <span class="member-badge" style="background:${nipBg};color:${nipColor}">${nips} nips</span>
+        <div style="width:48px;height:48px;border-radius:50%;background:${u.color};display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:#fff;flex-shrink:0">${u.initials}</div>
+        <div style="flex:1;min-width:0">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:3px">
+            <div style="font-family:'Playfair Display',serif;font-size:17px;font-weight:600;color:var(--black)">${u.name}</div>
+            <span style="font-family:'DM Mono',monospace;font-size:10px;font-weight:500;padding:3px 9px;border-radius:10px;background:${nipBg};color:${nipColor};letter-spacing:.04em">${nips} nips</span>
           </div>
-          <div class="member-stats">
-            ${latestW?latestW.weight_kg+' kg':'no weight logged'} · 
-            ${lost!==null&&lost>0?lost.toFixed(1)+' kg lost':'–'} · 
-            ${doneHabits}/${totalHabitsToday} habits
+          <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--mid);letter-spacing:.02em;margin-bottom:6px">
+            ${latestW ? latestW.weight_kg+' kg' : 'no weight'} &nbsp;·&nbsp; ${lost!==null&&lost>0?'↓'+lost.toFixed(1)+' kg':'–'} &nbsp;·&nbsp; ${doneH}/${totalH} habits${habitsAllDone?' ✓':''}
           </div>
-          <div class="member-habits">${habitDots}</div>
-        </div>`;
+          <div style="display:flex;gap:4px;flex-wrap:wrap">${habitDots}</div>
+        </div>
+        <div style="color:var(--border);font-size:18px;margin-left:4px">›</div>`;
+      card.onclick = () => openProfile(uid);
       list.appendChild(card);
     });
   }catch(e){
-    list.innerHTML = '<div class="empty-state">Could not load — check your connection.</div>';
+    list.innerHTML = `<div style="text-align:center;padding:32px 0">
+      <div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:600;color:var(--black);margin-bottom:8px">Could not load team data</div>
+      <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--mid);letter-spacing:.05em">Check your Supabase setup and connection</div>
+    </div>`;
   }
+}
+
+async function openProfile(uid){
+  const u = USERS[uid];
+  document.getElementById('profile-avatar').style.background = u.color;
+  document.getElementById('profile-avatar').textContent = u.initials;
+  document.getElementById('profile-name').textContent = u.name;
+
+  // Load last 7 days of data for this user
+  const [weights, habits, drinks] = await Promise.all([
+    sb('weight_logs','GET',null,`?user_id=eq.${uid}&order=logged_date.desc&limit=14&select=logged_date,weight_kg`),
+    sb('habit_logs','GET',null,`?user_id=eq.${uid}&order=logged_date.desc&select=logged_date,habit_id,completed`),
+    sb('drink_logs','GET',null,`?user_id=eq.${uid}&order=logged_date.desc&limit=7&select=logged_date,nips`),
+  ]);
+
+  const latestW = (weights||[]).sort((a,b)=>b.logged_date.localeCompare(a.logged_date))[0];
+  const lost = latestW ? +(u.startKg - latestW.weight_kg).toFixed(1) : null;
+  const totalDays = daysBetween('2026-03-20','2026-07-14');
+  const elapsedDays = daysBetween('2026-03-20', ts());
+  const expectedKg = +(u.startKg - (u.startKg-u.targetKg)*(elapsedDays/totalDays)).toFixed(1);
+  const diff = latestW ? +(latestW.weight_kg - expectedKg).toFixed(1) : null;
+  const statusColor = diff===null?'var(--mid)':diff<0?'var(--fit-dark)':diff<1.5?'#C4773A':'#B85C5C';
+  const statusText = diff===null?'No data':diff<0?'Ahead of target':diff<1.5?'Slightly behind':'Behind target';
+
+  document.getElementById('profile-subline').textContent = `Target: ${u.targetKg} kg by 14 Jul`;
+  document.getElementById('profile-stats').innerHTML = `
+    <div style="background:var(--warm);border-radius:var(--r-sm);padding:12px 8px;text-align:center">
+      <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:600;color:var(--black)">${latestW?latestW.weight_kg:'–'}</div>
+      <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--mid);margin-top:2px;letter-spacing:.05em;text-transform:uppercase">kg now</div>
+    </div>
+    <div style="background:var(--warm);border-radius:var(--r-sm);padding:12px 8px;text-align:center">
+      <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:600;color:${lost>0?'var(--fit)':'var(--mid)'}">${lost!==null&&lost>0?'↓'+lost.toFixed(1):'–'}</div>
+      <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--mid);margin-top:2px;letter-spacing:.05em;text-transform:uppercase">kg lost</div>
+    </div>
+    <div style="background:var(--warm);border-radius:var(--r-sm);padding:12px 8px;text-align:center">
+      <div style="font-family:'Playfair Display',serif;font-size:14px;font-weight:600;color:${statusColor};line-height:1.2;margin-top:4px">${statusText}</div>
+      <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--mid);margin-top:4px;letter-spacing:.05em;text-transform:uppercase">vs target</div>
+    </div>`;
+
+  // Today's detail
+  const todayHabits = (habits||[]).filter(h=>h.logged_date===ts());
+  const todayDrinks = (drinks||[]).find(d=>d.logged_date===ts());
+  const todayWeight = (weights||[]).find(w=>w.logged_date===ts());
+  const allHabits = getHabitsForUser(uid).filter(h=>isHabitActiveToday(h.id));
+  const habitRows = allHabits.map(h=>{
+    const done = todayHabits.some(x=>x.habit_id===h.id&&x.completed);
+    return `<div style="display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border)">
+      <div style="width:18px;height:18px;border-radius:50%;background:${done?u.color:'var(--border)'};display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        ${done?'<svg width="10" height="10" viewBox="0 0 14 14" fill="none"><polyline points="2,7 6,11 12,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>':''}
+      </div>
+      <span style="font-size:14px;color:${done?'var(--black)':'var(--mid)'}">${h.name}</span>
+    </div>`;
+  }).join('');
+
+  const nipsToday = todayDrinks?.nips || 0;
+  const nipColor = nipsToday>4?'#8A3A3A':nipsToday===4?'#7A5400':'var(--fit-dark)';
+  const nipBg = nipsToday>4?'#FAEAEA':nipsToday===4?'#FFF8EC':'var(--fit-light)';
+
+  document.getElementById('profile-today').innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <span style="font-size:14px;color:var(--mid)">Weight</span>
+      <span style="font-family:'Playfair Display',serif;font-size:16px;font-weight:600">${todayWeight?todayWeight.weight_kg+' kg':'Not logged'}</span>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <span style="font-size:14px;color:var(--mid)">Drinks</span>
+      <span style="font-family:'DM Mono',monospace;font-size:12px;padding:3px 10px;border-radius:10px;background:${nipBg};color:${nipColor}">${nipsToday} nips</span>
+    </div>
+    ${habitRows}`;
+
+  // 7-day history
+  const days7 = [];
+  for(let i=0;i<7;i++){
+    const d = new Date(); d.setDate(d.getDate()-i);
+    days7.push(d.toISOString().slice(0,10));
+  }
+
+  const historyHTML = days7.map(date=>{
+    const w = (weights||[]).find(x=>x.logged_date===date);
+    const d = (drinks||[]).find(x=>x.logged_date===date);
+    const hDone = (habits||[]).filter(x=>x.logged_date===date&&x.completed).length;
+    const hTotal = getHabitsForUser(uid).length;
+    const isToday = date===ts();
+    const nips = d?.nips||0;
+    const nipC = nips>4?'#8A3A3A':nips===4?'#7A5400':'var(--mid)';
+    return `<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)">
+      <div style="min-width:70px;font-family:'DM Mono',monospace;font-size:11px;color:var(--mid);letter-spacing:.03em">${isToday?'Today':new Date(date+'T00:00:00').toLocaleDateString('en-AU',{weekday:'short',day:'numeric',month:'short'})}</div>
+      <div style="flex:1;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        <span style="font-family:'Playfair Display',serif;font-size:14px;font-weight:600;color:${w?'var(--black)':'var(--border)'}">${w?w.weight_kg+' kg':'–'}</span>
+        <span style="font-family:'DM Mono',monospace;font-size:11px;color:${nipC}">${nips} nips</span>
+        <span style="font-family:'DM Mono',monospace;font-size:11px;color:var(--mid)">${hDone}/${hTotal} habits</span>
+      </div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('profile-history').innerHTML = historyHTML;
+  document.getElementById('profile-modal').classList.add('show');
 }
 
 // ─── SCIENCE ──────────────────────────────────────────────────────
