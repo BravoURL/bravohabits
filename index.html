@@ -351,6 +351,7 @@ body{padding-bottom:calc(var(--nav)+env(safe-area-inset-bottom,0px))}
     <div class="handle"></div>
     <div class="sheet-head" style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px 14px">
       <div id="set-title" style="font-family:var(--sf);font-size:20px;font-weight:700">Settings</div>
+      <div id="set-sub" style="font-family:var(--sm);font-size:11px;color:var(--mi);margin-top:2px;letter-spacing:.03em"></div>
       <button onclick="closeSheet('sh-settings')" style="background:var(--wm);border:1px solid var(--bo);border-radius:50%;width:32px;height:32px;cursor:pointer;color:var(--mi);font-size:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0">×</button>
     </div>
     <div style="overflow-y:auto;padding:16px 20px 48px;flex:1">
@@ -1141,7 +1142,6 @@ function setDrinksSlide(v){
 function openSettings(){
   var usr=u();
   document.getElementById('set-title').textContent=usr.name+' — Settings';
-  document.getElementById('set-sub').textContent='Changes apply immediately';
   document.getElementById('set-target-kg').value=usr.targetKg||'';
   document.getElementById('set-start-kg').value=usr.startKg||'';
   document.getElementById('set-target-date').value=usr.targetDate||'2026-07-14';
