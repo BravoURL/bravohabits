@@ -65,7 +65,7 @@ body{padding-bottom:calc(var(--nav)+env(safe-area-inset-bottom,0px))}
 .hero.bad{background:var(--rl);border-color:rgba(154,58,58,.2)}
 .h-badge{font-family:var(--sm);font-size:10px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;font-weight:500;color:var(--mi)}
 .hero.good .h-badge{color:var(--gd)}.hero.warn .h-badge{color:var(--am)}.hero.bad .h-badge{color:var(--re)}
-.h-kg{font-family:var(--sf);font-size:58px;font-weight:300;letter-spacing:-2px;line-height:1;margin-bottom:3px}
+.h-kg{font-family:var(--sf);font-size:64px;font-weight:700;letter-spacing:-3px;line-height:1;margin-bottom:3px}
 .h-sub{font-family:var(--sm);font-size:11px;color:var(--mi);letter-spacing:.04em;margin-bottom:14px}
 .h-msg{font-size:13px;line-height:1.7;padding:12px 14px;border-radius:var(--rs);background:rgba(0,0,0,.04)}
 .hero.good .h-msg{background:rgba(92,138,74,.1);color:var(--gd)}
@@ -74,12 +74,12 @@ body{padding-bottom:calc(var(--nav)+env(safe-area-inset-bottom,0px))}
 
 /* STATS */
 .stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
-.stat{background:var(--wm);border-radius:var(--rs);padding:13px 8px;text-align:center;border:1px solid var(--bo)}
-.stat-n{font-family:var(--sf);font-size:22px;font-weight:600;margin-bottom:2px}
+.stat{background:var(--wh);border-radius:var(--rs);padding:13px 8px;text-align:center;border:1px solid var(--bo);box-shadow:var(--sh)}
+.stat-n{font-family:var(--sf);font-size:26px;font-weight:700;margin-bottom:2px;letter-spacing:-.5px}
 .stat-l{font-family:var(--sm);font-size:9px;letter-spacing:.07em;text-transform:uppercase;color:var(--mi)}
 
 /* HABITS */
-.habit-sec{background:var(--wh);border:1px solid var(--bo);border-radius:var(--r);overflow:hidden;margin-bottom:10px;box-shadow:var(--sh)}
+.habit-sec{background:var(--wh);border:1px solid var(--bo);border-radius:var(--r);overflow:hidden;margin-bottom:10px;box-shadow:var(--sh);transition:border-color .2s}
 .hrow{display:flex;align-items:center;gap:12px;padding:13px 16px;border-bottom:1px solid var(--bo);cursor:pointer;user-select:none;-webkit-user-select:none;transition:background .1s}
 .hrow:active{background:var(--wm)}
 .hrow.locked{opacity:.45;cursor:not-allowed}
@@ -97,7 +97,7 @@ body{padding-bottom:calc(var(--nav)+env(safe-area-inset-bottom,0px))}
 .h-streak{font-family:var(--sm);font-size:10px;color:var(--gr);font-weight:500;margin-top:1px}
 .h-sci{font-size:13px;line-height:1.7;padding:11px 16px 12px 54px;background:var(--gl);display:none;border-top:1px solid rgba(92,138,74,.15);border-left:3px solid var(--gr);color:var(--gd)}
 .h-sci.show{display:block}
-.streak-dots{display:flex;gap:4px;padding:8px 16px 10px}
+.streak-dots{display:flex;gap:2px;padding:10px 14px 12px}
 .sdot{width:9px;height:9px;border-radius:50%}
 
 /* DRINKS */
@@ -140,6 +140,20 @@ body{padding-bottom:calc(var(--nav)+env(safe-area-inset-bottom,0px))}
 .tdot{width:8px;height:8px;border-radius:50%}
 .tbadge{font-family:var(--sm);font-size:10px;font-weight:500;padding:3px 9px;border-radius:10px;letter-spacing:.04em}
 .tskel{background:var(--wm);border:1px solid var(--bo);border-radius:var(--r);height:76px;margin-bottom:10px}
+.lb-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--bo)}
+.lb-row:last-child{border-bottom:none}
+.lb-rank{font-family:var(--sf);font-size:20px;font-weight:700;width:28px;flex-shrink:0;text-align:center}
+.lb-rank.gold{color:#C4933A}
+.lb-rank.silver{color:#8A8880}
+.lb-rank.bronze{color:#8A5A3A}
+.lb-av{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--sm);font-size:9px;font-weight:500;color:#fff;flex-shrink:0;letter-spacing:.06em}
+.lb-info{flex:1;min-width:0}
+.lb-name{font-family:var(--sf);font-size:15px;font-weight:600}
+.lb-score{font-family:var(--sm);font-size:10px;color:var(--mi);margin-top:1px;letter-spacing:.03em}
+.lb-bar-wrap{width:80px;flex-shrink:0}
+.lb-bar{height:6px;background:var(--bo);border-radius:3px;overflow:hidden;margin-bottom:3px}
+.lb-bar-fill{height:100%;border-radius:3px;transition:width .5s cubic-bezier(.34,1.2,.64,1)}
+.lb-pct{font-family:var(--sm);font-size:10px;text-align:right;font-weight:500}
 @keyframes shimmer{0%,100%{opacity:.5}50%{opacity:1}}
 .tskel{animation:shimmer 1.4s ease-in-out infinite}
 
@@ -270,12 +284,12 @@ body{padding-bottom:calc(var(--nav)+env(safe-area-inset-bottom,0px))}
       <button class="btn" onclick="logWeight(null)">Log</button>
     </div>
     <div id="w-pg-line" style="font-family:var(--sm);font-size:11px;color:var(--mi);letter-spacing:.03em;margin-bottom:4px">Not logged today</div>
-    <div class="divider"></div>
-    <div class="slbl" style="margin-top:0">Backdate</div>
+    <div style="height:1px;background:var(--bo);margin:16px 0 14px"></div>
+    <div style="font-family:var(--sm);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mi);margin-bottom:10px">Backdate a previous day</div>
     <div style="display:flex;gap:8px;margin-top:4px">
       <input type="date" id="bd-date" style="flex:.55;background:var(--wm);border:1px solid var(--bo);border-radius:var(--rs);color:var(--bk);font-size:13px;padding:10px;outline:none;min-width:0">
       <input type="number" id="bd-kg" placeholder="kg" step="0.1" min="40" max="250" inputmode="decimal" style="flex:.3;background:var(--wm);border:1px solid var(--bo);border-radius:var(--rs);color:var(--bk);font-size:14px;padding:10px;outline:none;min-width:0;-moz-appearance:textfield">
-      <button class="btn-sec" onclick="logWeight(document.getElementById('bd-date').value)" style="flex-shrink:0;padding:10px 14px">Save</button>
+      <button class="btn" onclick="logWeight(document.getElementById('bd-date').value)" style="flex-shrink:0;padding:10px 14px;background:var(--gd)">Save</button>
     </div>
   </div>
   <div class="card">
@@ -286,6 +300,7 @@ body{padding-bottom:calc(var(--nav)+env(safe-area-inset-bottom,0px))}
 
 <!-- TEAM PAGE -->
 <div id="page-team" class="page">
+  <div id="leaderboard" class="card" style="margin-bottom:14px"></div>
   <div id="team-list"></div>
 </div>
 
@@ -477,7 +492,7 @@ var AFFIRM=['Please solemnly confirm that {n} nips is accurate. Did you count ev
 var me=null, todayH={}, todayNips=0, weightLogs=[];
 
 // ── UTILS ─────────────────────────────────────────────────────────
-function ts(){return new Date().toISOString().slice(0,10);}
+function ts(){var d=new Date();return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2);}
 function fmt(d){return new Date(d+'T00:00:00').toLocaleDateString('en-AU',{weekday:'short',day:'numeric',month:'short'});}
 function dBetween(d1,d2){return Math.round((new Date(d2)-new Date(d1))/86400000);}
 function isLate(){var h=new Date().getHours();return h>=23||h<4;}
@@ -577,7 +592,7 @@ function habitsForUser(uid){
       .replace('{wake}',usr.wake||'6am')
       .replace('{work}',usr.work||'9am')
       .replace('{steps}',(usr.steps||6000).toLocaleString())
-      .replace('11pm',h.id==='sleep'?lightsOut:'11pm');
+      .replace('{lightsOut}',lightsOut);
     var cap=usr.drinksCap!=null?usr.drinksCap:4;
     if(h.id==='drinks') name='Drinks within cap ('+cap+' nips)';
     return {id:h.id,freq:h.freq,sci:h.sci,name:name};
@@ -630,9 +645,29 @@ async function renderHabits(){
     var hid=h.id;
     row.onclick=function(){toggleHabit(hid,row,h);};
     sec.appendChild(row);
-    // Streak dots
+    // Streak dots with day labels
     var dots=document.createElement('div');dots.className='streak-dots';
-    for(var i=6;i>=0;i--){var dot=document.createElement('div');dot.className='sdot';dot.style.background=streak>i?u().color:'var(--bo)';dots.appendChild(dot);}
+    var dayLabels=['S','M','T','W','T','F','S'];
+    var today=new Date().getDay();// 0=Sun
+    for(var i=6;i>=0;i--){
+      var dayOffset=6-i;
+      var d2=new Date();d2.setDate(d2.getDate()-i);
+      var dateStr=d2.getFullYear()+'-'+('0'+(d2.getMonth()+1)).slice(-2)+'-'+('0'+d2.getDate()).slice(-2);
+      var dayIdx=d2.getDay();
+      var isToday=(i===0);
+      // Check if this habit was completed on this date
+      var completed=false;
+      if(i===0){completed=!!todayH[h.id];}
+      var wrap=document.createElement('div');
+      wrap.style.cssText='display:flex;flex-direction:column;align-items:center;gap:3px;flex:1';
+      var dot=document.createElement('div');
+      dot.style.cssText='width:10px;height:10px;border-radius:50%;background:'+(completed?u().color:streak>dayOffset?u().color:'var(--bo)')+';'+(isToday?'box-shadow:0 0 0 2px var(--bo)':'');
+      var lbl=document.createElement('div');
+      lbl.style.cssText='font-family:var(--sm);font-size:8px;letter-spacing:.04em;color:'+(isToday?'var(--bk)':'var(--mi)')+';font-weight:'+(isToday?'600':'400');
+      lbl.textContent=dayLabels[dayIdx];
+      wrap.appendChild(dot);wrap.appendChild(lbl);
+      dots.appendChild(wrap);
+    }
     sec.appendChild(dots);
     if(h.sci){
       var sci=document.createElement('div');sci.className='h-sci'+(done?' show':'');sci.id='sci-'+h.id;
@@ -819,11 +854,11 @@ function renderWormChart(){
   canvas.width=W*2;canvas.height=H*2;canvas.style.width=W+'px';canvas.style.height=H+'px';
   ctx.scale(2,2);
 
-  var tDate=usr.target_date||TDATE;
+  var tDate=usr.targetDate||'2026-07-14';
   var startDate=sorted.length?sorted[0].logged_date:'2026-03-20';
-  var totalDays=dBetween(startDate,tDate);
-  var startKg=usr.start_kg||100;
-  var targetKg=usr.target_kg||80;
+  var totalDays=Math.max(1,dBetween(startDate,tDate));
+  var startKg=usr.startKg||100;
+  var targetKg=usr.targetKg||80;
   var pad={l:36,r:16,t:12,b:8};
   var cW=W-pad.l-pad.r;var cH=H-pad.t-pad.b;
 
@@ -917,9 +952,9 @@ function renderWormChart(){
     return;
   }
   var latest=sorted[sorted.length-1];
-  var elapsed=dBetween(startDate,ts());
+  var elapsed=Math.max(0,dBetween(startDate,ts()));
   var totalLoss=startKg-targetKg;
-  var expectedNow=startKg-(totalLoss*(elapsed/totalDays));
+  var expectedNow=totalDays>0?startKg-(totalLoss*(elapsed/totalDays)):startKg;
   var actualNow=latest.weight_kg;
   var diff=+(actualNow-expectedNow).toFixed(1);
 
@@ -1003,19 +1038,38 @@ function renderHero(){
     msg.textContent=barb||'Weigh yourself first thing every morning. Same time, same conditions. The number is just data.';
     document.getElementById('s-lost').textContent='–';document.getElementById('s-streak').textContent='–';return;
   }
-  var cur=latest.weight_kg;var lost=+(usr.startKg-cur).toFixed(1);
-  var planStart=sorted.length?sorted[sorted.length-1].logged_date:'2026-03-20';var totalD=dBetween(planStart,usr.targetDate||'2026-07-14');var elap=dBetween(planStart,ts());
-  var exp=+(usr.startKg-(usr.startKg-usr.targetKg)*(elap/totalD)).toFixed(1);
-  var diff=+(cur-exp).toFixed(1);
+  var cur=latest.weight_kg;
+  var baseKg=usr.startKg||sorted[sorted.length-1].weight_kg||cur;
+  var lost=+(baseKg-cur).toFixed(1);
+  // Use pace-based projection (same as weight tab) not linear from start date
+  var tDate=usr.targetDate||'2026-07-14';
+  var recent=sorted.slice().filter(function(w){return dBetween(w.logged_date,ts())<=21;});
+  var diff=0;// default on track
+  if(recent.length>=2){
+    var rf=recent[0],rl=recent[recent.length-1];
+    var rdays=dBetween(rf.logged_date,rl.logged_date);
+    var pace=rdays>0?(rf.weight_kg-rl.weight_kg)/rdays:0;
+    var daysLeft=Math.max(1,dBetween(ts(),tDate));
+    var projected=pace>0?Math.max(cur-pace*daysLeft,usr.targetKg):cur;
+    // diff = how far projected end is from target (positive = bad)
+    diff=+(projected-usr.targetKg).toFixed(1);
+  } else if(sorted.length===1){
+    // Only one entry — compare to linear expectation from that entry
+    var planStart=sorted[sorted.length-1].logged_date;
+    var totalD=Math.max(1,dBetween(planStart,tDate));
+    var elap=dBetween(planStart,ts());
+    var exp=+(usr.startKg-(usr.startKg-usr.targetKg)*(elap/totalD)).toFixed(1);
+    diff=+(cur-exp).toFixed(1);
+  }
   kgEl.textContent=cur.toFixed(1);
   var lostEl=document.getElementById('s-lost');lostEl.textContent=lost>0?lost.toFixed(1):'0.0';lostEl.style.color=lost>0?'var(--gr)':'var(--bk)';
   var streak=0;
-  for(var i=0;i<sorted.length;i++){var ex2=new Date(ts());ex2.setDate(ex2.getDate()-i);if(sorted[i]&&sorted[i].logged_date===ex2.toISOString().slice(0,10))streak++;else break;}
+  for(var i=0;i<sorted.length;i++){var ex2=new Date();ex2.setDate(ex2.getDate()-i);var ex2s=ex2.getFullYear()+'-'+('0'+(ex2.getMonth()+1)).slice(-2)+'-'+('0'+ex2.getDate()).slice(-2);if(sorted[i]&&sorted[i].logged_date===ex2s)streak++;else break;}
   var stEl=document.getElementById('s-streak');stEl.textContent=streak;stEl.style.color=streak>=7?'var(--gr)':streak>=3?'var(--am)':'var(--bk)';
-  if(diff<=-2){hero.className='hero good';badge.textContent='Ahead of target';kgEl.style.color='var(--gd)';sub.textContent=Math.abs(diff).toFixed(1)+' kg ahead of pace';msg.textContent='Ahead by '+Math.abs(diff).toFixed(1)+' kg. That is the compound effect of consistent days.'+(barb?' '+barb:'');}
-  else if(diff<=0){hero.className='hero good';badge.textContent='On track';kgEl.style.color='var(--gd)';sub.textContent='Right on target pace';msg.textContent='On track. Every day you hold this line, 14 July gets closer.'+(barb?' '+barb:'');}
-  else if(diff<=2){hero.className='hero warn';badge.textContent='Slightly behind';kgEl.style.color='var(--am)';sub.textContent=diff.toFixed(1)+' kg behind pace';msg.textContent=diff.toFixed(1)+' kg behind. One clean week closes this.'+(barb?' '+barb:'');}
-  else{hero.className='hero bad';badge.textContent='Off track';kgEl.style.color='var(--re)';sub.textContent=diff.toFixed(1)+' kg behind pace';msg.textContent=diff.toFixed(1)+' kg behind. Identify what slipped and fix it today.'+(barb?' '+barb:'');}
+  if(diff<=-2){hero.className='hero good';badge.textContent='✓ Ahead of target';kgEl.style.color='var(--gd)';sub.textContent=Math.abs(diff).toFixed(1)+' kg ahead of pace — keep it up';msg.textContent='Ahead by '+Math.abs(diff).toFixed(1)+' kg. That is the compound effect of consistent days.'+(barb?' '+barb:'');}
+  else if(diff<=0){hero.className='hero good';badge.textContent='✓ On track';kgEl.style.color='var(--gd)';sub.textContent='Right on target pace';msg.textContent='On track. Every day you hold this line, 14 July gets closer.'+(barb?' '+barb:'');}
+  else if(diff<=2){hero.className='hero warn';badge.textContent='↗ Slightly behind';kgEl.style.color='var(--am)';sub.textContent=diff.toFixed(1)+' kg behind — fixable this week';msg.textContent=diff.toFixed(1)+' kg behind pace. One clean week closes this. Tighten the habits.'+(barb?' '+barb:'');}
+  else{hero.className='hero bad';badge.textContent='↓ Off track';kgEl.style.color='var(--re)';sub.textContent=diff.toFixed(1)+' kg behind — action needed now';msg.textContent=diff.toFixed(1)+' kg off pace. Something slipped. Identify it and fix it today — not tomorrow.'+(barb?' '+barb:'');}
 }
 function goLogWeight(){
   closeM('m-honest');
@@ -1029,33 +1083,114 @@ function goLogWeight(){
 // ── TEAM ──────────────────────────────────────────────────────────
 async function loadTeam(){
   var list=document.getElementById('team-list');
-  list.innerHTML='';
+  var lb=document.getElementById('leaderboard');
+  list.innerHTML='';lb.innerHTML='';
   USER_ORDER.forEach(function(){var sk=document.createElement('div');sk.className='tskel';list.appendChild(sk);});
   try{
+    // Get last 7 days for habit compliance + week's weights + today's drinks
+    var weekAgo=new Date();weekAgo.setDate(weekAgo.getDate()-6);
+    var weekStart=weekAgo.getFullYear()+'-'+('0'+(weekAgo.getMonth()+1)).slice(-2)+'-'+('0'+weekAgo.getDate()).slice(-2);
     var results=await Promise.all([
       sb('weight_logs','GET',null,'?order=logged_date.desc&select=user_id,logged_date,weight_kg'),
-      sb('habit_logs','GET',null,'?logged_date=eq.'+ts()+'&select=user_id,habit_id,completed'),
-      sb('drink_logs','GET',null,'?logged_date=eq.'+ts()+'&select=user_id,nips'),
+      sb('habit_logs','GET',null,'?logged_date=gte.'+weekStart+'&select=user_id,logged_date,habit_id,completed'),
+      sb('drink_logs','GET',null,'?logged_date=gte.'+weekStart+'&select=user_id,logged_date,nips'),
     ]);
     var weights=results[0]||[],habits=results[1]||[],drinks=results[2]||[];
+    var todayHabits=habits.filter(function(h){return h.logged_date===ts();});
+    var todayDrinks=drinks.filter(function(d){return d.logged_date===ts();});
+
+    // Score each user: habit % this week (60%) + weight on track (25%) + drinks compliance (15%)
+    var scores=USER_ORDER.map(function(uid){
+      var usr=USERS[uid];
+      var uw=weights.filter(function(w){return w.user_id===uid;}).sort(function(a,b){return b.logged_date.localeCompare(a.logged_date);});
+      var uh=habits.filter(function(h){return h.user_id===uid&&h.completed;});
+      var ud=drinks.filter(function(d){return d.user_id===uid;});
+
+      // Habit score: completed / expected this week
+      var habitScore=0;
+      var days7=[];for(var i=0;i<7;i++){var dd=new Date();dd.setDate(dd.getDate()-i);days7.push(dd.getFullYear()+'-'+('0'+(dd.getMonth()+1)).slice(-2)+'-'+('0'+dd.getDate()).slice(-2));}
+      var totalExpected=0,totalDone=0;
+      days7.forEach(function(date){
+        var dayHabits=habitsForUser(uid).filter(function(h){
+          var d2=new Date(date+'T12:00:00');var dow=d2.getDay();
+          var m={Mon:1,Tue:2,Wed:3,Thu:4,Fri:5,Sat:6,Sun:0};
+          var hDef=HABITS.find(function(x){return x.id===h.id;});
+          if(!hDef)return false;
+          if(hDef.freq==='Daily')return true;
+          return hDef.freq.split('·').some(function(x){return m[x.trim()]===dow;});
+        });
+        totalExpected+=dayHabits.length;
+        totalDone+=uh.filter(function(h){return h.logged_date===date;}).length;
+      });
+      habitScore=totalExpected>0?Math.min(1,totalDone/totalExpected):0;
+
+      // Weight score: on pace = 1, behind = partial
+      var weightScore=0.5;// neutral if no data
+      if(uw.length>=1){
+        var latest2=uw[0];
+        var tDate2=usr.targetDate||'2026-07-14';
+        var recentW=uw.filter(function(w){return dBetween(w.logged_date,ts())<=14;});
+        if(recentW.length>=2){
+          var wf=recentW[0],wl=recentW[recentW.length-1];
+          var wdays=dBetween(wf.logged_date,wl.logged_date);
+          var pace=wdays>0?(wf.weight_kg-wl.weight_kg)/wdays:0;
+          var dLeft=Math.max(1,dBetween(ts(),tDate2));
+          var proj=pace>0?Math.max(latest2.weight_kg-pace*dLeft,usr.targetKg):latest2.weight_kg;
+          weightScore=proj<=usr.targetKg?1:proj<=usr.targetKg+2?0.7:proj<=usr.targetKg+5?0.4:0.1;
+        }
+      }
+
+      // Drinks score: under cap all week
+      var drinkScore=1;
+      var cap=usr.drinksCap||4;
+      ud.forEach(function(d){if((d.nips||0)>cap)drinkScore-=0.15;});
+      drinkScore=Math.max(0,drinkScore);
+
+      var total=Math.round((habitScore*60+weightScore*25+drinkScore*15));
+      var todayH2=todayHabits.filter(function(h){return h.user_id===uid&&h.completed;});
+      var todayD=todayDrinks.find(function(d){return d.user_id===uid;});
+      var nips=(todayD&&todayD.nips)||0;
+      var lost2=uw[0]?+(usr.startKg-uw[0].weight_kg).toFixed(1):null;
+      return {uid:uid,score:total,habitPct:Math.round(habitScore*100),uw:uw,lost:lost2,nips:nips,todayH:todayH2,totalH:habitsForUser(uid).filter(function(h){return isActiveToday(h.id);}).length};
+    }).sort(function(a,b){return b.score-a.score;});
+
+    // Render leaderboard
+    lb.innerHTML='<div style="font-family:var(--sm);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mi);margin-bottom:10px">This week — leaderboard</div>';
+    scores.forEach(function(s,i){
+      var usr=USERS[s.uid];
+      var rankClass=i===0?'gold':i===1?'silver':i===2?'bronze':'';
+      var rankLabel=i===0?'🥇':i===1?'🥈':i===2?'🥉':(i+1)+'';
+      var barColor=s.score>=80?'var(--gr)':s.score>=50?'#C4773A':'var(--re)';
+      var row=document.createElement('div');row.className='lb-row';
+      row.innerHTML='<div class="lb-rank '+rankClass+'">'+rankLabel+'</div>'
+        +'<div class="lb-av" style="background:'+usr.color+'">'+usr.initials+'</div>'
+        +'<div class="lb-info">'
+        +'<div class="lb-name">'+usr.name+'</div>'
+        +'<div class="lb-score">'+s.habitPct+'% habits · '+(s.lost&&s.lost>0?'↓'+s.lost.toFixed(1)+' kg':'no weight data')+'</div>'
+        +'</div>'
+        +'<div class="lb-bar-wrap">'
+        +'<div class="lb-bar"><div class="lb-bar-fill" style="width:'+s.score+'%;background:'+barColor+'"></div></div>'
+        +'<div class="lb-pct" style="color:'+barColor+'">'+s.score+'</div>'
+        +'</div>';
+      lb.appendChild(row);
+    });
+
+    // Render member cards
     list.innerHTML='';
     USER_ORDER.forEach(function(uid){
       var usr=USERS[uid];
-      var uw=weights.filter(function(w){return w.user_id===uid;}).sort(function(a,b){return b.logged_date.localeCompare(a.logged_date);});
-      var latest=uw[0];
-      var uh=habits.filter(function(h){return h.user_id===uid&&h.completed;});
-      var ud=drinks.find(function(d){return d.user_id===uid;});
-      var totalH=habitsForUser(uid).filter(function(h){return isActiveToday(h.id);}).length;
-      var nips=(ud&&ud.nips)||0;
-      var lost=latest?+(usr.startKg-latest.weight_kg).toFixed(1):null;
+      var sc=scores.find(function(s){return s.uid===uid;})||{nips:0,todayH:[],totalH:0,uw:[]};
+      var uw=sc.uw;var latest=uw[0];
+      var nips=sc.nips;
+      var lost=sc.lost;
       var daysSince=latest?dBetween(latest.logged_date,ts()):null;
-      var nipC=nips>4?'var(--re)':nips===4?'var(--am)':'var(--gd)';
-      var nipBg=nips>4?'var(--rl)':nips===4?'var(--al)':'var(--gl)';
+      var nipC=nips>(usr.drinksCap||4)?'var(--re)':nips===(usr.drinksCap||4)?'var(--am)':'var(--gd)';
+      var nipBg=nips>(usr.drinksCap||4)?'var(--rl)':nips===(usr.drinksCap||4)?'var(--al)':'var(--gl)';
       var absent=daysSince!==null&&daysSince>1?' · '+daysSince+'d absent':'';
-      var noData=!latest&&uh.length===0&&nips===0;
-      var statsTxt=noData?'Nothing logged yet':(latest?latest.weight_kg+' kg':'–')+(lost&&lost>0?' · ↓'+lost.toFixed(1)+' kg':'')+' · '+uh.length+'/'+totalH+' habits'+absent;
+      var noData=!latest&&sc.todayH.length===0&&nips===0;
+      var statsTxt=noData?'Nothing logged yet':(latest?latest.weight_kg+' kg':'–')+(lost&&lost>0?' · ↓'+lost.toFixed(1)+' kg':'')+' · '+sc.todayH.length+'/'+sc.totalH+' habits today'+absent;
       var dots=habitsForUser(uid).filter(function(h){return isActiveToday(h.id);}).map(function(h){
-        return '<div class="tdot" style="background:'+(uh.some(function(x){return x.habit_id===h.id;})?usr.color:'var(--bo)')+'"></div>';
+        return '<div class="tdot" style="background:'+(sc.todayH.some(function(x){return x.habit_id===h.id;})?usr.color:'var(--bo)')+'"></div>';
       }).join('');
       var card=document.createElement('div');card.className='tmem';
       card.innerHTML='<div class="tav" style="background:'+usr.color+'">'+usr.initials+'</div>'
@@ -1069,7 +1204,10 @@ async function loadTeam(){
       card.onclick=function(){openProfile(uid);};
       list.appendChild(card);
     });
-  }catch(e){list.innerHTML='<div class="empty">Could not load — check connection</div>';}
+  }catch(e){
+    list.innerHTML='<div class="empty">Could not load — check connection</div>';
+    console.error('loadTeam error:',e);
+  }
 }
 
 // ── PROFILE SHEET ─────────────────────────────────────────────────
