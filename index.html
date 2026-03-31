@@ -120,7 +120,7 @@ body{padding-bottom:calc(var(--nav)+env(safe-area-inset-bottom,0px))}
 .btn{background:var(--gr);color:#fff;border:none;border-radius:var(--rs);padding:12px 20px;font-family:var(--ss);font-size:14px;font-weight:600;cursor:pointer;transition:all .1s;white-space:nowrap;flex-shrink:0}
 .btn:active{transform:scale(.97)}
 .btn-sec{background:var(--wm);color:var(--mi);border:1px solid var(--bo);border-radius:var(--rs);padding:11px 16px;font-family:var(--ss);font-size:14px;cursor:pointer}
-.wlog-item{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--bo)}
+.wlog-item{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--bo);gap:6px}
 .wlog-item:last-child{border-bottom:none}
 .wlog-date{font-family:var(--sm);font-size:11px;color:var(--mi)}
 .wlog-kg{font-family:var(--sf);font-size:16px;font-weight:600}
@@ -736,15 +736,30 @@ async function loadWeights(){
   try{var d=await sb('weight_logs','GET',null,'?user_id=eq.'+me+'&order=logged_date.desc&limit=90');weightLogs=d||[];}
   catch(e){weightLogs=[];}
 }
+
+// Upsert weight — updates if already logged today, inserts if not
+async function sbUpsertWeight(userId,date,kg){
+  var r=await fetch(SU+'/rest/v1/weight_logs',{
+    method:'POST',
+    headers:{
+      'apikey':SK,'Authorization':'Bearer '+SK,
+      'Content-Type':'application/json',
+      'Prefer':'resolution=merge-duplicates,return=representation'
+    },
+    body:JSON.stringify({user_id:userId,logged_date:date,weight_kg:kg})
+  });
+  if(!r.ok)throw new Error(await r.text());
+  return r.json();
+}
+
 async function logWeightToday(){
   if(!me){toast('No user selected — tap your name to sign in');return;}
   var inp=document.getElementById('w-today-inp');
   if(!inp){toast('Input not found');return;}
   var v=parseFloat(inp.value);
   if(!v||v<40||v>250){toast('Enter a valid weight (e.g. 95.4)');return;}
-  toast('Saving...');
   try{
-    await sb('weight_logs','POST',{user_id:me,logged_date:ts(),weight_kg:+v.toFixed(1)});
+    await sbUpsertWeight(me,ts(),+v.toFixed(1));
     inp.value='';
     await loadWeights();
     renderHero();
@@ -756,7 +771,7 @@ async function logWeightToday(){
     }
     toast(v.toFixed(1)+' kg logged.');
   }catch(e){
-    toast('Error: '+e.message.slice(0,80));
+    toast('Could not save: '+e.message.slice(0,60));
   }
 }
 async function logWeight(dateOverride){
@@ -765,18 +780,35 @@ async function logWeight(dateOverride){
   if(!v||v<40||v>250){toast('Enter a valid weight');return;}
   var date=dateOverride||ts();
   try{
-    await sb('weight_logs','POST',{user_id:me,logged_date:date,weight_kg:+v.toFixed(1)});
+    await sbUpsertWeight(me,date,+v.toFixed(1));
     inp.value='';if(dateOverride)document.getElementById('bd-date').value='';
     await loadWeights();renderHero();renderWeightPage();
+    setTimeout(renderWormChart,50);
     if(date===ts()&&!todayH['weigh']){
       todayH['weigh']=true;
-      await sb('habit_logs','POST',{user_id:me,logged_date:ts(),habit_id:'weigh',completed:true});
+      try{await sb('habit_logs','POST',{user_id:me,logged_date:ts(),habit_id:'weigh',completed:true});}catch(e2){}
       renderHabits();
     }
     toast(v.toFixed(1)+' kg logged.');
-  }catch(e){toast('Could not save: '+e.message.slice(0,50));}
+  }catch(e){toast('Could not save: '+e.message.slice(0,60));}
 }
 
+
+async function deleteWeight(date){
+  if(!confirm('Delete weight entry for '+fmt(date)+'?'))return;
+  try{
+    await fetch(SU+'/rest/v1/weight_logs?user_id=eq.'+me+'&logged_date=eq.'+date,{
+      method:'DELETE',
+      headers:{'apikey':SK,'Authorization':'Bearer '+SK,'Content-Type':'application/json'}
+    });
+    if(date===ts()){
+      document.getElementById('w-today-line').textContent='Not logged today';
+      document.getElementById('w-today-line') && (document.getElementById('w-today-line').textContent='Not logged today');
+    }
+    await loadWeights();renderHero();renderWeightPage();setTimeout(renderWormChart,50);
+    toast('Entry deleted.');
+  }catch(e){toast('Could not delete: '+e.message.slice(0,50));}
+}
 function renderWormChart(){
   var canvas=document.getElementById('worm-chart');
   if(!canvas)return;
@@ -941,7 +973,11 @@ function renderWeightPage(){
     var row=document.createElement('div');row.className='wlog-item';
     var dh='';
     if(diff!==null){var c=diff<0?'background:var(--gl);color:var(--gd)':diff>0?'background:var(--rl);color:var(--re)':'background:var(--wm);color:var(--mi)';dh='<span class="wdiff" style="'+c+'">'+(diff>0?'+':'')+diff+'</span>';}
-    row.innerHTML='<span class="wlog-date">'+(w.logged_date===ts()?'Today':fmt(w.logged_date))+'</span><span class="wlog-kg">'+w.weight_kg+' kg</span>'+dh;
+    row.innerHTML='<span class="wlog-date">'+(w.logged_date===ts()?'Today':fmt(w.logged_date))+'</span>'
+      +'<span class="wlog-kg">'+w.weight_kg+' kg</span>'
+      +dh
+      +'<button class="del-btn" data-date="'+w.logged_date+'" style="background:none;border:none;cursor:pointer;color:var(--bo);font-size:16px;padding:4px 0 4px 8px;line-height:1;flex-shrink:0" title="Delete">🗑</button>';
+    row.querySelector('.del-btn').addEventListener('click',function(e){e.stopPropagation();deleteWeight(this.dataset.date);});
     logEl.appendChild(row);
   });
 }
