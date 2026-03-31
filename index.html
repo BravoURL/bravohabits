@@ -349,47 +349,50 @@ body{padding-bottom:calc(var(--nav)+env(safe-area-inset-bottom,0px))}
 <div class="sh-ov" id="sh-settings">
   <div class="sheet">
     <div class="handle"></div>
-    <div class="sheet-head" style="display:flex;align-items:center;justify-content:space-between">
-      <div>
-        <div style="font-family:var(--sf);font-size:20px;font-weight:700" id="set-title">Settings</div>
-        <div style="font-family:var(--sm);font-size:11px;color:var(--mi);margin-top:2px;letter-spacing:.03em" id="set-sub"></div>
-      </div>
+    <div class="sheet-head" style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px 14px">
+      <div id="set-title" style="font-family:var(--sf);font-size:20px;font-weight:700">Settings</div>
       <button onclick="closeSheet('sh-settings')" style="background:var(--wm);border:1px solid var(--bo);border-radius:50%;width:32px;height:32px;cursor:pointer;color:var(--mi);font-size:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0">×</button>
     </div>
-    <div class="sheet-body">
+    <div style="overflow-y:auto;padding:16px 20px 48px;flex:1">
 
       <div class="slbl" style="margin-top:0">Weight goal</div>
-      <div style="display:flex;gap:8px;margin-bottom:12px">
-        <div style="flex:1">
-          <div class="form-lbl" style="margin-bottom:4px">Target (kg)</div>
-          <input class="inp inp-num" type="number" id="set-target-kg" step="0.1" inputmode="decimal" placeholder="e.g. 89">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
+        <div>
+          <div class="form-lbl" style="margin-bottom:5px">Current / start (kg)</div>
+          <input class="inp" type="number" id="set-start-kg" step="0.1" inputmode="decimal" placeholder="e.g. 96">
         </div>
-        <div style="flex:1">
-          <div class="form-lbl" style="margin-bottom:4px">By date</div>
-          <input type="date" class="inp" id="set-target-date">
+        <div>
+          <div class="form-lbl" style="margin-bottom:5px">Target (kg)</div>
+          <input class="inp" type="number" id="set-target-kg" step="0.1" inputmode="decimal" placeholder="e.g. 89">
         </div>
       </div>
-      <div class="form-lbl" style="margin-bottom:4px">Starting weight (kg)</div>
-      <input class="inp inp-num" type="number" id="set-start-kg" step="0.1" inputmode="decimal" placeholder="e.g. 96" style="margin-bottom:12px">
+      <div class="form-lbl" style="margin-bottom:5px">Target date</div>
+      <input type="date" class="inp" id="set-target-date" style="margin-bottom:20px">
 
-      <div class="slbl">Daily step target</div>
-      <div style="font-family:var(--sf);font-size:32px;font-weight:300;text-align:center;margin-bottom:6px" id="set-steps-val">6,000</div>
-      <input type="range" min="2000" max="12000" step="500" id="set-steps-range" oninput="setStepsSlide(this.value)" style="width:100%;margin-bottom:8px">
-      <div style="display:flex;justify-content:space-between;font-family:var(--sm);font-size:10px;color:var(--mi);margin-bottom:4px"><span>2,000</span><span>12,000</span></div>
+      <div class="slbl">Daily steps</div>
+      <div style="font-family:var(--sf);font-size:40px;font-weight:300;text-align:center;letter-spacing:-1px;margin-bottom:4px" id="set-steps-val">6,000</div>
+      <input type="range" min="2000" max="12000" step="500" id="set-steps-range" oninput="setStepsSlide(this.value)" style="width:100%;margin-bottom:6px">
+      <div style="display:flex;justify-content:space-between;font-family:var(--sm);font-size:10px;color:var(--mi);letter-spacing:.04em;margin-bottom:8px"><span>2,000</span><span>12,000</span></div>
+      <div id="set-steps-sci" style="font-size:13px;line-height:1.65;padding:11px 13px;border-radius:var(--rs);background:var(--wm);color:var(--mi);margin-bottom:20px"></div>
 
       <div class="slbl">Drinks cap (nips/day)</div>
-      <div style="font-family:var(--sf);font-size:32px;font-weight:300;text-align:center;margin-bottom:6px" id="set-drinks-val">4</div>
-      <input type="range" min="0" max="12" step="1" id="set-drinks-range" oninput="setDrinksSlide(this.value)" style="width:100%;margin-bottom:4px">
-      <div style="display:flex;justify-content:space-between;font-family:var(--sm);font-size:10px;color:var(--mi);margin-bottom:4px"><span>0</span><span>12</span></div>
+      <div style="font-family:var(--sf);font-size:40px;font-weight:300;text-align:center;letter-spacing:-1px;margin-bottom:4px" id="set-drinks-val">4</div>
+      <input type="range" min="0" max="12" step="1" id="set-drinks-range" oninput="setDrinksSlide(this.value)" style="width:100%;margin-bottom:6px">
+      <div style="display:flex;justify-content:space-between;font-family:var(--sm);font-size:10px;color:var(--mi);letter-spacing:.04em;margin-bottom:8px"><span>0 nips</span><span>12 nips</span></div>
+      <div id="set-drinks-sci" style="font-size:13px;line-height:1.65;padding:11px 13px;border-radius:var(--rs);background:var(--wm);color:var(--mi);margin-bottom:20px"></div>
 
-      <div class="slbl">Wake time</div>
-      <input class="inp" type="time" id="set-wake" style="margin-bottom:12px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px">
+        <div>
+          <div class="slbl" style="margin-top:0">Wake time</div>
+          <input class="inp" type="time" id="set-wake">
+        </div>
+        <div>
+          <div class="slbl" style="margin-top:0">Lights out</div>
+          <input class="inp" type="time" id="set-lights-out">
+        </div>
+      </div>
 
-      <div class="slbl">Lights out</div>
-      <input class="inp" type="time" id="set-lights-out" style="margin-bottom:20px">
-
-      <button class="btn" style="width:100%" onclick="saveSettings()">Save my settings</button>
-      <div style="height:1px;background:var(--bo);margin:20px 0"></div>
+      <button class="btn" style="width:100%;margin-bottom:12px" onclick="saveSettings()">Save settings</button>
       <button class="btn-sec" style="width:100%" onclick="closeSheet('sh-settings');switchUser()">Switch user</button>
 
     </div>
@@ -1118,10 +1121,22 @@ function inputToTime(val){
 function setStepsSlide(v){
   v=parseInt(v);
   document.getElementById('set-steps-val').textContent=v.toLocaleString();
+  var sci=document.getElementById('set-steps-sci');if(!sci)return;
+  if(v<4000){sci.style.background='var(--al)';sci.style.color='var(--am)';sci.textContent=v.toLocaleString()+' steps is a start. Research is clear that below 5,000 steps per day is sedentary — visceral fat accumulates faster, cardiovascular risk rises, insulin resistance worsens. You can do better than this.';}
+  else if(v<6000){sci.style.background='var(--wm)';sci.style.color='var(--mi)';sci.textContent=v.toLocaleString()+' steps/day. You are in the active range but not yet in the zone where fat loss compounds meaningfully. Consider stretching the target.';}
+  else if(v<8000){sci.style.background='var(--gl)';sci.style.color='var(--gd)';sci.textContent=v.toLocaleString()+' steps/day. Solid target. At this level visceral fat responds measurably, insulin sensitivity improves and resting metabolic rate stays elevated. This is the right zone.';}
+  else if(v<10000){sci.style.background='var(--gl)';sci.style.color='var(--gd)';sci.textContent=v.toLocaleString()+' steps/day. Excellent. This level is associated with significantly better cardiovascular outcomes and sustained fat loss independent of structured exercise.';}
+  else{sci.style.background='var(--gl)';sci.style.color='var(--gd)';sci.textContent=v.toLocaleString()+' steps/day. That is an exceptional commitment. At this level you are in the top percentile of daily movement. The metabolic and longevity benefits are well documented.';}
 }
 function setDrinksSlide(v){
   v=parseInt(v);
   document.getElementById('set-drinks-val').textContent=v;
+  var sci=document.getElementById('set-drinks-sci');if(!sci)return;
+  if(v===0){sci.style.background='var(--gl)';sci.style.color='var(--gd)';sci.textContent='Zero nips. Your liver, sleep quality, fat metabolism and insulin sensitivity will all operate at their best. This is the single highest-leverage change available to most people.';}
+  else if(v<=2){sci.style.background='var(--gl)';sci.style.color='var(--gd)';sci.textContent=v+' nips/day is a disciplined and achievable target. At this level fat oxidation impact is minimal and sleep quality remains largely intact.';}
+  else if(v<=4){sci.style.background='var(--wm)';sci.style.color='var(--mi)';sci.textContent=v+' nips/day is the working cap — meaningful accountability without extreme restriction. Note: a large wine glass is typically 3–5 nips. You are counting pours, not glasses.';}
+  else if(v<=6){sci.style.background='var(--al)';sci.style.color='var(--am)';sci.textContent=v+' nips/day will suppress fat oxidation for most of the day and meaningfully disrupt sleep architecture. You can set this as your cap — but the science is clear on the cost.';}
+  else{sci.style.background='var(--rl)';sci.style.color='var(--re)';sci.textContent=v+' nips/day is heavy drinking by clinical definition. This will directly undermine every other habit in this app. If this is the honest number, then honesty is the first step — and the next step is reducing it.';}
 }
 function openSettings(){
   var usr=u();
@@ -1132,10 +1147,10 @@ function openSettings(){
   document.getElementById('set-target-date').value=usr.targetDate||'2026-07-14';
   var steps=usr.steps||6000;
   document.getElementById('set-steps-range').value=steps;
-  document.getElementById('set-steps-val').textContent=steps.toLocaleString();
+  setStepsSlide(steps);
   var drinks=usr.drinksCap||4;
   document.getElementById('set-drinks-range').value=drinks;
-  document.getElementById('set-drinks-val').textContent=drinks;
+  setDrinksSlide(drinks);
   document.getElementById('set-wake').value=timeToInput(usr.wake);
   document.getElementById('set-lights-out').value=timeToInput(usr.lightsOut||'11pm');
   document.getElementById('sh-settings').classList.add('show');
