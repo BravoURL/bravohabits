@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>BravoHabit</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{
@@ -15,110 +15,70 @@
   --sf:'Playfair Display',serif;--ss:'DM Sans',sans-serif;--sm:'DM Mono',monospace;
   --nav:62px;--r:14px;--rs:10px;
   --sh:0 1px 3px rgba(0,0,0,.05),0 1px 2px rgba(0,0,0,.04);
-  --shm:0 6px 24px rgba(0,0,0,.09);
 }
 html,body{background:var(--wh);color:var(--bk);font-family:var(--ss);font-size:15px;line-height:1.5;min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
 body{padding-bottom:calc(var(--nav)+env(safe-area-inset-bottom,0px))}
 
-/* ── TYPOGRAPHY HELPERS ── */
-.t-serif{font-family:var(--sf)}
-.t-mono{font-family:var(--sm)}
-.t-mid{color:var(--mi)}
-.t-gr{color:var(--gd)}
-.t-re{color:var(--re)}
-.t-am{color:var(--am)}
-
-/* ── USER SCREEN ── */
-#us{position:fixed;inset:0;background:var(--wh);z-index:100;display:none;flex-direction:column;align-items:center;padding:56px 24px 40px;overflow-y:auto}
+/* USER SCREEN */
+#us{position:fixed;inset:0;background:var(--wh);z-index:100;display:none;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px}
 #us.show{display:flex}
-.us-logo{font-family:var(--sf);font-size:34px;font-weight:700;letter-spacing:-.5px;margin-bottom:4px;align-self:flex-start}
+.us-logo{font-family:var(--sf);font-size:32px;font-weight:700;letter-spacing:-.5px;margin-bottom:4px}
 .us-logo span{font-weight:400;opacity:.35}
-.us-tagline{font-family:var(--sm);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mi);margin-bottom:28px;align-self:flex-start}
-.us-list{width:100%;max-width:380px;display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
-.us-card{background:var(--wh);border:1px solid var(--bo);border-radius:var(--r);padding:15px 18px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:all .12s;box-shadow:var(--sh);width:100%;text-align:left}
-.us-card:active{background:var(--wm);transform:scale(.98)}
-.us-av{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--sm);font-size:10px;font-weight:500;color:#fff;flex-shrink:0;letter-spacing:.06em}
-.us-info{flex:1}
-.us-name{font-family:var(--sf);font-size:18px;font-weight:700;margin-bottom:1px}
-.us-meta{font-family:var(--sm);font-size:10px;color:var(--mi);letter-spacing:.04em}
-.us-streak{font-family:var(--sm);font-size:10px;font-weight:500;padding:2px 8px;border-radius:10px;background:var(--gl);color:var(--gd)}
-.us-actions{display:flex;gap:8px;width:100%;max-width:380px}
-.us-act-btn{flex:1;background:var(--wm);border:1px solid var(--bo);border-radius:var(--rs);padding:11px;font-family:var(--sm);font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:var(--mi);cursor:pointer;transition:all .12s;display:flex;align-items:center;justify-content:center;gap:6px}
-.us-act-btn:active{background:var(--bo)}
+.us-sub{font-family:var(--sm);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mi);margin-bottom:28px}
+.us-list{width:100%;max-width:340px;display:flex;flex-direction:column;gap:10px}
+.us-btn{background:var(--wh);border:1px solid var(--bo);border-radius:var(--r);padding:15px 18px;display:flex;align-items:center;gap:14px;cursor:pointer;box-shadow:var(--sh);width:100%;text-align:left;transition:all .12s}
+.us-btn:active{background:var(--wm);transform:scale(.98)}
+.us-av{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--sm);font-size:11px;font-weight:500;color:#fff;flex-shrink:0;letter-spacing:.06em}
+.us-name{font-family:var(--sf);font-size:18px;font-weight:700}
+.us-meta{font-family:var(--sm);font-size:11px;color:var(--mi);margin-top:2px;letter-spacing:.02em}
 
-/* ── APP BAR ── */
+/* APP BAR */
 .app-bar{position:sticky;top:0;z-index:10;background:rgba(250,250,248,.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--bo);display:flex;align-items:center;justify-content:space-between;padding:0 16px;height:52px}
 .app-logo{font-family:var(--sf);font-size:19px;font-weight:700;letter-spacing:-.2px}
 .app-logo span{font-weight:400;opacity:.35}
-.chip{background:var(--wm);border:1px solid var(--bo);border-radius:20px;padding:5px 12px 5px 7px;display:flex;align-items:center;gap:7px;cursor:pointer;font-family:var(--sm);font-size:10px;font-weight:500;letter-spacing:.04em}
-.chip-av{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--sm);font-size:8px;font-weight:500;color:#fff;letter-spacing:.04em}
+.chip{background:var(--wm);border:1px solid var(--bo);border-radius:20px;padding:5px 12px 5px 7px;display:flex;align-items:center;gap:7px;cursor:pointer;font-family:var(--sm);font-size:11px;font-weight:500;letter-spacing:.04em}
+.chip-av{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--sm);font-size:8px;font-weight:500;color:#fff}
 .app-date{font-family:var(--sm);font-size:11px;color:var(--mi);letter-spacing:.04em}
 
-/* ── BOTTOM NAV ── */
-.bnav{position:fixed;bottom:0;left:0;right:0;height:calc(var(--nav)+env(safe-area-inset-bottom,0px));background:rgba(250,250,248,.95);backdrop-filter:blur(20px);border-top:1px solid var(--bo);display:flex;align-items:flex-start;padding-top:8px;z-index:20}
+/* BOTTOM NAV */
+.bnav{position:fixed;bottom:0;left:0;right:0;height:calc(var(--nav)+env(safe-area-inset-bottom,0px));background:rgba(250,250,248,.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--bo);display:flex;align-items:flex-start;padding-top:8px;z-index:20}
 .nb{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;color:var(--mi);font-family:var(--sm);font-size:10px;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;padding:4px 0;transition:color .12s}
 .nb.active{color:var(--gr)}
 .nb-icon{font-size:20px;line-height:1}
 
-/* ── PAGES ── */
+/* PAGES */
 .page{display:none;padding:16px;max-width:480px;margin:0 auto;min-height:70vh}
 .page.active{display:block}
-
-/* ── CARDS / LAYOUT ── */
 .card{background:var(--wh);border:1px solid var(--bo);border-radius:var(--r);padding:16px 18px;margin-bottom:10px;box-shadow:var(--sh)}
 .slbl{font-family:var(--sm);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mi);margin:16px 0 8px}
 .slbl:first-child{margin-top:0}
-.divider{height:1px;background:var(--bo);margin:12px 0}
 
-/* ── BUTTONS ── */
-.btn{background:var(--gr);color:#fff;border:none;border-radius:var(--rs);padding:12px 20px;font-family:var(--ss);font-size:14px;font-weight:600;cursor:pointer;transition:all .1s;white-space:nowrap;flex-shrink:0}
-.btn:active{transform:scale(.97)}
-.btn:disabled{opacity:.35;cursor:not-allowed;transform:none!important}
-.btn-sec{background:var(--wm);color:var(--mi);border:1px solid var(--bo);border-radius:var(--rs);padding:11px 18px;font-family:var(--ss);font-size:14px;font-weight:500;cursor:pointer;transition:all .1s}
-.btn-sec:active{background:var(--bo)}
-.btn-row{display:flex;flex-direction:column;gap:10px}
-
-/* ── INPUTS ── */
-.inp{background:var(--wm);border:1px solid var(--bo);border-radius:var(--rs);color:var(--bk);font-family:var(--ss);font-size:15px;padding:11px 13px;outline:none;width:100%}
-.inp:focus{border-color:var(--gr)}
-.inp-num{font-family:var(--sf);font-size:22px;text-align:center;-moz-appearance:textfield}
-.inp-num::-webkit-outer-spin-button,.inp-num::-webkit-inner-spin-button{-webkit-appearance:none}
-.inp-lrg{background:var(--wm);border:1px solid var(--bo);border-radius:var(--rs);color:var(--bk);font-family:var(--sf);font-size:26px;padding:12px 14px;outline:none;text-align:center;min-width:0;-moz-appearance:textfield;width:100%}
-.inp-lrg::-webkit-outer-spin-button,.inp-lrg::-webkit-inner-spin-button{-webkit-appearance:none}
-.inp-lrg:focus{border-color:var(--gr)}
-.inp-lrg::placeholder{font-size:16px;font-family:var(--ss);color:var(--mi)}
-.form-row{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}
-.form-lbl{font-family:var(--sm);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--mi)}
-
-/* ── HERO ── */
+/* HERO */
 .hero{border-radius:18px;padding:22px 18px;margin-bottom:12px;border:1px solid var(--bo);background:var(--wm)}
 .hero.good{background:var(--gl);border-color:rgba(92,138,74,.2)}
 .hero.warn{background:var(--al);border-color:rgba(122,80,16,.2)}
 .hero.bad{background:var(--rl);border-color:rgba(154,58,58,.2)}
-.hero-badge{font-family:var(--sm);font-size:10px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;font-weight:500;color:var(--mi)}
-.hero.good .hero-badge{color:var(--gd)}
-.hero.warn .hero-badge{color:var(--am)}
-.hero.bad .hero-badge{color:var(--re)}
-.hero-kg{font-family:var(--sf);font-size:58px;font-weight:300;letter-spacing:-2px;line-height:1;margin-bottom:3px}
-.hero-sub{font-family:var(--sm);font-size:11px;color:var(--mi);letter-spacing:.04em;margin-bottom:14px}
-.hero-msg{font-size:13px;line-height:1.7;padding:12px 14px;border-radius:var(--rs);background:rgba(0,0,0,.04)}
-.hero.good .hero-msg{background:rgba(92,138,74,.1);color:var(--gd)}
-.hero.warn .hero-msg{background:rgba(122,80,16,.08);color:var(--am)}
-.hero.bad .hero-msg{background:rgba(154,58,58,.08);color:var(--re)}
+.h-badge{font-family:var(--sm);font-size:10px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;font-weight:500;color:var(--mi)}
+.hero.good .h-badge{color:var(--gd)}.hero.warn .h-badge{color:var(--am)}.hero.bad .h-badge{color:var(--re)}
+.h-kg{font-family:var(--sf);font-size:58px;font-weight:300;letter-spacing:-2px;line-height:1;margin-bottom:3px}
+.h-sub{font-family:var(--sm);font-size:11px;color:var(--mi);letter-spacing:.04em;margin-bottom:14px}
+.h-msg{font-size:13px;line-height:1.7;padding:12px 14px;border-radius:var(--rs);background:rgba(0,0,0,.04)}
+.hero.good .h-msg{background:rgba(92,138,74,.1);color:var(--gd)}
+.hero.warn .h-msg{background:rgba(122,80,16,.08);color:var(--am)}
+.hero.bad .h-msg{background:rgba(154,58,58,.08);color:var(--re)}
 
-/* ── STATS ── */
+/* STATS */
 .stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
 .stat{background:var(--wm);border-radius:var(--rs);padding:13px 8px;text-align:center;border:1px solid var(--bo)}
 .stat-n{font-family:var(--sf);font-size:22px;font-weight:600;margin-bottom:2px}
 .stat-l{font-family:var(--sm);font-size:9px;letter-spacing:.07em;text-transform:uppercase;color:var(--mi)}
 
-/* ── HABITS ── */
+/* HABITS */
 .habit-sec{background:var(--wh);border:1px solid var(--bo);border-radius:var(--r);overflow:hidden;margin-bottom:10px;box-shadow:var(--sh)}
-.habit-row{display:flex;align-items:center;gap:12px;padding:13px 16px;border-bottom:1px solid var(--bo);cursor:pointer;user-select:none;-webkit-user-select:none;transition:background .1s}
-.habit-row:last-of-type{border-bottom:none}
-.habit-row:active{background:var(--wm)}
-.habit-row.locked{opacity:.45;cursor:not-allowed}
-.habit-row.locked:active{background:transparent}
+.hrow{display:flex;align-items:center;gap:12px;padding:13px 16px;border-bottom:1px solid var(--bo);cursor:pointer;user-select:none;-webkit-user-select:none;transition:background .1s}
+.hrow:active{background:var(--wm)}
+.hrow.locked{opacity:.45;cursor:not-allowed}
+.hrow.locked:active{background:transparent}
 .hck{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--bo);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .22s}
 .hck.done{background:var(--gr);border-color:var(--gr)}
 @keyframes pop{0%{transform:scale(1.3)}100%{transform:scale(1)}}
@@ -129,68 +89,74 @@ body{padding-bottom:calc(var(--nav)+env(safe-area-inset-bottom,0px))}
 .h-name{font-size:15px;font-weight:500;transition:color .2s}
 .h-name.done{color:var(--mi)}
 .h-freq{font-family:var(--sm);font-size:10px;color:var(--mi);margin-top:1px;letter-spacing:.04em}
-.h-streak{font-family:var(--sm);font-size:10px;font-weight:500;color:var(--gr);margin-top:1px}
+.h-streak{font-family:var(--sm);font-size:10px;color:var(--gr);font-weight:500;margin-top:1px}
 .h-sci{font-size:13px;line-height:1.7;padding:11px 16px 12px 54px;background:var(--gl);display:none;border-top:1px solid rgba(92,138,74,.15);border-left:3px solid var(--gr);color:var(--gd)}
 .h-sci.show{display:block}
-.streak-dots{display:flex;gap:4px;padding:8px 16px 12px;flex-wrap:wrap;border-top:1px solid var(--bo)}
-.s-dot{width:10px;height:10px;border-radius:50%}
+.streak-dots{display:flex;gap:4px;padding:8px 16px 10px}
+.sdot{width:9px;height:9px;border-radius:50%}
 
-/* ── DRINKS ── */
+/* DRINKS */
 .nip-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
 .nip-big{font-family:var(--sf);font-size:58px;font-weight:300;letter-spacing:-2px;line-height:1}
 .nip-unit{font-family:var(--sm);font-size:10px;color:var(--mi);letter-spacing:.05em;text-transform:uppercase;margin-top:2px}
 .nip-ctrl{display:flex;flex-direction:column;gap:8px}
-.nip-btn{width:46px;height:46px;border-radius:50%;border:1px solid var(--bo);background:var(--wm);font-size:24px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .1s;font-weight:300;font-family:var(--ss)}
+.nip-btn{width:46px;height:46px;border-radius:50%;border:1px solid var(--bo);background:var(--wm);font-size:24px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .1s}
 .nip-btn:active{transform:scale(.91);background:var(--bo)}
 .nip-bar{height:5px;background:var(--bo);border-radius:3px;overflow:hidden;margin-bottom:10px}
 .nip-fill{height:100%;border-radius:3px;background:var(--gr);transition:width .4s cubic-bezier(.34,1.2,.64,1)}
 .nip-sci{font-size:13px;line-height:1.7;padding:12px 14px;border-radius:var(--rs);background:var(--wm);color:var(--mi)}
 
-/* ── WEIGHT ── */
+/* WEIGHT */
 .w-row{display:flex;gap:10px;margin-bottom:8px}
+.w-inp{flex:1;background:var(--wm);border:1px solid var(--bo);border-radius:var(--rs);color:var(--bk);font-family:var(--sf);font-size:26px;padding:11px 14px;outline:none;text-align:center;min-width:0;-moz-appearance:textfield}
+.w-inp::-webkit-outer-spin-button,.w-inp::-webkit-inner-spin-button{-webkit-appearance:none}
+.w-inp:focus{border-color:var(--gr)}
+.w-inp::placeholder{font-size:16px;font-family:var(--ss);color:var(--mi)}
+.btn{background:var(--gr);color:#fff;border:none;border-radius:var(--rs);padding:12px 20px;font-family:var(--ss);font-size:14px;font-weight:600;cursor:pointer;transition:all .1s;white-space:nowrap;flex-shrink:0}
+.btn:active{transform:scale(.97)}
+.btn-sec{background:var(--wm);color:var(--mi);border:1px solid var(--bo);border-radius:var(--rs);padding:11px 16px;font-family:var(--ss);font-size:14px;cursor:pointer}
 .wlog-item{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--bo)}
 .wlog-item:last-child{border-bottom:none}
-.wlog-date{font-family:var(--sm);font-size:11px;color:var(--mi);letter-spacing:.03em}
+.wlog-date{font-family:var(--sm);font-size:11px;color:var(--mi)}
 .wlog-kg{font-family:var(--sf);font-size:16px;font-weight:600}
-.wlog-diff{font-family:var(--sm);font-size:11px;font-weight:500;padding:2px 8px;border-radius:10px}
+.wdiff{font-family:var(--sm);font-size:11px;font-weight:500;padding:2px 8px;border-radius:10px}
 .traj-box{text-align:center;padding:20px 16px}
 .traj-num{font-family:var(--sf);font-size:46px;font-weight:300;letter-spacing:-1.5px;margin:6px 0}
 .traj-lbl{font-family:var(--sm);font-size:10px;color:var(--mi);letter-spacing:.07em;text-transform:uppercase}
-.traj-tag{font-family:var(--sm);font-size:11px;font-weight:500;padding:4px 12px;border-radius:10px;display:inline-block;margin-top:8px;letter-spacing:.04em}
-.bd-row{display:flex;gap:8px;margin-top:10px}
+.traj-tag{font-family:var(--sm);font-size:11px;font-weight:500;padding:4px 12px;border-radius:10px;display:inline-block;margin-top:8px}
 
-/* ── TEAM ── */
+/* TEAM */
 .tmem{background:var(--wh);border:1px solid var(--bo);border-radius:var(--r);padding:14px 16px;margin-bottom:10px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:background .1s;box-shadow:var(--sh)}
 .tmem:active{background:var(--wm)}
-.tav{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--sm);font-size:10px;font-weight:500;color:#fff;flex-shrink:0;letter-spacing:.06em}
+.tav{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--sm);font-size:11px;font-weight:500;color:#fff;flex-shrink:0;letter-spacing:.06em}
 .tname{font-family:var(--sf);font-size:17px;font-weight:600;margin-bottom:2px}
 .tstats{font-family:var(--sm);font-size:11px;color:var(--mi);letter-spacing:.02em;margin-bottom:5px}
 .tdots{display:flex;gap:4px;flex-wrap:wrap}
 .tdot{width:8px;height:8px;border-radius:50%}
 .tbadge{font-family:var(--sm);font-size:10px;font-weight:500;padding:3px 9px;border-radius:10px;letter-spacing:.04em}
 .tskel{background:var(--wm);border:1px solid var(--bo);border-radius:var(--r);height:76px;margin-bottom:10px}
-@keyframes shimmer{0%{opacity:.5}50%{opacity:1}100%{opacity:.5}}
+@keyframes shimmer{0%,100%{opacity:.5}50%{opacity:1}}
 .tskel{animation:shimmer 1.4s ease-in-out infinite}
 
-/* ── PROFILE SHEET ── */
-.sheet-ov{position:fixed;inset:0;background:rgba(15,15,15,.3);backdrop-filter:blur(6px);z-index:200;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .22s}
-.sheet-ov.show{opacity:1;pointer-events:all}
+/* PROFILE SHEET */
+.sh-ov{position:fixed;inset:0;background:rgba(15,15,15,.3);backdrop-filter:blur(6px);z-index:200;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .22s}
+.sh-ov.show{opacity:1;pointer-events:all}
 .sheet{background:var(--wh);border-radius:22px 22px 0 0;width:100%;max-width:480px;transform:translateY(100%);transition:transform .28s cubic-bezier(.34,1.05,.64,1);box-shadow:0 -4px 30px rgba(0,0,0,.1);max-height:90vh;display:flex;flex-direction:column;overflow:hidden}
-.sheet-ov.show .sheet{transform:translateY(0)}
-.handle{width:36px;height:4px;background:var(--bo);border-radius:2px;margin:12px auto 0;flex-shrink:0}
-.sheet-head{padding:14px 18px;flex-shrink:0;border-bottom:1px solid var(--bo)}
-.sheet-body{overflow-y:auto;padding:14px 18px 80px;flex:1;-webkit-overflow-scrolling:touch}
+.sh-ov.show .sheet{transform:translateY(0)}
+.sh-handle{width:36px;height:4px;background:var(--bo);border-radius:2px;margin:12px auto 0;flex-shrink:0}
+.sh-head{padding:14px 18px;flex-shrink:0;border-bottom:1px solid var(--bo)}
+.sh-body{overflow-y:auto;padding:14px 18px 44px;flex:1;-webkit-overflow-scrolling:touch}
 .ss-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
 .ss{background:var(--wm);border-radius:var(--rs);padding:12px 8px;text-align:center}
 .ss-n{font-family:var(--sf);font-size:20px;font-weight:600}
 .ss-l{font-family:var(--sm);font-size:9px;letter-spacing:.07em;text-transform:uppercase;color:var(--mi);margin-top:2px}
 .day-row{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--bo);align-items:flex-start}
 .day-row:last-child{border-bottom:none}
-.day-lbl{font-family:var(--sm);font-size:11px;color:var(--mi);min-width:56px;padding-top:2px;letter-spacing:.02em}
+.day-lbl{font-family:var(--sm);font-size:11px;color:var(--mi);min-width:56px;padding-top:2px}
 .day-kg{font-family:var(--sf);font-size:15px;font-weight:600}
-.day-meta{font-family:var(--sm);font-size:11px;color:var(--mi);margin-top:2px;letter-spacing:.02em}
+.day-meta{font-family:var(--sm);font-size:11px;color:var(--mi);margin-top:2px}
 
-/* ── MODALS ── */
+/* MODALS */
 .m-ov{position:fixed;inset:0;background:rgba(15,15,15,.35);backdrop-filter:blur(6px);z-index:300;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .22s}
 .m-ov.show{opacity:1;pointer-events:all}
 .modal{background:var(--wh);border-radius:22px 22px 0 0;padding:26px 20px 44px;width:100%;max-width:480px;transform:translateY(100%);transition:transform .28s cubic-bezier(.34,1.05,.64,1);box-shadow:0 -4px 30px rgba(0,0,0,.1)}
@@ -199,6 +165,7 @@ body{padding-bottom:calc(var(--nav)+env(safe-area-inset-bottom,0px))}
 .m-sub{font-size:14px;color:var(--mi);line-height:1.65;margin-bottom:18px}
 .tip-box{background:var(--wm);border:1px solid var(--bo);border-radius:var(--rs);padding:13px;margin-bottom:14px;font-size:14px;color:#3A3A38;line-height:1.7}
 .fury-box{background:var(--rl);border:1px solid rgba(154,58,58,.2);border-radius:var(--rs);padding:13px;margin-bottom:14px;font-size:14px;color:var(--re);line-height:1.65}
+.btn-col{display:flex;flex-direction:column;gap:10px}
 .cd-wrap{text-align:center;margin-bottom:14px}
 .cd-ring{width:50px;height:50px;margin:0 auto 6px}
 .cd-ring circle{fill:none;stroke-width:4}
@@ -207,43 +174,14 @@ body{padding-bottom:calc(var(--nav)+env(safe-area-inset-bottom,0px))}
 .cd-num{font-family:var(--sf);font-size:20px;font-weight:600;color:var(--gr)}
 .cd-lbl{font-family:var(--sm);font-size:10px;color:var(--mi);margin-top:2px;letter-spacing:.04em}
 
-/* ── ONBOARDING ── */
-.ob-step{display:none}
-.ob-step.active{display:block}
-.ob-prog{display:flex;gap:6px;margin-bottom:24px}
-.ob-dot{height:3px;flex:1;background:var(--bo);border-radius:2px;transition:background .3s}
-.ob-dot.done{background:var(--gr)}
-.ob-dot.active{background:var(--gr);opacity:.5}
-.slider-wrap{margin:16px 0}
-.slider-val{font-family:var(--sf);font-size:36px;font-weight:300;text-align:center;margin-bottom:8px}
-.slider-sci{font-size:13px;line-height:1.7;padding:12px 14px;border-radius:var(--rs);background:var(--wm);color:var(--mi);margin-top:10px;min-height:60px;transition:all .2s}
-.slider-sci.happy{background:var(--gl);color:var(--gd)}
-.slider-sci.warn{background:var(--al);color:var(--am)}
-.slider-sci.fury{background:var(--rl);color:var(--re)}
-input[type=range]{-webkit-appearance:none;width:100%;height:4px;background:var(--bo);border-radius:2px;outline:none}
-input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;border-radius:50%;background:var(--gr);cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.15)}
-.colour-pick{width:34px;height:34px;border-radius:50%;cursor:pointer;border:3px solid transparent;transition:border-color .15s}
-.colour-pick.sel{border-color:var(--bk)}
-.habit-toggle{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--bo)}
-.habit-toggle:last-child{border-bottom:none}
-.ht-name{font-size:14px;font-weight:500}
-.ht-freq{font-family:var(--sm);font-size:10px;color:var(--mi);letter-spacing:.04em;margin-top:1px}
-.toggle{width:44px;height:26px;background:var(--bo);border-radius:13px;position:relative;transition:background .2s;cursor:pointer;flex-shrink:0}
-.toggle.on{background:var(--gr)}
-.toggle::after{content:'';position:absolute;width:20px;height:20px;background:#fff;border-radius:50%;top:3px;left:3px;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.15)}
-.toggle.on::after{transform:translateX(18px)}
-
-/* ── TOAST ── */
+/* TOAST */
 .toast{position:fixed;bottom:calc(var(--nav)+14px);left:50%;transform:translateX(-50%) translateY(14px);background:var(--bk);border-radius:var(--rs);padding:11px 18px;font-size:13px;font-weight:500;color:var(--wh);opacity:0;transition:all .22s;pointer-events:none;z-index:999;white-space:nowrap;max-width:92vw;text-align:center}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-
-/* ── MISC ── */
 .empty{text-align:center;padding:32px 0;color:var(--mi);font-family:var(--sm);font-size:11px;letter-spacing:.06em}
-.nd-t{font-family:var(--sf);font-size:18px;font-weight:600;margin-bottom:5px}
-.nd-s{font-family:var(--sm);font-size:11px;color:var(--mi);letter-spacing:.05em}
+.divider{height:1px;background:var(--bo);margin:10px 0 12px}
 .spin{width:32px;height:32px;border:3px solid var(--bo);border-top-color:var(--gr);border-radius:50%;animation:rot .8s linear infinite;margin:40px auto}
 @keyframes rot{to{transform:rotate(360deg)}}
-@media(min-width:480px){.page{padding:20px 24px}.app-bar,.bnav{padding:0 24px}}
+@media(min-width:480px){.page{padding:20px 24px}.app-bar{padding:0 24px}}
 </style>
 </head>
 <body>
@@ -251,18 +189,14 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;heigh
 <!-- USER SCREEN -->
 <div id="us" class="show">
   <div class="us-logo"><span>Bravo</span>Habit</div>
-  <div class="us-tagline">Accountability. No excuses.</div>
-  <div class="us-list" id="us-list"><div class="spin"></div></div>
-  <div class="us-actions">
-    <button class="us-act-btn" onclick="openOnboard()">＋ Add person</button>
-    <button class="us-act-btn" onclick="openSettings()">⚙ Settings</button>
-  </div>
+  <div class="us-sub">Who are you?</div>
+  <div class="us-list" id="us-list"></div>
 </div>
 
 <!-- APP BAR -->
 <div class="app-bar">
   <div class="app-logo"><span>Bravo</span>Habit</div>
-  <div class="chip" onclick="switchUser()">
+  <div class="chip" id="chip" onclick="openSettings()">
     <div class="chip-av" id="chip-av"></div>
     <span id="chip-name"></span>
   </div>
@@ -272,10 +206,10 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;heigh
 <!-- TODAY -->
 <div id="page-today" class="page active">
   <div id="hero" class="hero">
-    <div class="hero-badge" id="hero-badge">Today</div>
-    <div class="hero-kg" id="hero-kg">–</div>
-    <div class="hero-sub" id="hero-sub">Log your weight to begin</div>
-    <div class="hero-msg" id="hero-msg">Weigh yourself first thing every morning. Same time, same conditions. The number is just data.</div>
+    <div class="h-badge" id="h-badge">Today</div>
+    <div class="h-kg" id="h-kg">–</div>
+    <div class="h-sub" id="h-sub">Log your weight to begin</div>
+    <div class="h-msg" id="h-msg">Weigh yourself first thing every morning. Same time, same conditions. The number is just data.</div>
   </div>
   <div class="stats-row">
     <div class="stat"><div class="stat-n" id="s-lost">–</div><div class="stat-l">kg lost</div></div>
@@ -285,19 +219,19 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;heigh
   <div class="slbl">Weight</div>
   <div class="card">
     <div class="w-row">
-      <input class="inp-lrg" type="number" id="w-today" placeholder="e.g. 114.2" step="0.1" min="40" max="250" inputmode="decimal">
+      <input class="w-inp" type="number" id="w-today-inp" placeholder="e.g. 114.2" step="0.1" min="40" max="250" inputmode="decimal">
       <button class="btn" onclick="logWeightToday()">Log</button>
     </div>
     <div id="w-today-line" style="font-family:var(--sm);font-size:11px;color:var(--mi);letter-spacing:.03em">Not logged today</div>
   </div>
   <div class="slbl">Habits</div>
   <div id="habit-list"></div>
-  <div class="slbl">Drinks — nips today</div>
+  <div class="slbl">Drinks — nips today &nbsp;<span style="font-weight:300;text-transform:none;letter-spacing:0;font-family:var(--ss);font-size:10px">(1 nip = 1 shot = 30ml)</span></div>
   <div class="card">
     <div class="nip-row">
       <div>
         <div class="nip-big" id="nip-num">0</div>
-        <div class="nip-unit">of <span id="nip-cap">4</span> · 1 nip = 1 shot (30ml)</div>
+        <div class="nip-unit">of 4 cap</div>
       </div>
       <div class="nip-ctrl">
         <button class="nip-btn" onclick="changeNips(1)">+</button>
@@ -305,12 +239,20 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;heigh
       </div>
     </div>
     <div class="nip-bar"><div class="nip-fill" id="nip-fill" style="width:0%"></div></div>
-    <div class="nip-sci" id="nip-sci">A large wine glass is typically 3–5 nips. Count what you actually poured — not the glass, the pour.</div>
+    <div class="nip-sci" id="nip-sci">A large wine glass is typically 3–5 nips. Count what you actually poured.</div>
   </div>
 </div>
 
-<!-- WEIGHT -->
+<!-- WEIGHT PAGE -->
 <div id="page-weight" class="page">
+  <div class="card" style="padding:16px 12px 12px">
+    <div style="font-family:var(--sm);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mi);margin-bottom:10px">Weight trajectory</div>
+    <canvas id="worm-chart" style="width:100%;height:180px;display:block"></canvas>
+    <div style="display:flex;justify-content:space-between;margin-top:6px;font-family:var(--sm);font-size:10px;color:var(--mi)">
+      <span id="worm-start-lbl"></span><span id="worm-end-lbl"></span>
+    </div>
+    <div id="worm-msg" style="font-size:13px;line-height:1.65;padding:10px 12px;border-radius:var(--rs);margin-top:8px;background:var(--wm);color:var(--mi)"></div>
+  </div>
   <div class="card traj-box">
     <div class="traj-lbl">Anticipated weight at target date</div>
     <div class="traj-num" id="traj-num">–</div>
@@ -319,15 +261,15 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;heigh
   <div class="card">
     <div class="slbl" style="margin-top:0">Log today</div>
     <div class="w-row">
-      <input class="inp-lrg" type="number" id="w-in" placeholder="e.g. 114.2" step="0.1" min="40" max="250" inputmode="decimal">
+      <input class="w-inp" type="number" id="w-in" placeholder="e.g. 114.2" step="0.1" min="40" max="250" inputmode="decimal">
       <button class="btn" onclick="logWeight(null)">Log</button>
     </div>
-    <div id="w-pg-line" style="font-family:var(--sm);font-size:11px;color:var(--mi);letter-spacing:.03em;margin-bottom:6px">Not logged today</div>
+    <div id="w-pg-line" style="font-family:var(--sm);font-size:11px;color:var(--mi);letter-spacing:.03em;margin-bottom:4px">Not logged today</div>
     <div class="divider"></div>
     <div class="slbl" style="margin-top:0">Backdate</div>
-    <div class="bd-row">
-      <input type="date" id="bd-date" style="flex:.55;background:var(--wm);border:1px solid var(--bo);border-radius:var(--rs);color:var(--bk);font-size:13px;padding:10px;outline:none">
-      <input type="number" id="bd-kg" placeholder="kg" step="0.1" min="40" max="250" inputmode="decimal" style="flex:.3;background:var(--wm);border:1px solid var(--bo);border-radius:var(--rs);color:var(--bk);font-size:14px;padding:10px;outline:none;-moz-appearance:textfield">
+    <div style="display:flex;gap:8px;margin-top:4px">
+      <input type="date" id="bd-date" style="flex:.55;background:var(--wm);border:1px solid var(--bo);border-radius:var(--rs);color:var(--bk);font-size:13px;padding:10px;outline:none;min-width:0">
+      <input type="number" id="bd-kg" placeholder="kg" step="0.1" min="40" max="250" inputmode="decimal" style="flex:.3;background:var(--wm);border:1px solid var(--bo);border-radius:var(--rs);color:var(--bk);font-size:14px;padding:10px;outline:none;min-width:0;-moz-appearance:textfield">
       <button class="btn-sec" onclick="logWeight(document.getElementById('bd-date').value)" style="flex-shrink:0;padding:10px 14px">Save</button>
     </div>
   </div>
@@ -337,7 +279,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;heigh
   </div>
 </div>
 
-<!-- TEAM -->
+<!-- TEAM PAGE -->
 <div id="page-team" class="page">
   <div id="team-list"></div>
 </div>
@@ -347,24 +289,6 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;heigh
   <button class="nb active" onclick="showPage('today',this)"><div class="nb-icon">⊙</div>Today</button>
   <button class="nb" onclick="showPage('weight',this)"><div class="nb-icon">↓</div>Weight</button>
   <button class="nb" onclick="showPage('team',this)"><div class="nb-icon">◎</div>Team</button>
-</div>
-
-<!-- REFRAME MODAL -->
-<div class="m-ov" id="m-reframe">
-  <div class="modal">
-    <div class="m-title">Before you log that drink…</div>
-    <div class="m-sub">You haven't done your Reframe task yet today. Five minutes now saves you hours of undoing the damage later.</div>
-    <div class="tip-box" id="craving-tip"></div>
-    <div style="font-size:12px;color:var(--mi);font-style:italic;margin-bottom:14px;line-height:1.6">Tomorrow: do your Reframe task <em>before</em> your first drink. People who complete Reframe before drinking consume on average 40% fewer drinks that day. The neural pathway is freshly rewired.</div>
-    <div class="cd-wrap">
-      <svg class="cd-ring" viewBox="0 0 44 44"><circle class="trk" cx="22" cy="22" r="18"/><circle class="fl" id="cd-fl" cx="22" cy="22" r="18" stroke-dashoffset="0"/></svg>
-      <div class="cd-num" id="cd-n">15</div><div class="cd-lbl">seconds</div>
-    </div>
-    <div class="btn-row">
-      <button class="btn" id="rf-done" disabled onclick="markReframeDone()">Done — mark Reframe complete</button>
-      <button class="btn-sec" id="rf-skip" disabled onclick="skipReframe()">Log the drink anyway</button>
-    </div>
-  </div>
 </div>
 
 <!-- FURY MODAL -->
@@ -380,8 +304,8 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;heigh
 <div class="m-ov" id="m-honest">
   <div class="modal">
     <div class="m-title">Hold on.</div>
-    <div class="fury-box">You're ticking weigh-in — but there's no weight logged in the app. Ticking this without a real number is the definition of self-deception. The app cannot help you if the data isn't real. There is no judgement here — but there must be honesty. Log your actual weight first.</div>
-    <div class="btn-row">
+    <div class="fury-box">You're ticking weigh-in — but there's no weight logged in the app. Ticking this without a real number is self-deception. The app cannot help you if the data isn't real. Log your actual weight first.</div>
+    <div class="btn-col">
       <button class="btn" onclick="goLogWeight()">Log my weight now</button>
       <button class="btn-sec" onclick="closeM('m-honest')">I'll do it later</button>
     </div>
@@ -389,332 +313,233 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;heigh
 </div>
 
 <!-- DRINKS CONFIRM MODAL -->
-<div class="m-ov" id="m-drinks-confirm">
+<div class="m-ov" id="m-dc">
   <div class="modal">
     <div class="m-title" id="dc-title">Your drinks today</div>
     <div class="fury-box" id="dc-fury" style="display:none"></div>
-    <div class="tip-box">Be straight with yourself. There's no benefit in fudging these numbers — no one else is punished by your dishonesty, only you. Progress comes from accurate data, not comfortable numbers. If you're not sure, err toward honesty. Baby steps in the right direction beat dishonest leaps every time.</div>
-    <div class="btn-row">
+    <div class="tip-box">Be straight with yourself. There's no benefit in fudging these numbers — only you are affected by the dishonesty. Progress comes from accurate data. Baby steps in the right direction beat dishonest leaps every time.</div>
+    <div class="btn-col">
       <button class="btn" onclick="confirmDrinks(true)">Yes — that's accurate</button>
-      <button class="btn-sec" onclick="confirmDrinks(false)">Actually, let me recount</button>
+      <button class="btn-sec" onclick="confirmDrinks(false)">Let me recount</button>
     </div>
   </div>
 </div>
 
 <!-- PROFILE SHEET -->
-<div class="sheet-ov" id="sh-profile">
+<div class="sh-ov" id="sh-profile">
   <div class="sheet">
-    <div class="handle"></div>
-    <div class="sheet-head">
+    <div class="sh-handle"></div>
+    <div class="sh-head">
       <div style="display:flex;align-items:center;gap:12px">
-        <div id="ps-av" style="width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--sm);font-size:10px;font-weight:500;color:#fff;flex-shrink:0;letter-spacing:.06em"></div>
-        <div style="flex:1"><div id="ps-name" style="font-family:var(--sf);font-size:20px;font-weight:700"></div><div id="ps-sub" style="font-family:var(--sm);font-size:11px;color:var(--mi);letter-spacing:.03em;margin-top:1px"></div></div>
-        <button onclick="closeSheet('sh-profile')" style="background:var(--wm);border:1px solid var(--bo);border-radius:50%;width:30px;height:30px;cursor:pointer;color:var(--mi);font-size:16px;display:flex;align-items:center;justify-content:center">×</button>
+        <div id="ps-av" style="width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--sm);font-size:11px;font-weight:500;color:#fff;flex-shrink:0;letter-spacing:.06em"></div>
+        <div style="flex:1">
+          <div id="ps-name" style="font-family:var(--sf);font-size:20px;font-weight:700"></div>
+          <div id="ps-sub" style="font-family:var(--sm);font-size:11px;color:var(--mi);letter-spacing:.03em;margin-top:1px"></div>
+        </div>
+        <button onclick="closeSheet('sh-profile')" style="background:var(--wm);border:1px solid var(--bo);border-radius:50%;width:32px;height:32px;cursor:pointer;color:var(--mi);font-size:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0">×</button>
       </div>
       <div class="ss-row" id="ps-stats"></div>
     </div>
-    <div class="sheet-body" id="ps-body"></div>
+    <div class="sh-body" id="ps-body"></div>
   </div>
 </div>
 
-<!-- ONBOARDING SHEET -->
-<div class="sheet-ov" id="sh-onboard">
-  <div class="sheet">
-    <div class="handle"></div>
-    <div class="sheet-head">
-      <div style="display:flex;align-items:center;justify-content:space-between">
-        <div style="font-family:var(--sf);font-size:20px;font-weight:700" id="ob-title">Add person</div>
-        <button onclick="closeSheet('sh-onboard')" style="background:var(--wm);border:1px solid var(--bo);border-radius:50%;width:30px;height:30px;cursor:pointer;color:var(--mi);font-size:16px;display:flex;align-items:center;justify-content:center">×</button>
-      </div>
-      <div class="ob-prog" id="ob-prog"></div>
-    </div>
-    <div class="sheet-body" id="ob-body"></div>
-  </div>
-</div>
 
 <!-- SETTINGS SHEET -->
-<div class="sheet-ov" id="sh-settings">
+<div class="sh-ov" id="sh-settings">
   <div class="sheet">
     <div class="handle"></div>
-    <div class="sheet-head">
-      <div style="display:flex;align-items:center;justify-content:space-between">
-        <div style="font-family:var(--sf);font-size:20px;font-weight:700">Settings</div>
-        <button onclick="closeSheet('sh-settings')" style="background:var(--wm);border:1px solid var(--bo);border-radius:50%;width:30px;height:30px;cursor:pointer;color:var(--mi);font-size:16px;display:flex;align-items:center;justify-content:center">×</button>
+    <div class="sheet-head" style="display:flex;align-items:center;justify-content:space-between">
+      <div>
+        <div style="font-family:var(--sf);font-size:20px;font-weight:700" id="set-title">Settings</div>
+        <div style="font-family:var(--sm);font-size:11px;color:var(--mi);margin-top:2px;letter-spacing:.03em" id="set-sub"></div>
       </div>
+      <button onclick="closeSheet('sh-settings')" style="background:var(--wm);border:1px solid var(--bo);border-radius:50%;width:32px;height:32px;cursor:pointer;color:var(--mi);font-size:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0">×</button>
     </div>
-    <div class="sheet-body" id="sh-settings-body"><div class="spin"></div></div>
+    <div class="sheet-body">
+
+      <div class="slbl" style="margin-top:0">Weight goal</div>
+      <div style="display:flex;gap:8px;margin-bottom:12px">
+        <div style="flex:1">
+          <div class="form-lbl" style="margin-bottom:4px">Target (kg)</div>
+          <input class="inp inp-num" type="number" id="set-target-kg" step="0.1" inputmode="decimal" placeholder="e.g. 89">
+        </div>
+        <div style="flex:1">
+          <div class="form-lbl" style="margin-bottom:4px">By date</div>
+          <input type="date" class="inp" id="set-target-date">
+        </div>
+      </div>
+      <div class="form-lbl" style="margin-bottom:4px">Starting weight (kg)</div>
+      <input class="inp inp-num" type="number" id="set-start-kg" step="0.1" inputmode="decimal" placeholder="e.g. 96" style="margin-bottom:12px">
+
+      <div class="slbl">Daily step target</div>
+      <div style="font-family:var(--sf);font-size:32px;font-weight:300;text-align:center;margin-bottom:6px" id="set-steps-val">6,000</div>
+      <input type="range" min="2000" max="12000" step="500" id="set-steps-range" oninput="setStepsSlide(this.value)" style="width:100%;margin-bottom:8px">
+      <div style="display:flex;justify-content:space-between;font-family:var(--sm);font-size:10px;color:var(--mi);margin-bottom:4px"><span>2,000</span><span>12,000</span></div>
+
+      <div class="slbl">Drinks cap (nips/day)</div>
+      <div style="font-family:var(--sf);font-size:32px;font-weight:300;text-align:center;margin-bottom:6px" id="set-drinks-val">4</div>
+      <input type="range" min="0" max="12" step="1" id="set-drinks-range" oninput="setDrinksSlide(this.value)" style="width:100%;margin-bottom:4px">
+      <div style="display:flex;justify-content:space-between;font-family:var(--sm);font-size:10px;color:var(--mi);margin-bottom:4px"><span>0</span><span>12</span></div>
+
+      <div class="slbl">Wake time</div>
+      <input class="inp" type="time" id="set-wake" style="margin-bottom:12px">
+
+      <div class="slbl">Lights out</div>
+      <input class="inp" type="time" id="set-lights-out" style="margin-bottom:20px">
+
+      <button class="btn" style="width:100%" onclick="saveSettings()">Save my settings</button>
+      <div style="height:1px;background:var(--bo);margin:20px 0"></div>
+      <button class="btn-sec" style="width:100%" onclick="closeSheet('sh-settings');switchUser()">Switch user</button>
+
+    </div>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-const SU='https://xgmnyhpzuwngdngtttux.supabase.co';
-const SK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhnbW55aHB6dXduZ2RuZ3R0dHV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ0MDYxOTgsImV4cCI6MjA4OTk4MjE5OH0.aQvdjbOSRqQJmBKF-9z7KOXhC2M_gKPZ1m4rQhPZ9eo';
-const TDATE='2026-07-14';
-const NIP_COST=8;
+var SU='https://xgmnyhpzuwngdngtttux.supabase.co';
+var SK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhnbW55aHB6dXduZ2RuZ3R0dHV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ0MDYxOTgsImV4cCI6MjA4OTk4MjE5OH0.aQvdjbOSRqQJmBKF-9z7KOXhC2M_gKPZ1m4rQhPZ9eo';
+var NIP_COST=8;
 
-// ── HABIT DEFINITIONS ─────────────────────────────────────────────
-const HABIT_DEFS={
-  sleep:{name:'Lights out by {lights_out}',freq:'Daily',sci:'Sleep regulates ghrelin and leptin — the hormones controlling hunger. Every hour of poor sleep raises cortisol, promotes fat storage and worsens insulin resistance. The later you stay up, the more you eat, drink and undo.'},
-  wake:{name:'Awake by {wake_time}',freq:'Daily',sci:'Cortisol peaks naturally in the morning, priming your prefrontal cortex — your sharpest window for decisions. A disciplined start is a keystone habit that anchors everything else.'},
-  work:{name:'At work by {work_time}',freq:'Weekdays',sci:'Showing up on time signals to yourself — not others — that you are executing. Keystone habits like punctuality create a cascade effect on all other habits that day.'},
-  train:{name:'Attend workout',freq:'Mon · Tue · Thu',sci:'Resistance training elevates your resting metabolic rate for up to 48 hours. Three sessions per week is the minimum effective dose to preserve muscle in a calorie deficit.'},
-  steps:{name:'{steps} steps today',freq:'Daily',sci:'During low-intensity movement, fat is the dominant fuel source. Visceral fat — the dangerous kind around your organs — responds fastest to sustained daily movement.'},
-  reframe:{name:'Reframe daily task',freq:'Daily',sci:'Alcohol suppresses fat oxidation for up to 12 hours after the last drink. Reframe works at the neural pathway level. Five minutes a day compounds into genuine behavioural change.'},
-  weigh:{name:'Weigh in — logged in app',freq:'Daily',sci:'Daily weigh-ins remove the emotional charge of the number. The data becomes a trend, not a verdict. Consistency of measurement is what makes the trajectory visible.'},
-  drinks:{name:'Drinks within cap',freq:'Daily',sci:'Alcohol is the single variable that undermines every other habit simultaneously — fat oxidation, sleep quality, tracking accuracy, insulin sensitivity. The cap exists for your benefit, not as a rule.'},
-  record:{name:'Listen to recordings',freq:'Thu · Fri · Sun',sci:''},
+// ── FIXED USERS ───────────────────────────────────────────────────
+var USERS={
+  bill: {id:'bill', name:'Bill Wallis', initials:'AWW',color:'#5C8A4A',startKg:115,targetKg:95, targetDate:'2026-07-14',steps:4500,wake:'7am',work:'9am',dob:'1964-04-10',reframe:true},
+  leon: {id:'leon', name:'Leon Wallis', initials:'LRW',color:'#3A6030',startKg:105,targetKg:105,targetDate:'2026-07-14',steps:6000,wake:'5am',work:'6am',dob:'1989-02-25',reframe:true},
+  greg: {id:'greg', name:'Greg Wallis', initials:'GTW',color:'#7A6B4E',startKg:105,targetKg:105,targetDate:'2026-07-14',steps:6000,wake:'5am',work:'6am',dob:'1993-03-12',reframe:true},
+  brent:   {id:'brent',   name:'Brent Wallis',        initials:'BWW',color:'#4A7C8E',startKg:96, targetKg:89, targetDate:'2026-07-14',steps:6000,wake:'5am',  work:'6am',dob:'1995-01-26',reframe:true, lightsOut:'11pm',drinksCap:4},
+  gregrowe:{id:'gregrowe',name:'Greg Rowe',    initials:'GWR',color:'#6B5C8A',startKg:88, targetKg:88, targetDate:'2026-07-14',steps:7500,wake:'4:30am',work:'6am',dob:null,       reframe:false,lightsOut:'10pm',drinksCap:1},
+  elliot:  {id:'elliot',  name:'Elliot Slack', initials:'EJS',color:'#3A6B8A',startKg:77, targetKg:76, targetDate:'2026-07-14',steps:6000,wake:'6:30am',work:'9am',dob:null,       reframe:false,lightsOut:'10pm',drinksCap:4},
+  arne:    {id:'arne',    name:'Arne Hornsey', initials:'ASH',color:'#8A4A4A',startKg:null,targetKg:null,targetDate:null,        steps:6000,wake:'6am',  work:'9am',dob:null,       reframe:false,lightsOut:'11pm',drinksCap:22},
+};
+var USER_ORDER=['arne','bill','brent','elliot','gregrowe','greg','leon'];
+
+// ── HABITS ────────────────────────────────────────────────────────
+var HABITS=[
+  {id:'sleep',  name:'Lights out by {lightsOut}',     freq:'Daily',           sci:'Sleep regulates ghrelin and leptin — the hormones controlling hunger. Every late night raises cortisol, worsens insulin resistance and directly promotes fat storage. Alcohol suppresses REM sleep regardless of how many hours you spend in bed.'},
+  {id:'wake',   name:'Awake at {wake}',               freq:'Daily',           sci:'Cortisol peaks naturally in the morning, priming your prefrontal cortex — your sharpest decision-making window. A disciplined start anchors everything that follows.'},
+  {id:'work',   name:'At work by {work}',             freq:'Weekdays',        sci:'Showing up on time signals to yourself — not others — that you are executing on your commitments. Keystone habits like punctuality cascade into all other habits that day.'},
+  {id:'steps',  name:'{steps} steps today',           freq:'Daily',           sci:'During low-intensity movement, fat is the dominant fuel source. Visceral fat — the dangerous kind around your organs — responds fastest to sustained daily movement. Walking after meals blunts post-meal glucose spikes by up to 30%.'},
+  {id:'weigh',  name:'Weigh in — logged in app',      freq:'Daily',           sci:'Daily weigh-ins remove the emotional charge of the number. The data becomes a trend, not a verdict. Consistency of measurement is what makes the trajectory visible — and inconsistency is how drift goes unnoticed.'},
+  {id:'record', name:'Listen to recordings',          freq:'Thu · Fri · Sun', sci:'Consistent audio reinforcement rewires behavioural defaults over time. This is not passive — it is active reprogramming of the neural pathways that drive the choices this plan depends on.'},
+];
+
+var NIP_SCI=[
+  'A standard nip is 30ml. A large restaurant pour of wine is typically 200ml — that\'s 5–6 nips in one glass. Count the pour, not the vessel.',
+  '1 nip. Your liver processes roughly one standard drink per hour. You\'re tracking. Fat burning continues. No meaningful disruption at this level.',
+  '2 nips. Fat oxidation is now paused. Your liver has switched from fat metabolism to processing ethanol — it won\'t multitask. Everything else waits.',
+  '3 nips. Cortisol is elevated. ADH suppression has started — you\'ll lose fluid faster tonight than you\'ll replace it. Tomorrow morning\'s grogginess is already booked in.',
+  '4 nips — the cap. Alcohol dehydrogenase is working at capacity. Sleep tonight will show reduced REM and deep sleep stages regardless of total hours. This is the line.',
+  '5 nips. You\'re over. Fat burning is off for the next 8–12 hours minimum. Your liver is exclusively processing ethanol. Every other metabolic priority has been shelved.',
+  '6 nips. Blood glucose regulation is now impaired. For anyone on insulin, this is a direct interaction risk — alcohol inhibits gluconeogenesis, blocking the liver\'s ability to release emergency glucose. This is not trivial.',
+  '7 nips. Your body is now in measurable inflammatory response. IL-6 and TNF-alpha are elevated. Insulin sensitivity is dropping in real time. The training session you did today produced muscle protein synthesis — alcohol at this level actively suppresses it.',
+  '8 nips. Cortisol is significantly elevated. Sleep architecture is compromised — you will spend less time in slow-wave sleep, which is when growth hormone is released and fat is mobilised. The workout recovery you earned today won\'t happen tonight.',
+  '9 nips. At this intake level, research shows next-day resting metabolic rate is measurably lower. You will be hungrier tomorrow, have reduced impulse control, and make worse food decisions. Tonight is costing you tomorrow.',
+  '10 nips. This week\'s fat loss trajectory has been materially altered. 10 nips represents roughly 700–800 calories of ethanol — outside the plan entirely. Your liver will prioritise ethanol clearance for the next 15+ hours. Nothing else happens until that\'s done.',
+  '11 nips. At this level you are in the clinical range for a heavy drinking episode. The research on heavy episodic drinking and visceral fat accumulation is unambiguous — a single night at this intake has measurable effects on abdominal fat distribution over time.',
+  '12 nips. 12 standard drinks is twice the level at which most clinical studies define intoxication. Your liver is processing a toxic load. Sleep tonight will be fragmented, non-restorative, and short. Tomorrow\'s habits will be harder in every measurable way.',
+  '13 nips. Hepatic fat metabolism will not resume until well into tomorrow. The alcohol you\'ve consumed tonight will still be influencing your blood glucose, cortisol and sleep architecture 18 hours from now. 13 nips has a longer tail than one night.',
+  '14 nips. At this intake level, acetaldehyde — the toxic byproduct of ethanol metabolism — is accumulating faster than your liver can clear it. This is what causes the systemic inflammation, the headache, and the next-day fog. 14 nips is not a hangover. It\'s a chemical insult.',
+  '15 nips. 15 standard drinks in a single session is associated in longitudinal research with significantly elevated risk of liver disease, cardiovascular events, and metabolic syndrome — independent of weekly average intake. Tonight alone is a data point.',
+  '16 nips. Your pancreas has been secreting insulin continuously to manage the glucose disruption. The repeated insulin spikes from this much alcohol are directly associated with increased visceral fat deposition — the specific fat this plan is targeting. 16 nips is working against the plan at a cellular level.',
+  '17 nips. At 17 standard drinks your blood alcohol concentration — depending on body weight — is in a range where judgement, coordination and memory are clinically impaired. You are not in a position to accurately assess anything right now, including how many drinks you\'ve had.',
+  '18 nips. The cumulative ethanol load tonight exceeds what the liver can safely queue for processing. Oxidative stress is significant. The mitochondrial damage from a single episode at this level is measurable in blood markers for 72 hours after the last drink.',
+  '19 nips. Research on episodic heavy drinking at this level shows suppression of testosterone, elevated oestrogen conversion, and disruption to the HPA axis that persists for 3–5 days. 19 nips tonight will influence your hormonal environment for most of the week.',
+  '20 nips. 20 standard drinks is a clinical threshold in alcohol use disorder screening tools. This is not a judgment — it is a fact. The AUDIT-C assessment asks about nights like this specifically. If tonight is not unusual, that information matters more than this app.',
+  '21 nips. Your liver has processed enough ethanol tonight to generate a measurable rise in liver enzymes that would show on a blood test tomorrow. ALT and AST elevations from a single session at this level are well documented. 21 nips leaves a biological trace.',
+  '22 nips. There is no version of tonight that doesn\'t cost you the next several days. Cognitive function, mood, metabolism, sleep quality, insulin sensitivity, training recovery — all measurably impaired. 22 nips is not a night. It\'s a week-long event that started tonight. Water. Stop. Sleep.',
+];
+
+var AGE_BARBS={
+  '20s':['At {age}, you have every biological advantage available. The question is whether you\'re using them or squandering them.','Your metabolism at {age} is the best it will ever be. Set a standard now, before it costs twice as much to maintain.','Is it too much to ask at {age} for some basic life discipline? Asking for literally every future version of you.','{age} years old and already making excuses. Interesting choice.','At {age}, the habits you build now compound for decades. So do the ones you don\'t.'],
+  '30s':['In your 30s now. The decade where what you do to your body starts to show up on your face.','At {age}, recovery time is longer, sleep is worse, and metabolism is slower than it was. The plan is the answer.','Is it too much, at {age}, to expect some basic life discipline? Genuinely curious.','At {age} you have some interesting life priorities. The body keeps score whether you\'re watching or not.','Thirty-something with the habits of someone who hasn\'t noticed their body has an expiry date. Fix it.'],
+  '40s':['Forty-something. The decade where ignoring your health stops being consequence-free.','At {age}, visceral fat accumulates significantly faster. The good news: it responds fastest to the right habits.','In your 40s, cortisol regulation is less efficient, muscle mass declines without effort. The data is clear.','At {age}, consistency is the only currency that matters.'],
+  '50s':['At {age}, every good habit compounds at a rate that would make your younger self jealous.','The 50s: when the consequences of decades of choices become visible. Also when the right habits have their most dramatic impact.','In your 50s. Visceral fat is the specific enemy. Walking, lifting and cutting alcohol have disproportionate impact at this age.','At {age}, the science is unambiguous: the habits in this app are the specific interventions that predict quality of life at 80.'],
+  '60s+':['At {age}, you are running the most important decade of maintenance your body will ever need. The return on every good habit is exceptional.','The data on health outcomes at your age is clear: the habits in this app predict quality of life at 80. Not optional.','At {age}, visceral fat, insulin resistance and sleep are the three highest-leverage levers available. You\'re working on all three.','Every great man is defined by what he does when no one is watching. At {age}, you know this better than anyone.'],
 };
 
-// ── NIP SCIENCE (per level) ───────────────────────────────────────
-const NIP_SCI=[
-  'Nothing logged yet. A large wine glass is typically 3–5 nips — count the pour, not the glass.',
-  'One nip. Your body handles this comfortably. Liver processing is minimal. No meaningful fat oxidation impact at this level.',
-  'Two nips. Your liver is now prioritising ethanol processing above everything else. Fat burning is paused for the next few hours.',
-  'Three nips. Cortisol is rising. Sleep architecture will be disrupted tonight — you will get less deep sleep regardless of how long you\'re in bed.',
-  'Four nips — at the cap. Fat oxidation is fully suppressed. Sleep will be lighter and shorter. This is the line.',
-  'Five nips — over the cap. Every additional nip compounds the damage. Your liver is under real pressure. Fat burning won\'t resume properly until tomorrow.',
-  'Six nips. Sleep quality tonight will be significantly impaired. Tomorrow\'s decisions, willpower and training will all suffer. Is this worth it?',
-  'Seven nips. You are now drinking at a level that causes measurable inflammation. Your insulin sensitivity drops with every additional drink.',
-  'Eight nips. Your liver is working overtime. Blood glucose regulation is compromised — on insulin, this is a serious risk. Stop.',
-  'Nine nips. This is heavy drinking by any clinical measure. The cumulative physiological cost is significant. You know this.',
-  'Ten nips. At this level, fat loss this week is effectively cancelled. Every other habit you completed today is being undermined right now.',
-  'Eleven nips. This is not accountability — it is documentation of a pattern. The data will not lie to you, even when you lie to yourself.',
-  'Twelve nips. You\'re a grot. No plan survives this kind of night. Tomorrow starts the reset — but it starts tomorrow, which means now, you stop.',
-];
-
-// ── AGE-AWARE BARBS (indexed by decade/age bracket) ───────────────
-const AGE_BARBS={
-  '20s':[
-    'At {age}, you have every biological advantage available to a human. The question is whether you\'re using them or squandering them.',
-    'Your metabolism at {age} is the best it will ever be. That\'s not an excuse — it\'s a reason to set a standard now, before it costs twice as much to maintain.',
-    'Is it too much to ask at {age} for some basic life discipline? Asking for literally every future version of you.',
-    'At {age}, the habits you build now compound for decades. The ones you don\'t are also compounding. Choose wisely.',
-    '{age} years old and already making excuses. Interesting choice.',
-  ],
-  '30s':[
-    'In your 30s now. The decade where what you do to your body actually starts to show up on your face. Fun, isn\'t it.',
-    'At {age}, your recovery time is longer, your sleep is worse, and your metabolism is slower than it was. The plan is the answer — not the enemy.',
-    'Is it too much, at {age}, to expect some basic life discipline? Genuinely curious.',
-    'At {age} you sure have some interesting life priorities. The body keeps score whether you\'re watching or not.',
-    'Thirty-something with the habits of someone who hasn\'t noticed their body has an expiry date. Fix it.',
-  ],
-  '40s':[
-    'Forty-something. The decade where ignoring your health stops being consequence-free. Welcome to accountability.',
-    'At {age}, visceral fat accumulates significantly faster. The good news: it also responds faster to the right habits. The plan is the plan.',
-    'In your 40s, your cortisol regulation is less efficient, your muscle mass declines without effort, and sleep becomes more critical than ever. The data is clear.',
-    'Plenty of time left — but less than there was. At {age}, consistency is the only currency that matters.',
-  ],
-  '50s':[
-    'At {age}, every good habit compounds at a rate that would make your younger self jealous. There is still everything to play for.',
-    'The 50s: when the consequences of decades of choices become visible. Also when the right habits have their most dramatic impact. Useful timing.',
-    'In your 50s now. Visceral fat is the specific enemy. Walking, lifting and cutting alcohol have a disproportionate impact at this age. Do the plan.',
-    'At {age}, the science is unambiguous: daily movement, protein, sleep and reduced alcohol reverse biological age markers. The plan is just the science, applied.',
-  ],
-  '60s+':[
-    'At {age}, you are running the most important decade of maintenance your body will ever need. The return on every good habit is exceptional right now.',
-    'The data on health outcomes at your age is clear: the habits in this app are the specific interventions that predict quality of life at 80. Not optional.',
-    'At {age}, visceral fat, insulin resistance and sleep are the three highest-leverage levers available. You\'re working on all three. That is what discipline looks like.',
-    'Every great man is defined by what he does when no one is watching. At {age}, you know this better than anyone.',
-  ],
-};
-
-const CRAVINGS=[
-  'Alcohol cravings peak at 20 minutes then pass. Your brain is running an old program — not a genuine need. Wait it out.',
-  'The urge to drink is a neural pathway firing. Every time you let it pass, that pathway weakens. Every time you give in, it strengthens.',
-  'Your liver prioritises processing alcohol above everything else — including burning fat. One drink pauses fat oxidation for up to 12 hours.',
-  '5 slow breaths: inhale 4 counts, hold 4, exhale 6. Your nervous system physically cannot maintain a craving response during controlled breathing.',
-  'What\'s the actual feeling underneath the craving right now? Stress? Boredom? Habit? Name it. Cravings lose power the moment you identify the emotion.',
-];
-const FURY_LATE=[
-  'It is past 11pm. Logging at this hour confirms the pattern. Late nights elevate cortisol, wreck sleep and make tomorrow harder. This is not about what others think — it is about whether you are lying to yourself.',
-  'Every hour past lights-out costs you the next morning. Ghrelin spikes, leptin drops, insulin sensitivity worsens. Go to bed now.',
-];
-const FURY_ABSENT=[
-  '{days} days without logging. The plan requires daily data. Without it there is no accountability — just intention. Intention without action is nothing. Log it now.',
-  '{days} days gone without a single entry. This is how plans die — not dramatically, but quietly through small omissions that compound. Start today.',
-];
-const AFFIRM=[
-  'Please solemnly confirm that {n} nips is accurate. Did you count every pour? That wine glass might have been 4 nips, not 1. Did you have a roadie? A quiet top-up? Think carefully.',
-  'You know this is nips — not glasses, right? You can\'t pour 4 glasses at 4 nips each and log 4 nips guilt-free. We\'re onto that. Is {n} really the number?',
-  '{n} nips. Before you confirm — stretch your mind back through the evening. Was there anything missed? Honesty here is the whole point. There is no benefit in fudging this.',
-];
+var CRAVINGS=['Alcohol cravings peak at 20 minutes then pass. Your brain is running an old program — not a genuine need. Wait it out.','The urge to drink is a neural pathway firing. Every time you let it pass, that pathway weakens. Every time you give in, it strengthens.','Your liver prioritises processing alcohol above everything else — including burning fat. One drink pauses fat oxidation for up to 12 hours.','5 slow breaths: inhale 4 counts, hold 4, exhale 6. Your nervous system cannot maintain a craving response during controlled breathing.','What\'s the actual feeling underneath the craving right now? Stress? Boredom? Habit? Name it. Cravings lose power when you label the emotion.'];
+var FURY_LATE=['It is past 11pm. Logging at this hour confirms the pattern. Late nights elevate cortisol, wreck sleep and make tomorrow harder. This is not about what others think — it is about whether you are lying to yourself.','Every hour past lights-out costs you the next morning. Ghrelin spikes, leptin drops, insulin sensitivity worsens. Go to bed.'];
+var FURY_ABSENT=['{days} days without logging. The plan requires daily data. Without it there is no accountability — just intention. Intention without action is nothing. Log it now.','{days} days gone without a single entry. This is how plans die — not dramatically, but quietly through small omissions that compound. Start today.'];
+var AFFIRM=['Please solemnly confirm that {n} nips is accurate. Did you count every pour? That wine glass might have been 4 nips, not 1. Did you forget a roadie? Think carefully.','You know this is nips — not glasses, right? You can\'t pour 4 glasses at 4 nips each and log 4 nips guilt-free. We\'re onto that. Is {n} really the number?','{n} nips. Before you confirm — stretch your mind back through the evening. Was there anything missed? Honesty here is the whole point.'];
 
 // ── STATE ─────────────────────────────────────────────────────────
-let me=null,allUsers=[],userHabits={},todayH={},todayNips=0,weightLogs=[],pendingNip=false,cdTimer=null;
-
-const SEED_USERS=[
-  {id:'bill', name:'Bill', display_name:'Bill', initials:'AWW',color:'#5C8A4A',start_kg:115,target_kg:95, target_date:'2026-07-14',daily_steps:4500,wake_time:'7am',work_time:'9am',dob:'1964-04-10'},
-  {id:'leon', name:'Leon', display_name:'Leon', initials:'LRW',color:'#3A6030',start_kg:105,target_kg:105,target_date:'2026-07-14',daily_steps:6000,wake_time:'5am',work_time:'6am',dob:'1989-02-25'},
-  {id:'greg', name:'Greg', display_name:'Greg', initials:'GTW',color:'#7A6B4E',start_kg:105,target_kg:105,target_date:'2026-07-14',daily_steps:6000,wake_time:'5am',work_time:'6am',dob:'1993-03-12'},
-  {id:'brent',name:'Brent',display_name:'Brent',initials:'BWW',color:'#4A7C8E',start_kg:96, target_kg:89, target_date:'2026-07-14',daily_steps:6000,wake_time:'5am',work_time:'6am',dob:'1995-01-26'},
-];
+var me=null, todayH={}, todayNips=0, weightLogs=[], pendingNip=false, cdTimer=null;
 
 // ── UTILS ─────────────────────────────────────────────────────────
-const ts=()=>new Date().toISOString().slice(0,10);
-const fmt=d=>new Date(d+'T00:00:00').toLocaleDateString('en-AU',{weekday:'short',day:'numeric',month:'short'});
-const dBetween=(d1,d2)=>Math.round((new Date(d2)-new Date(d1))/86400000);
-const isLate=()=>{const h=new Date().getHours();return h>=23||h<4;};
-const age=dob=>{if(!dob)return null;const d=new Date(dob),n=new Date();let a=n.getFullYear()-d.getFullYear();if(n<new Date(n.getFullYear(),d.getMonth(),d.getDate()))a--;return a;};
-const ageBracket=a=>{if(!a)return null;if(a<30)return '20s';if(a<40)return '30s';if(a<50)return '40s';if(a<60)return '50s';return '60s+';};
-function getBarb(usr){
-  const a=age(usr.dob);if(!a)return null;
-  const bracket=ageBracket(a);
-  const barbs=AGE_BARBS[bracket]||AGE_BARBS['30s'];
-  const b=barbs[Math.floor(Date.now()/86400000)%barbs.length];
+function ts(){return new Date().toISOString().slice(0,10);}
+function fmt(d){return new Date(d+'T00:00:00').toLocaleDateString('en-AU',{weekday:'short',day:'numeric',month:'short'});}
+function dBetween(d1,d2){return Math.round((new Date(d2)-new Date(d1))/86400000);}
+function isLate(){var h=new Date().getHours();return h>=23||h<4;}
+function getAge(dob){if(!dob)return null;var d=new Date(dob),n=new Date(),a=n.getFullYear()-d.getFullYear();if(n<new Date(n.getFullYear(),d.getMonth(),d.getDate()))a--;return a;}
+function getBarb(uid){
+  var u=USERS[uid];if(!u||!u.dob)return null;
+  var a=getAge(u.dob);
+  var bracket=a<30?'20s':a<40?'30s':a<50?'40s':a<60?'50s':'60s+';
+  var barbs=AGE_BARBS[bracket];
+  var b=barbs[Math.floor(Date.now()/86400000)%barbs.length];
   return b.replace(/{age}/g,a);
 }
-const u=()=>allUsers.find(x=>x.id===me)||{};
+function u(){return USERS[me]||USERS.bill;}
 
 // ── SUPABASE ──────────────────────────────────────────────────────
 async function sb(table,method,body,params){
-  method=method||'GET';params=params||'';
-  const r=await fetch(SU+'/rest/v1/'+table+params,{
-    method,headers:{'apikey':SK,'Authorization':'Bearer '+SK,'Content-Type':'application/json',
-      'Prefer':method==='POST'?'resolution=merge-duplicates,return=representation':''},
+  var r=await fetch(SU+'/rest/v1/'+table+(params||''),{
+    method:method||'GET',
+    headers:{'apikey':SK,'Authorization':'Bearer '+SK,'Content-Type':'application/json','Prefer':(method||'GET')==='POST'?'resolution=merge-duplicates,return=representation':''},
     body:body?JSON.stringify(body):null
   });
   if(!r.ok&&method!=='DELETE')throw new Error(await r.text());
-  const t=await r.text();return t?JSON.parse(t):null;
+  var t=await r.text();return t?JSON.parse(t):null;
 }
 
-// ── USERS ─────────────────────────────────────────────────────────
-async function loadUsers(){
-  try{
-    // Timeout after 5 seconds
-    const timeout=new Promise((_,reject)=>setTimeout(()=>reject(new Error('timeout')),5000));
-    let d=null;
-    try{
-      d=await Promise.race([
-        sb('users','GET',null,'?select=id,display_name,start_kg,target_kg,target_date,daily_steps,wake_time,work_time,initials,color,dob,has_reframe&order=dob.asc'),
-        timeout
-      ]);
-    }catch(e1){
-      try{
-        d=await Promise.race([
-          sb('users','GET',null,'?select=id,display_name,start_kg,target_kg,target_date,daily_steps,wake_time,work_time'),
-          new Promise((_,reject)=>setTimeout(()=>reject(new Error('timeout')),5000))
-        ]);
-      }catch(e2){d=null;}
-    }
-    allUsers=(d&&d.length)?d.sort((a,b)=>{
-      // Sort by DOB ascending (oldest first)
-      if(!a.dob&&!b.dob)return 0;
-      if(!a.dob)return 1;if(!b.dob)return -1;
-      return new Date(a.dob)-new Date(b.dob);
-    }):[];
-  }catch(e){console.warn('loadUsers failed, using seeds:',e.message);allUsers=SEED_USERS.slice();}
-}
-
-async function loadUserHabits(){
-  if(!me)return;
-  try{
-    const d=await sb('user_habits','GET',null,'?user_id=eq.'+me+'&enabled=eq.true');
-    userHabits[me]=(d||[]);
-  }catch(e){userHabits[me]=[];}
-}
-
-function getUserHabits(uid){
-  const uh=userHabits[uid]||[];
-  const usr=allUsers.find(x=>x.id===uid)||{};
-  return uh.map(h=>{
-    const def=HABIT_DEFS[h.habit_id];if(!def)return null;
-    const cap=h.target_value||4;
-    return {
-      id:h.habit_id,
-      name:def.name
-        .replace('{lights_out}',usr.lights_out||'11pm')
-        .replace('{wake_time}',usr.wake_time||'6am')
-        .replace('{work_time}',usr.work_time||'9am')
-        .replace('{steps}',(h.target_value||6000).toLocaleString()),
-      freq:def.freq,sci:def.sci,target:h.target_value
-    };
-  }).filter(Boolean);
-}
-
-function isActiveToday(hid){
-  const d=new Date().getDay();
-  const def=HABIT_DEFS[hid]||{freq:'Daily'};
-  if(def.freq==='Daily')return true;
-  const m={Mon:1,Tue:2,Wed:3,Thu:4,Fri:5,Sat:6,Sun:0};
-  return def.freq.split('·').some(x=>m[x.trim()]===d);
-}
-
+// ── USER SCREEN ───────────────────────────────────────────────────
 function renderUserScreen(){
-  const list=document.getElementById('us-list');
-  if(!list)return;
+  var list=document.getElementById('us-list');
   list.innerHTML='';
-  if(!allUsers.length){
-    list.innerHTML='<div style="text-align:center;padding:20px 0;font-family:var(--sm);font-size:11px;color:var(--mi);letter-spacing:.06em">No users yet — add one below</div>';
-    return;
-  }
-  allUsers.forEach(function(usr){
-    const a=age(usr.dob);
-    const btn=document.createElement('button');
-    btn.className='us-card';
-    btn.innerHTML='<div class="us-av" style="background:'+(usr.color||'#5C8A4A')+'">'+(usr.initials||'?')+'</div>'
-      +'<div class="us-info">'
-      +'<div class="us-name">'+(usr.name||usr.display_name||'User')+'</div>'
-      +'<div class="us-meta">'+(a?a+' yrs · ':'')+' → '+(usr.target_kg||'–')+' kg</div>'
+  USER_ORDER.forEach(function(uid){
+    var u=USERS[uid];
+    var a=getAge(u.dob);
+    var btn=document.createElement('button');
+    btn.className='us-btn';
+    btn.innerHTML='<div class="us-av" style="background:'+u.color+'">'+u.initials+'</div>'
+      +'<div><div class="us-name">'+u.name+'</div>'
       +'</div>';
-    btn.onclick=function(){selectUser(usr.id);};
+    btn.onclick=function(){selectUser(uid);};
     list.appendChild(btn);
   });
-  // Load streaks async in background - non-blocking
-  sb('weight_logs','GET',null,'?order=logged_date.desc&select=user_id,logged_date&limit=200').then(function(wLogs){
-    const today=ts();
-    allUsers.forEach(function(usr){
-      const uw=(wLogs||[]).filter(function(w){return w.user_id===usr.id;}).sort(function(a,b){return b.logged_date.localeCompare(a.logged_date);});
-      let s=0;
-      for(let i=0;i<uw.length;i++){
-        const exp=new Date(today);exp.setDate(exp.getDate()-i);
-        if(uw[i]&&uw[i].logged_date===exp.toISOString().slice(0,10))s++;else break;
-      }
-      if(s>0){
-        // Find the card and append streak badge
-        const cards=list.querySelectorAll('.us-card');
-        const idx=allUsers.indexOf(usr);
-        if(cards[idx]){
-          const badge=document.createElement('div');
-          badge.className='us-streak';
-          badge.textContent='🔥 '+s;
-          cards[idx].appendChild(badge);
-        }
-      }
-    });
-  }).catch(function(){});
 }
-
 function selectUser(uid){
   me=uid;
-  document.cookie='bh_user='+uid+';max-age='+(365*86400)+';path=/;samesite=strict';
+  document.cookie='bh_user='+uid+';max-age='+31536000+';path=/;samesite=strict';
   document.getElementById('us').classList.remove('show');
   initApp();
 }
 function switchUser(){document.getElementById('us').classList.add('show');}
-function loadSavedUser(){const c=document.cookie.split(';').find(x=>x.trim().startsWith('bh_user='));if(c)me=c.trim().split('=')[1];}
-
+function loadSavedUser(){
+  var c=document.cookie.split(';').find(function(x){return x.trim().startsWith('bh_user=');});
+  if(c)me=c.trim().split('=')[1];
+}
 function updateChip(){
-  const usr=u();
-  document.getElementById('chip-av').style.background=usr.color||'#5C8A4A';
-  document.getElementById('chip-av').textContent=usr.initials||'?';
-  document.getElementById('chip-name').textContent=usr.name||usr.display_name||'';
+  var usr=u();
+  document.getElementById('chip-av').style.background=usr.color;
+  document.getElementById('chip-av').textContent=usr.initials;
+  document.getElementById('chip-name').textContent=usr.name;
 }
 
-// ── NAVIGATION ────────────────────────────────────────────────────
+// ── NAV ───────────────────────────────────────────────────────────
 function showPage(id,btn){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
+  document.querySelectorAll('.nb').forEach(function(b){b.classList.remove('active');});
   document.getElementById('page-'+id).classList.add('active');
   if(btn)btn.classList.add('active');
   if(id==='team')loadTeam();
-  if(id==='weight')renderWeightPage();
+  if(id==='weight'){renderWeightPage();setTimeout(renderWormChart,50);}
 }
-function toast(msg,dur=2800){
-  const t=document.getElementById('toast');
-  t.textContent=msg;t.classList.add('show');
-  clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),dur);
+function toast(msg,dur){
+  var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
+  clearTimeout(t._t);t._t=setTimeout(function(){t.classList.remove('show');},dur||2800);
 }
 function closeM(id){
   document.getElementById(id).classList.remove('show');
@@ -722,633 +547,431 @@ function closeM(id){
 }
 function closeSheet(id){document.getElementById(id).classList.remove('show');}
 
-// ── HABIT STREAKS ─────────────────────────────────────────────────
-async function getHabitStreaks(){
+// ── HABITS ────────────────────────────────────────────────────────
+
+// ── PER-USER HABIT CONFIG ─────────────────────────────────────────
+var USER_HABITS={
+  bill:     ['sleep','wake','work','train','steps','reframe','weigh','drinks','record'],
+  leon:     ['sleep','wake','work','train','steps','reframe','weigh','drinks','record'],
+  greg:     ['sleep','wake','work','train','steps','reframe','weigh','drinks','record'],
+  brent:    ['sleep','wake','work','train','steps','reframe','weigh','drinks','record'],
+  gregrowe: ['sleep','wake','steps','weigh','drinks','record'],
+  elliot:   ['sleep','wake','steps','weigh','drinks','record'],
+  arne:     ['sleep','wake','steps','drinks','record'],
+};
+
+function habitsForUser(uid){
+  var usr=USERS[uid];if(!usr)return [];
+  var allowed=USER_HABITS[uid]||USER_HABITS.bill;
+  return HABITS.filter(function(h){return allowed.indexOf(h.id)>=0;}).map(function(h){
+    var lightsOut=usr.lightsOut||'11pm';
+    var name=h.name
+      .replace('{wake}',usr.wake||'6am')
+      .replace('{work}',usr.work||'9am')
+      .replace('{steps}',(usr.steps||6000).toLocaleString())
+      .replace('11pm',h.id==='sleep'?lightsOut:'11pm');
+    var cap=usr.drinksCap!=null?usr.drinksCap:4;
+    if(h.id==='drinks') name='Drinks within cap ('+cap+' nips)';
+    return {id:h.id,freq:h.freq,sci:h.sci,name:name};
+  });
+}
+function isActiveToday(hid){
+  var d=new Date().getDay();
+  var h=HABITS.find(function(x){return x.id===hid;})||{freq:'Daily'};
+  if(h.freq==='Daily')return true;
+  var m={Mon:1,Tue:2,Wed:3,Thu:4,Fri:5,Sat:6,Sun:0};
+  return h.freq.split('·').some(function(x){return m[x.trim()]===d;});
+}
+async function loadTodayHabits(){
   try{
-    const logs=await sb('habit_logs','GET',null,'?user_id=eq.'+me+'&order=logged_date.desc&select=logged_date,habit_id,completed&limit=300');
-    const streaks={};
-    const habits=getUserHabits(me).filter(h=>isActiveToday(h.id));
-    habits.forEach(h=>{
-      let s=0;
-      const hLogs=(logs||[]).filter(l=>l.habit_id===h.id&&l.completed).map(l=>l.logged_date).sort((a,b)=>b.localeCompare(a));
-      for(let i=0;i<hLogs.length;i++){
-        const exp=new Date(ts());exp.setDate(exp.getDate()-i);
-        if(hLogs[i]===exp.toISOString().slice(0,10))s++;else break;
+    var d=await sb('habit_logs','GET',null,'?user_id=eq.'+me+'&logged_date=eq.'+ts()+'&select=habit_id,completed');
+    todayH={};(d||[]).forEach(function(r){todayH[r.habit_id]=r.completed;});
+  }catch(e){todayH={};}
+}
+async function getStreaks(){
+  var streaks={};
+  try{
+    var logs=await sb('habit_logs','GET',null,'?user_id=eq.'+me+'&order=logged_date.desc&select=logged_date,habit_id,completed&limit=300');
+    habitsForUser(me).filter(function(h){return isActiveToday(h.id);}).forEach(function(h){
+      var hl=(logs||[]).filter(function(l){return l.habit_id===h.id&&l.completed;}).map(function(l){return l.logged_date;}).sort(function(a,b){return b.localeCompare(a);});
+      var s=0;
+      for(var i=0;i<hl.length;i++){
+        var exp=new Date(ts());exp.setDate(exp.getDate()-i);
+        if(hl[i]===exp.toISOString().slice(0,10))s++;else break;
       }
       streaks[h.id]=s;
     });
-    return streaks;
-  }catch(e){return {};}
+  }catch(e){}
+  return streaks;
 }
-
-// ── HABITS ────────────────────────────────────────────────────────
-async function loadTodayHabits(){
-  try{
-    const d=await sb('habit_logs','GET',null,'?user_id=eq.'+me+'&logged_date=eq.'+ts()+'&select=habit_id,completed');
-    todayH={};(d||[]).forEach(r=>{todayH[r.habit_id]=r.completed;});
-  }catch(e){todayH={};}
-}
-
 async function renderHabits(){
-  const list=document.getElementById('habit-list');
+  var list=document.getElementById('habit-list');
   list.innerHTML='';
-  const habits=getUserHabits(me).filter(h=>isActiveToday(h.id));
-  const streaks=await getHabitStreaks();
-  const usr=u();
-
-  habits.forEach(h=>{
-    const done=!!todayH[h.id];
-    const streak=streaks[h.id]||0;
-    const locked=h.id==='weigh'&&!done;// checked in toggle
-
-    const sec=document.createElement('div');sec.className='habit-sec';
-
-    const row=document.createElement('div');row.className='habit-row';
-    row.innerHTML=`<div class="hck ${done?'done':''}"><svg viewBox="0 0 14 14" fill="none"><polyline points="2,7 6,11 12,3" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-      <div class="h-info">
-        <div class="h-name ${done?'done':''}">${h.name}</div>
-        <div class="h-freq">${h.freq}</div>
-        ${streak>0?`<div class="h-streak">🔥 ${streak} day streak</div>`:''}
-      </div>`;
-    row.onclick=()=>toggleHabit(h.id,row,h);
+  var habits=habitsForUser(me).filter(function(h){return isActiveToday(h.id);});
+  var streaks=await getStreaks();
+  habits.forEach(function(h){
+    var done=!!todayH[h.id];
+    var streak=streaks[h.id]||0;
+    var sec=document.createElement('div');sec.className='habit-sec';
+    var row=document.createElement('div');row.className='hrow';
+    row.innerHTML='<div class="hck '+(done?'done':'')+'"><svg viewBox="0 0 14 14" fill="none"><polyline points="2,7 6,11 12,3" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>'
+      +'<div class="h-info"><div class="h-name '+(done?'done':'')+'">'+h.name+'</div>'
+      +'<div class="h-freq">'+h.freq+'</div>'
+      +(streak>0?'<div class="h-streak">🔥 '+streak+' day streak</div>':'')
+      +'</div>';
+    var hid=h.id;
+    row.onclick=function(){toggleHabit(hid,row,h);};
     sec.appendChild(row);
-
-    // Streak dots (last 7 days)
-    const dotsDiv=document.createElement('div');dotsDiv.className='streak-dots';
-    for(let i=6;i>=0;i--){
-      const dot=document.createElement('div');dot.className='s-dot';
-      dot.style.background=streak>i?'var(--gr)':'var(--bo)';
-      dotsDiv.appendChild(dot);
-    }
-    sec.appendChild(dotsDiv);
-
+    // Streak dots
+    var dots=document.createElement('div');dots.className='streak-dots';
+    for(var i=6;i>=0;i--){var dot=document.createElement('div');dot.className='sdot';dot.style.background=streak>i?u().color:'var(--bo)';dots.appendChild(dot);}
+    sec.appendChild(dots);
     if(h.sci){
-      const sci=document.createElement('div');
-      sci.className='h-sci'+(done?' show':'');
-      sci.id='sci-'+h.id;
-      // Inject age barb into science if available
-      const barb=getBarb(usr);
-      sci.textContent=h.sci+(barb&&Math.random()>.6?' '+barb:'');
+      var sci=document.createElement('div');sci.className='h-sci'+(done?' show':'');sci.id='sci-'+h.id;
+      var barb=getBarb(me);
+      sci.textContent=h.sci+(barb&&Math.random()>.7?' '+barb:'');
       sec.appendChild(sci);
     }
     list.appendChild(sec);
   });
   updateStats();
 }
-
 async function toggleHabit(id,row,h){
-  const now=!todayH[id];
-
+  var now=!todayH[id];
   if(id==='weigh'&&now){
-    const logged=weightLogs.some(w=>w.logged_date===ts());
+    var logged=weightLogs.some(function(w){return w.logged_date===ts();});
     if(!logged){document.getElementById('m-honest').classList.add('show');return;}
   }
   if(id==='drinks'&&now){openDrinksConfirm();return;}
-  if(isLate()&&(id==='sleep'||id==='wake')){
-    document.getElementById('fury-t').textContent="It's past lights-out.";
+  if(isLate()&&id==='sleep'){
+    document.getElementById('fury-t').textContent="It's past 11pm.";
     document.getElementById('fury-b').textContent=FURY_LATE[Math.floor(Math.random()*FURY_LATE.length)];
     document.getElementById('m-fury').classList.add('show');
-    if(id==='sleep')return;
+    return;
   }
-
   todayH[id]=now;
-  const check=row.querySelector('.hck');const name=row.querySelector('.h-name');
-  check.classList.toggle('done',now);name.classList.toggle('done',now);
-  const sci=document.getElementById('sci-'+id);
-  if(sci)now?sci.classList.add('show'):sci.classList.remove('show');
+  var ck=row.querySelector('.hck');var nm=row.querySelector('.h-name');
+  ck.classList.toggle('done',now);nm.classList.toggle('done',now);
+  var sci=document.getElementById('sci-'+id);
+  if(sci){if(now)sci.classList.add('show');else sci.classList.remove('show');}
   try{await sb('habit_logs','POST',{user_id:me,logged_date:ts(),habit_id:id,completed:now});}catch(e){}
-  const active=getUserHabits(me).filter(h=>isActiveToday(h.id));
-  const doneC=active.filter(h=>todayH[h.id]).length;
-  if(doneC===active.length){toast('All done. That is what execution looks like.');document.getElementById('hero').classList.add('good');}
+  var active=habitsForUser(me).filter(function(h){return isActiveToday(h.id);});
+  var done=active.filter(function(h){return todayH[h.id];}).length;
+  if(done===active.length)toast('All done. That is what execution looks like.');
   else if(now)toast('Logged.');
   updateStats();
 }
-
 function updateStats(){
-  const active=getUserHabits(me).filter(h=>isActiveToday(h.id));
-  const done=active.filter(h=>todayH[h.id]).length;
-  const el=document.getElementById('s-habits');
+  var active=habitsForUser(me).filter(function(h){return isActiveToday(h.id);});
+  var done=active.filter(function(h){return todayH[h.id];}).length;
+  var el=document.getElementById('s-habits');
   el.textContent=done+'/'+active.length;
   el.style.color=done===active.length?'var(--gr)':done>=Math.ceil(active.length*.6)?'var(--am)':'var(--bk)';
 }
 
 // ── DRINKS ────────────────────────────────────────────────────────
 async function loadTodayNips(){
-  try{const d=await sb('drink_logs','GET',null,'?user_id=eq.'+me+'&logged_date=eq.'+ts()+'&select=nips');todayNips=(d&&d[0])?d[0].nips:0;}
+  try{var d=await sb('drink_logs','GET',null,'?user_id=eq.'+me+'&logged_date=eq.'+ts()+'&select=nips');todayNips=(d&&d[0])?d[0].nips:0;}
   catch(e){todayNips=0;}
   renderNips();
 }
-
 async function changeNips(delta){
   if(delta>0&&isLate()){
-    document.getElementById('fury-t').textContent='Adding drinks after lights-out?';
+    document.getElementById('fury-t').textContent='Adding drinks after 11pm?';
     document.getElementById('fury-b').textContent=FURY_LATE[Math.floor(Math.random()*FURY_LATE.length)];
     document.getElementById('m-fury').classList.add('show');
   }
-  const uh=userHabits[me]||[];
-  const hasReframe=(uh.find(h=>h.habit_id==='reframe'))||false;
-  if(delta>0&&hasReframe&&!todayH['reframe']){
+  if(delta>0&&!todayH['reframe']){
     pendingNip=true;
     document.getElementById('craving-tip').textContent=CRAVINGS[Math.floor(Math.random()*CRAVINGS.length)];
     startCountdown();
     document.getElementById('m-reframe').classList.add('show');
     return;
   }
-  await saveNips(Math.max(0,Math.min(20,todayNips+delta)));
+  await saveNips(Math.max(0,Math.min(22,todayNips+delta)));
 }
-
-async function saveNips(n){todayNips=n;renderNips();try{await sb('drink_logs','POST',{user_id:me,logged_date:ts(),nips:n});}catch(e){}}
-
+async function saveNips(n){
+  todayNips=n;renderNips();
+  try{await sb('drink_logs','POST',{user_id:me,logged_date:ts(),nips:n});}catch(e){}
+}
 function renderNips(){
-  const n=todayNips;
-  const usr=u();const cap=(userHabits[me]||[]).find(h=>h.habit_id==='drinks');
-  const capVal=cap?cap.target_value||4:4;
-  document.getElementById('nip-cap').textContent=capVal;
-  const el=document.getElementById('nip-num');
-  el.textContent=n;el.style.color=n>capVal?'var(--re)':n===capVal?'var(--am)':'var(--bk)';
-  const fill=document.getElementById('nip-fill');
-  fill.style.width=Math.min(100,(n/capVal)*100)+'%';
-  fill.style.background=n>capVal?'var(--re)':n===capVal?'#C4773A':'var(--gr)';
-  const sci=document.getElementById('nip-sci');
+  var n=todayNips;
+  var el=document.getElementById('nip-num');el.textContent=n;
+  el.style.color=n>4?'var(--re)':n===4?'var(--am)':'var(--bk)';
+  var fill=document.getElementById('nip-fill');
+  fill.style.width=Math.min(100,(n/4)*100)+'%';
+  fill.style.background=n>4?'var(--re)':n===4?'#C4773A':'var(--gr)';
+  var sci=document.getElementById('nip-sci');
   sci.textContent=NIP_SCI[Math.min(n,NIP_SCI.length-1)];
-  sci.style.color=n>capVal?'var(--re)':n===capVal?'var(--am)':'var(--mi)';
-  sci.style.background=n>capVal?'var(--rl)':n===capVal?'var(--al)':'var(--wm)';
+  sci.style.color=n>4?'var(--re)':n===4?'var(--am)':'var(--mi)';
+  sci.style.background=n>4?'var(--rl)':n===4?'var(--al)':'var(--wm)';
 }
-
 function openDrinksConfirm(){
-  const n=todayNips;
+  var n=todayNips;
   document.getElementById('dc-title').textContent='Your drinks today: '+n+' nip'+(n!==1?'s':'');
-  const fury=document.getElementById('dc-fury');
-  sb('drink_logs','GET',null,'?user_id=eq.'+me+'&order=logged_date.desc&limit=4&select=nips').then(logs=>{
-    const cons=(logs||[]).filter(l=>l.nips===4).length;
-    if(cons>=3&&n===4){fury.style.display='block';fury.textContent='Every single day this week: exactly 4 nips. Remarkably consistent. Please solemnly affirm this is accurate. Did you count every pour? Did you forget a roadie? Honest question.';}
+  var fury=document.getElementById('dc-fury');
+  sb('drink_logs','GET',null,'?user_id=eq.'+me+'&order=logged_date.desc&limit=4&select=nips').then(function(logs){
+    var cons=(logs||[]).filter(function(l){return l.nips===4;}).length;
+    if(cons>=3&&n===4){fury.style.display='block';fury.textContent='Every single day this week: exactly 4 nips. Please confirm this is accurate. Did you count every pour? Did you forget a roadie?';}
     else if(n>4){fury.style.display='block';fury.textContent=AFFIRM[Math.floor(Math.random()*AFFIRM.length)].replace(/{n}/g,n);}
     else{fury.style.display='none';}
-    document.getElementById('m-drinks-confirm').classList.add('show');
-  }).catch(()=>{fury.style.display='none';document.getElementById('m-drinks-confirm').classList.add('show');});
+    document.getElementById('m-dc').classList.add('show');
+  }).catch(function(){fury.style.display='none';document.getElementById('m-dc').classList.add('show');});
 }
-
 async function confirmDrinks(confirmed){
-  closeM('m-drinks-confirm');
+  closeM('m-dc');
   if(confirmed){
     todayH['drinks']=true;
     try{await sb('habit_logs','POST',{user_id:me,logged_date:ts(),habit_id:'drinks',completed:true});}catch(e){}
     renderHabits();updateStats();
-    toast(todayNips<=4?'Within cap. Logged.':'Over the cap — logged honestly. That matters.');
+    toast(todayNips<=4?'Within cap. Logged.':'Over cap — logged honestly. That matters.');
   }else{toast('Take another look at your count.');}
 }
 
-// ── REFRAME ───────────────────────────────────────────────────────
-function startCountdown(){
-  const dB=document.getElementById('rf-done');const sB=document.getElementById('rf-skip');
-  const nE=document.getElementById('cd-n');const fE=document.getElementById('cd-fl');
-  const lbl=document.querySelector('.cd-lbl');
-  dB.disabled=true;sB.disabled=true;nE.style.color='var(--gr)';fE.style.stroke='var(--gr)';lbl.textContent='seconds';
-  if(cdTimer)clearInterval(cdTimer);
-  let s=15;const C=2*Math.PI*18;
-  const tick=()=>{nE.textContent=s;fE.style.strokeDashoffset=C*(1-s/15);if(s<=0){clearInterval(cdTimer);dB.disabled=false;sB.disabled=false;nE.textContent='OK';lbl.textContent='you can proceed';}s--;};
-  tick();cdTimer=setInterval(tick,1000);
-}
-async function markReframeDone(){
-  todayH['reframe']=true;
-  try{await sb('habit_logs','POST',{user_id:me,logged_date:ts(),habit_id:'reframe',completed:true});}catch(e){}
-  renderHabits();closeM('m-reframe');
-  if(pendingNip){pendingNip=false;await saveNips(Math.min(20,todayNips+1));}
-  toast('Reframe complete.');
-}
-async function skipReframe(){closeM('m-reframe');if(pendingNip){pendingNip=false;await saveNips(Math.min(20,todayNips+1));}}
-
 // ── WEIGHT ────────────────────────────────────────────────────────
-async function loadWeights(){try{const d=await sb('weight_logs','GET',null,'?user_id=eq.'+me+'&order=logged_date.desc&limit=90');weightLogs=d||[];}catch(e){weightLogs=[];}}
-
+async function loadWeights(){
+  try{var d=await sb('weight_logs','GET',null,'?user_id=eq.'+me+'&order=logged_date.desc&limit=90');weightLogs=d||[];}
+  catch(e){weightLogs=[];}
+}
 async function logWeightToday(){
-  const inp=document.getElementById('w-today');const v=parseFloat(inp.value);
+  var inp=document.getElementById('w-today-inp');
+  var v=parseFloat(inp.value);
   if(!v||v<40||v>250){toast('Enter a valid weight');return;}
-  if(isLate()){document.getElementById('fury-t').textContent='Logging weight after lights-out?';document.getElementById('fury-b').textContent=FURY_LATE[0];document.getElementById('m-fury').classList.add('show');}
+  if(isLate()){document.getElementById('fury-t').textContent='Logging weight after 11pm?';document.getElementById('fury-b').textContent=FURY_LATE[0];document.getElementById('m-fury').classList.add('show');}
   try{
     await sb('weight_logs','POST',{user_id:me,logged_date:ts(),weight_kg:+v.toFixed(1)});
     inp.value='';await loadWeights();renderHero();
     document.getElementById('w-today-line').textContent='Today: '+v.toFixed(1)+' kg';
-    if(!todayH['weigh']){todayH['weigh']=true;await sb('habit_logs','POST',{user_id:me,logged_date:ts(),habit_id:'weigh',completed:true});renderHabits();}
+    if(!todayH['weigh']){
+      todayH['weigh']=true;
+      await sb('habit_logs','POST',{user_id:me,logged_date:ts(),habit_id:'weigh',completed:true});
+      renderHabits();
+    }
     toast(v.toFixed(1)+' kg logged.');
-  }catch(e){toast('Could not save — check connection');}
+  }catch(e){toast('Could not save: '+e.message.slice(0,50));}
 }
-
 async function logWeight(dateOverride){
-  const inp=document.getElementById(dateOverride?'bd-kg':'w-in');const v=parseFloat(inp.value);
+  var inp=document.getElementById(dateOverride?'bd-kg':'w-in');
+  var v=parseFloat(inp.value);
   if(!v||v<40||v>250){toast('Enter a valid weight');return;}
-  const date=dateOverride||ts();
-  if(!dateOverride&&isLate()){document.getElementById('fury-t').textContent='Logging weight after lights-out?';document.getElementById('fury-b').textContent=FURY_LATE[0];document.getElementById('m-fury').classList.add('show');}
+  var date=dateOverride||ts();
   try{
     await sb('weight_logs','POST',{user_id:me,logged_date:date,weight_kg:+v.toFixed(1)});
     inp.value='';if(dateOverride)document.getElementById('bd-date').value='';
     await loadWeights();renderHero();renderWeightPage();
-    if(date===ts()&&!todayH['weigh']){todayH['weigh']=true;await sb('habit_logs','POST',{user_id:me,logged_date:ts(),habit_id:'weigh',completed:true});renderHabits();}
+    if(date===ts()&&!todayH['weigh']){
+      todayH['weigh']=true;
+      await sb('habit_logs','POST',{user_id:me,logged_date:ts(),habit_id:'weigh',completed:true});
+      renderHabits();
+    }
     toast(v.toFixed(1)+' kg logged.');
-  }catch(e){toast('Could not save — check connection');}
+  }catch(e){toast('Could not save: '+e.message.slice(0,50));}
+}
+
+function renderWormChart(){
+  var canvas=document.getElementById('worm-chart');
+  if(!canvas)return;
+  var usr=u();
+  var sorted=[].concat(weightLogs).sort(function(a,b){return a.logged_date.localeCompare(b.logged_date);});
+  var ctx=canvas.getContext('2d');
+  var W=canvas.offsetWidth||320;var H=180;
+  canvas.width=W*2;canvas.height=H*2;canvas.style.width=W+'px';canvas.style.height=H+'px';
+  ctx.scale(2,2);
+
+  var tDate=usr.target_date||TDATE;
+  var startDate=sorted.length?sorted[0].logged_date:'2026-03-20';
+  var totalDays=dBetween(startDate,tDate);
+  var startKg=usr.start_kg||100;
+  var targetKg=usr.target_kg||80;
+  var pad={l:36,r:16,t:12,b:8};
+  var cW=W-pad.l-pad.r;var cH=H-pad.t-pad.b;
+
+  // Y axis range — from startKg+2 down to targetKg-2
+  var yMax=Math.max(startKg+1, sorted.length?sorted[sorted.length-1].weight_kg+1:startKg+1);
+  var yMin=targetKg-1;
+  var yRange=yMax-yMin;
+
+  function xPos(dateStr){return pad.l+cW*Math.max(0,Math.min(1,dBetween(startDate,dateStr)/totalDays));}
+  function yPos(kg){return pad.t+cH*(1-(kg-yMin)/yRange);}
+
+  // Background
+  ctx.fillStyle='#F5F2ED';ctx.fillRect(0,0,W,H);
+
+  // Target line (dashed)
+  ctx.setLineDash([4,4]);ctx.strokeStyle='rgba(92,138,74,0.4)';ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(pad.l,yPos(targetKg));ctx.lineTo(W-pad.r,yPos(targetKg));ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle='rgba(92,138,74,0.6)';ctx.font='500 9px DM Mono, monospace';
+  ctx.fillText('Target '+targetKg+'kg',pad.l+2,yPos(targetKg)-3);
+
+  // Ideal trajectory line
+  ctx.strokeStyle='rgba(92,138,74,0.2)';ctx.lineWidth=1.5;
+  ctx.beginPath();
+  ctx.moveTo(xPos(startDate),yPos(startKg));
+  ctx.lineTo(xPos(tDate),yPos(targetKg));
+  ctx.stroke();
+
+  // Today marker
+  var todayX=xPos(ts());
+  ctx.strokeStyle='rgba(0,0,0,0.08)';ctx.lineWidth=1;ctx.setLineDash([3,3]);
+  ctx.beginPath();ctx.moveTo(todayX,pad.t);ctx.lineTo(todayX,H-pad.b);ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Actual weight line
+  if(sorted.length>1){
+    ctx.strokeStyle='#0F0F0F';ctx.lineWidth=2;ctx.lineJoin='round';
+    ctx.beginPath();
+    sorted.forEach(function(w,i){
+      var x=xPos(w.logged_date);var y=yPos(Math.max(w.weight_kg,targetKg));
+      if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);
+    });
+    ctx.stroke();
+  }
+
+  // Projected line from last point to target date
+  if(sorted.length>=2){
+    var recent=sorted.filter(function(w){return dBetween(w.logged_date,ts())<=14;});
+    if(recent.length>=2){
+      var f=recent[0],l2=recent[recent.length-1];
+      var days=dBetween(f.logged_date,l2.logged_date);
+      var pace=days>0?(f.weight_kg-l2.weight_kg)/days:0;
+      if(pace>0){
+        var lastW=sorted[sorted.length-1];
+        var projEnd=Math.max(lastW.weight_kg-pace*dBetween(lastW.logged_date,tDate),targetKg);
+        ctx.strokeStyle='rgba(15,15,15,0.3)';ctx.lineWidth=1.5;ctx.setLineDash([5,4]);
+        ctx.beginPath();
+        ctx.moveTo(xPos(lastW.logged_date),yPos(Math.max(lastW.weight_kg,targetKg)));
+        ctx.lineTo(xPos(tDate),yPos(projEnd));
+        ctx.stroke();
+        ctx.setLineDash([]);
+        // Dot at projected end
+        var endC=projEnd<=targetKg?'#5C8A4A':projEnd<=targetKg+3?'#C4773A':'#9A3A3A';
+        ctx.fillStyle=endC;ctx.beginPath();
+        ctx.arc(xPos(tDate),yPos(projEnd),4,0,Math.PI*2);ctx.fill();
+      }
+    }
+  }
+
+  // Dots on actual readings
+  sorted.forEach(function(w){
+    ctx.fillStyle='#0F0F0F';ctx.beginPath();
+    ctx.arc(xPos(w.logged_date),yPos(Math.max(w.weight_kg,targetKg)),2.5,0,Math.PI*2);ctx.fill();
+  });
+
+  // Y axis labels
+  ctx.fillStyle='var(--mi)';ctx.font='9px DM Mono, monospace';ctx.textAlign='right';
+  [yMax,Math.round((yMax+yMin)/2),yMin].forEach(function(kg){
+    ctx.fillStyle='#8A8880';ctx.fillText(kg+'kg',pad.l-4,yPos(kg)+3);
+  });
+
+  // Labels
+  document.getElementById('worm-start-lbl').textContent=fmt(startDate);
+  document.getElementById('worm-end-lbl').textContent=fmt(tDate);
+
+  // Worm message
+  var msg=document.getElementById('worm-msg');
+  if(!sorted.length){
+    msg.textContent='No weight data yet. Log your weight daily to see your trajectory.';
+    msg.style.background='var(--wm)';msg.style.color='var(--mi)';
+    return;
+  }
+  var latest=sorted[sorted.length-1];
+  var elapsed=dBetween(startDate,ts());
+  var totalLoss=startKg-targetKg;
+  var expectedNow=startKg-(totalLoss*(elapsed/totalDays));
+  var actualNow=latest.weight_kg;
+  var diff=+(actualNow-expectedNow).toFixed(1);
+
+  if(sorted.length<3){
+    msg.textContent='Keep logging daily. Three or more readings needed to project your trajectory accurately.';
+    msg.style.background='var(--wm)';msg.style.color='var(--mi)';
+  } else if(diff<=-2){
+    msg.style.background='var(--gl)';msg.style.color='var(--gd)';
+    msg.textContent='Ahead of target by '+Math.abs(diff).toFixed(1)+' kg. The trajectory is pointing in the right direction. Keep doing exactly what you are doing.';
+  } else if(diff<=0){
+    msg.style.background='var(--gl)';msg.style.color='var(--gd)';
+    msg.textContent='Right on pace. The line is going where it needs to go. Consistency is the only thing standing between you and July 14.';
+  } else if(diff<=2){
+    msg.style.background='var(--al)';msg.style.color='var(--am)';
+    msg.textContent=diff.toFixed(1)+' kg behind target pace. The trajectory is drifting. This is fixable in a week — but only if the numbers going into the app are honest. Are they?';
+  } else if(diff<=4){
+    msg.style.background='var(--rl)';msg.style.color='var(--re)';
+    msg.textContent=diff.toFixed(1)+' kg behind where this line needs to be. The projected end point misses the target. Something in the plan is not working — or something in the logging is not accurate. Both are worth examining.';
+  } else {
+    msg.style.background='var(--rl)';msg.style.color='var(--re)';
+    msg.textContent=diff.toFixed(1)+' kg behind target. At current pace the goal is out of reach by July 14. The data does not lie — but it also cannot help if it is not being given accurate inputs. Log honestly. Every day. That is the only path back.';
+  }
 }
 
 function renderWeightPage(){
-  const usr=u();
-  const tw=weightLogs.find(w=>w.logged_date===ts());
+  var usr=u();
+  var tw=weightLogs.find(function(w){return w.logged_date===ts();});
   document.getElementById('w-pg-line').textContent=tw?'Today: '+tw.weight_kg+' kg':'Not logged today';
-  const bd=document.getElementById('bd-date');if(!bd.value)bd.value=ts();
-  const sorted=[...weightLogs].sort((a,b)=>a.logged_date.localeCompare(b.logged_date));
-  const tNum=document.getElementById('traj-num');const tTag=document.getElementById('traj-tag');
-  const tDate=usr.target_date||TDATE;
-
+  var bd=document.getElementById('bd-date');if(!bd.value)bd.value=ts();
+  var sorted=weightLogs.slice().sort(function(a,b){return a.logged_date.localeCompare(b.logged_date);});
+  var tNum=document.getElementById('traj-num'),tTag=document.getElementById('traj-tag');
   if(sorted.length>=2){
-    const recent=sorted.filter(w=>dBetween(w.logged_date,ts())<=14);
-    let pace=0;
-    if(recent.length>=2){const f=recent[0],l=recent[recent.length-1];const days=dBetween(f.logged_date,l.logged_date);if(days>0)pace=(f.weight_kg-l.weight_kg)/days;}
-    const latest=sorted[sorted.length-1];
+    var recent=sorted.filter(function(w){return dBetween(w.logged_date,ts())<=14;});
+    var pace=0;
+    if(recent.length>=2){var f=recent[0],l=recent[recent.length-1];var days=dBetween(f.logged_date,l.logged_date);if(days>0)pace=(f.weight_kg-l.weight_kg)/days;}
+    var latest=sorted[sorted.length-1];
     if(pace>0){
-      const raw=+(latest.weight_kg-pace*dBetween(ts(),tDate)).toFixed(1);
-      const proj=Math.max(raw,usr.target_kg||0);
-      tNum.textContent=proj.toFixed(1)+' kg';
-      tNum.style.color=proj<=(usr.target_kg||0)?'var(--gr)':proj<=(usr.target_kg||0)+3?'var(--am)':'var(--re)';
-      if(proj<=(usr.target_kg||0)){tTag.textContent='On track to hit '+(usr.target_kg||'–')+' kg';tTag.style.background='var(--gl)';tTag.style.color='var(--gd)';}
-      else{const over=+(proj-(usr.target_kg||0)).toFixed(1);tTag.textContent=over+' kg above target at this pace';tTag.style.background='var(--rl)';tTag.style.color='var(--re)';}
+      var raw=+(latest.weight_kg-pace*dBetween(ts(),usr.targetDate)).toFixed(1);
+      var proj=Math.max(raw,usr.targetKg);
+      tNum.textContent=proj.toFixed(1)+' kg';tNum.style.color=proj<=usr.targetKg?'var(--gr)':proj<=usr.targetKg+3?'var(--am)':'var(--re)';
+      if(proj<=usr.targetKg){tTag.textContent='On track to hit '+usr.targetKg+' kg';tTag.style.background='var(--gl)';tTag.style.color='var(--gd)';}
+      else{tTag.textContent=+(proj-usr.targetKg).toFixed(1)+' kg above target at this pace';tTag.style.background='var(--rl)';tTag.style.color='var(--re)';}
     }else{tNum.textContent='–';tTag.textContent='No downward trend yet';tTag.style.background='var(--al)';tTag.style.color='var(--am)';}
   }else{tNum.textContent='–';tTag.textContent='Log a few weights first';tTag.style.background='var(--wm)';tTag.style.color='var(--mi)';}
-
-  const logEl=document.getElementById('w-log');
-  const display=[...weightLogs].sort((a,b)=>b.logged_date.localeCompare(a.logged_date)).slice(0,20);
+  var logEl=document.getElementById('w-log');
+  var display=weightLogs.slice().sort(function(a,b){return b.logged_date.localeCompare(a.logged_date);}).slice(0,20);
   if(!display.length){logEl.innerHTML='<div class="empty">No weights logged yet</div>';return;}
   logEl.innerHTML='';
-  display.forEach((w,i)=>{
-    const prev=display[i+1];const diff=prev?+(w.weight_kg-prev.weight_kg).toFixed(1):null;
-    const row=document.createElement('div');row.className='wlog-item';
-    let dh='';
-    if(diff!==null){const c=diff<0?'background:var(--gl);color:var(--gd)':diff>0?'background:var(--rl);color:var(--re)':'background:var(--wm);color:var(--mi)';dh=`<span class="wlog-diff" style="${c}">${diff>0?'+':''}${diff}</span>`;}
-    row.innerHTML=`<span class="wlog-date">${w.logged_date===ts()?'Today':fmt(w.logged_date)}</span><span class="wlog-kg">${w.weight_kg} kg</span>${dh}`;
+  display.forEach(function(w,i){
+    var prev=display[i+1];var diff=prev?+(w.weight_kg-prev.weight_kg).toFixed(1):null;
+    var row=document.createElement('div');row.className='wlog-item';
+    var dh='';
+    if(diff!==null){var c=diff<0?'background:var(--gl);color:var(--gd)':diff>0?'background:var(--rl);color:var(--re)':'background:var(--wm);color:var(--mi)';dh='<span class="wdiff" style="'+c+'">'+(diff>0?'+':'')+diff+'</span>';}
+    row.innerHTML='<span class="wlog-date">'+(w.logged_date===ts()?'Today':fmt(w.logged_date))+'</span><span class="wlog-kg">'+w.weight_kg+' kg</span>'+dh;
     logEl.appendChild(row);
   });
 }
-
 function renderHero(){
-  const usr=u();
-  const hero=document.getElementById('hero');const badge=document.getElementById('hero-badge');
-  const kgEl=document.getElementById('hero-kg');const sub=document.getElementById('hero-sub');const msg=document.getElementById('hero-msg');
-  const sorted=[...weightLogs].sort((a,b)=>b.logged_date.localeCompare(a.logged_date));
-  const latest=sorted[0]||null;
-  const barb=getBarb(usr);
-
+  var usr=u();
+  var hero=document.getElementById('hero'),badge=document.getElementById('h-badge');
+  var kgEl=document.getElementById('h-kg'),sub=document.getElementById('h-sub'),msg=document.getElementById('h-msg');
+  var sorted=weightLogs.slice().sort(function(a,b){return b.logged_date.localeCompare(a.logged_date);});
+  var latest=sorted[0]||null;
+  var barb=getBarb(me);
   if(weightLogs.length>0){
-    const gap=dBetween(sorted[0].logged_date,ts());
+    var gap=dBetween(sorted[0].logged_date,ts());
     if(gap>=3){
       document.getElementById('fury-t').textContent=gap+' days without logging.';
-      document.getElementById('fury-b').textContent=FURY_ABSENT[Math.floor(Math.random()*FURY_ABSENT.length)].replace(/{days}/g,gap);
+      document.getElementById('fury-b').textContent=FURY_ABSENT[gap>=7?1:0].replace(/{days}/g,gap);
       document.getElementById('m-fury').classList.add('show');
     }
   }
-
   if(!latest){
-    hero.className='hero';badge.textContent='No data yet';badge.style.color='var(--mi)';
+    hero.className='hero';badge.textContent='No data yet';
     kgEl.textContent='–';kgEl.style.color='var(--bk)';
     sub.textContent='Log your weight to begin tracking';
-    msg.textContent=(barb||'Weigh yourself first thing every morning. Same time, same conditions. The number is just data.')+' Consistency of measurement is what makes the trajectory visible.';
-    document.getElementById('s-lost').textContent='–';document.getElementById('s-streak').textContent='–';
-    return;
+    msg.textContent=barb||'Weigh yourself first thing every morning. Same time, same conditions. The number is just data.';
+    document.getElementById('s-lost').textContent='–';document.getElementById('s-streak').textContent='–';return;
   }
-
-  const cur=latest.weight_kg;const lost=+(usr.start_kg-cur).toFixed(1);
-  const tDate=usr.target_date||TDATE;
-  const totalDays=dBetween(usr.created_at?usr.created_at.slice(0,10):'2026-03-20',tDate);
-  const elap=dBetween(usr.created_at?usr.created_at.slice(0,10):'2026-03-20',ts());
-  const exp=+(usr.start_kg-(usr.start_kg-usr.target_kg)*(elap/totalDays)).toFixed(1);
-  const diff=+(cur-exp).toFixed(1);
+  var cur=latest.weight_kg;var lost=+(usr.startKg-cur).toFixed(1);
+  var totalD=dBetween('2026-03-20',usr.targetDate);var elap=dBetween('2026-03-20',ts());
+  var exp=+(usr.startKg-(usr.startKg-usr.targetKg)*(elap/totalD)).toFixed(1);
+  var diff=+(cur-exp).toFixed(1);
   kgEl.textContent=cur.toFixed(1);
-  const lostEl=document.getElementById('s-lost');lostEl.textContent=lost>0?lost.toFixed(1):'0.0';lostEl.style.color=lost>0?'var(--gr)':'var(--bk)';
-
-  let streak=0;
-  for(let i=0;i<sorted.length;i++){const ex2=new Date(ts());ex2.setDate(ex2.getDate()-i);if(sorted[i]&&sorted[i].logged_date===ex2.toISOString().slice(0,10))streak++;else break;}
-  const stEl=document.getElementById('s-streak');stEl.textContent=streak;stEl.style.color=streak>=7?'var(--gr)':streak>=3?'var(--am)':'var(--bk)';
-
-  if(diff<=-2){
-    hero.className='hero good';badge.textContent='Ahead of target';kgEl.style.color='var(--gd)';
-    sub.textContent=Math.abs(diff).toFixed(1)+' kg ahead of target pace';
-    msg.textContent='Ahead by '+Math.abs(diff).toFixed(1)+' kg. That is the compound effect of consistent days. Keep this up.';
-  }else if(diff<=0){
-    hero.className='hero good';badge.textContent='On track';kgEl.style.color='var(--gd)';
-    sub.textContent='Right on target pace';
-    msg.textContent='On track. Every day you hold this line, your target gets closer. The maths is working.'+(barb?' — '+barb:'');
-  }else if(diff<=2){
-    hero.className='hero warn';badge.textContent='Slightly behind';kgEl.style.color='var(--am)';
-    sub.textContent=diff.toFixed(1)+' kg behind target pace';
-    msg.textContent=diff.toFixed(1)+' kg behind pace. Not a crisis yet — one clean week closes this. Tighten the habits today.'+(barb?' '+barb:'');
-  }else{
-    hero.className='hero bad';badge.textContent='Off track';kgEl.style.color='var(--re)';
-    sub.textContent=diff.toFixed(1)+' kg behind target pace';
-    msg.textContent=diff.toFixed(1)+' kg behind where the plan needs you. This does not fix itself. Identify what slipped and fix it today.'+(barb?' '+barb:'');
-  }
+  var lostEl=document.getElementById('s-lost');lostEl.textContent=lost>0?lost.toFixed(1):'0.0';lostEl.style.color=lost>0?'var(--gr)':'var(--bk)';
+  var streak=0;
+  for(var i=0;i<sorted.length;i++){var ex2=new Date(ts());ex2.setDate(ex2.getDate()-i);if(sorted[i]&&sorted[i].logged_date===ex2.toISOString().slice(0,10))streak++;else break;}
+  var stEl=document.getElementById('s-streak');stEl.textContent=streak;stEl.style.color=streak>=7?'var(--gr)':streak>=3?'var(--am)':'var(--bk)';
+  if(diff<=-2){hero.className='hero good';badge.textContent='Ahead of target';kgEl.style.color='var(--gd)';sub.textContent=Math.abs(diff).toFixed(1)+' kg ahead of pace';msg.textContent='Ahead by '+Math.abs(diff).toFixed(1)+' kg. That is the compound effect of consistent days.'+(barb?' '+barb:'');}
+  else if(diff<=0){hero.className='hero good';badge.textContent='On track';kgEl.style.color='var(--gd)';sub.textContent='Right on target pace';msg.textContent='On track. Every day you hold this line, 14 July gets closer.'+(barb?' '+barb:'');}
+  else if(diff<=2){hero.className='hero warn';badge.textContent='Slightly behind';kgEl.style.color='var(--am)';sub.textContent=diff.toFixed(1)+' kg behind pace';msg.textContent=diff.toFixed(1)+' kg behind. One clean week closes this.'+(barb?' '+barb:'');}
+  else{hero.className='hero bad';badge.textContent='Off track';kgEl.style.color='var(--re)';sub.textContent=diff.toFixed(1)+' kg behind pace';msg.textContent=diff.toFixed(1)+' kg behind. Identify what slipped and fix it today.'+(barb?' '+barb:'');}
 }
-
-// ── TEAM ──────────────────────────────────────────────────────────
-async function loadTeam(){
-  const list=document.getElementById('team-list');
-  list.innerHTML='';
-  allUsers.forEach(()=>{const sk=document.createElement('div');sk.className='tskel';list.appendChild(sk);});
-  try{
-    const [weights,habits,drinks]=await Promise.all([
-      sb('weight_logs','GET',null,'?order=logged_date.desc&select=user_id,logged_date,weight_kg'),
-      sb('habit_logs','GET',null,'?logged_date=eq.'+ts()+'&select=user_id,habit_id,completed'),
-      sb('drink_logs','GET',null,'?logged_date=eq.'+ts()+'&select=user_id,nips'),
-    ]);
-    list.innerHTML='';
-    allUsers.forEach(usr=>{
-      const uid=usr.id;
-      const uw=[...(weights||[]).filter(w=>w.user_id===uid)].sort((a,b)=>b.logged_date.localeCompare(a.logged_date));
-      const latest=uw[0];const uh=(habits||[]).filter(h=>h.user_id===uid&&h.completed);
-      const ud=(drinks||[]).find(d=>d.user_id===uid);
-      const uhDefs=userHabits[uid]||[];const totalH=uhDefs.filter(h=>isActiveToday(h.habit_id)).length;
-      const doneH=uh.length;const nips=(ud&&ud.nips)||0;
-      const lost=latest?+(usr.start_kg-latest.weight_kg).toFixed(1):null;
-      const nipC=nips>4?'var(--re)':nips===4?'var(--am)':'var(--gd)';
-      const nipBg=nips>4?'var(--rl)':nips===4?'var(--al)':'var(--gl)';
-      const daysSince=latest?dBetween(latest.logged_date,ts()):null;
-      const absent=daysSince!==null&&daysSince>1?' · '+daysSince+'d absent':'';
-      const noData=!latest&&doneH===0&&nips===0;
-      const statsTxt=noData?'Nothing logged yet':(latest?latest.weight_kg+' kg':'–')+(lost&&lost>0?' · ↓'+lost.toFixed(1)+' kg':'')+' · '+doneH+'/'+totalH+' habits'+absent;
-      const dots=uhDefs.filter(h=>isActiveToday(h.habit_id)).map(h=>{
-        const done=uh.some(x=>x.habit_id===h.habit_id);
-        return `<div class="tdot" style="background:${done?usr.color:'var(--bo)'}"></div>`;
-      }).join('');
-      const card=document.createElement('div');card.className='tmem';
-      card.innerHTML=`<div class="tav" style="background:${usr.color||'#5C8A4A'}">${usr.initials||'?'}</div>
-        <div style="flex:1;min-width:0">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px">
-            <div class="tname">${usr.name||usr.display_name}</div>
-            <span class="tbadge" style="background:${nipBg};color:${nipC}">${nips} nips</span>
-          </div>
-          <div class="tstats">${statsTxt}</div>
-          <div class="tdots">${dots}</div>
-        </div>
-        <div style="color:var(--bo);font-size:18px;margin-left:4px">›</div>`;
-      card.onclick=()=>openProfile(uid);
-      list.appendChild(card);
-    });
-  }catch(e){list.innerHTML='<div style="text-align:center;padding:32px 0"><div class="nd-t">Could not load</div><div class="nd-s">Check your connection</div></div>';}
-}
-
-// ── PROFILE SHEET ─────────────────────────────────────────────────
-async function openProfile(uid){
-  const usr=allUsers.find(x=>x.id===uid)||{};
-  document.getElementById('ps-av').style.background=usr.color||'#5C8A4A';
-  document.getElementById('ps-av').textContent=usr.initials||'?';
-  document.getElementById('ps-name').textContent=usr.name||usr.display_name||'';
-  document.getElementById('ps-sub').textContent='Target: '+(usr.target_kg||'–')+' kg · '+(usr.target_date||TDATE);
-  document.getElementById('ps-body').innerHTML='<div class="spin"></div>';
-  document.getElementById('sh-profile').classList.add('show');
-  try{
-    const [weights,habits,drinks]=await Promise.all([
-      sb('weight_logs','GET',null,'?user_id=eq.'+uid+'&order=logged_date.desc&limit=14&select=logged_date,weight_kg'),
-      sb('habit_logs','GET',null,'?user_id=eq.'+uid+'&order=logged_date.desc&select=logged_date,habit_id,completed'),
-      sb('drink_logs','GET',null,'?user_id=eq.'+uid+'&order=logged_date.desc&limit=14&select=logged_date,nips'),
-    ]);
-    const latest=[...(weights||[])].sort((a,b)=>b.logged_date.localeCompare(a.logged_date))[0];
-    const lost=latest?+(usr.start_kg-latest.weight_kg).toFixed(1):null;
-    const tDate=usr.target_date||TDATE;
-    const totalD=dBetween(usr.created_at?usr.created_at.slice(0,10):'2026-03-20',tDate);
-    const elap=dBetween(usr.created_at?usr.created_at.slice(0,10):'2026-03-20',ts());
-    const exp2=+(usr.start_kg-(usr.start_kg-usr.target_kg)*(elap/totalD)).toFixed(1);
-    const diff2=latest?+(latest.weight_kg-exp2).toFixed(1):null;
-    const stC=diff2===null?'var(--mi)':diff2<0?'var(--gd)':diff2<2?'var(--am)':'var(--re)';
-    const stT=diff2===null?'No data':diff2<0?'Ahead of pace':diff2<2?'Slightly behind':'Behind target';
-    document.getElementById('ps-stats').innerHTML=
-      `<div class="ss"><div class="ss-n">${latest?latest.weight_kg:'–'}</div><div class="ss-l">kg now</div></div>`+
-      `<div class="ss"><div class="ss-n" style="color:${lost&&lost>0?'var(--gr)':'var(--mi)'}">${lost&&lost>0?'↓'+lost.toFixed(1):'–'}</div><div class="ss-l">kg lost</div></div>`+
-      `<div class="ss"><div class="ss-n" style="font-size:14px;color:${stC};margin-top:4px;line-height:1.2">${stT}</div><div class="ss-l">vs pace</div></div>`;
-
-    const hasData=(weights||[]).length>0||(habits||[]).length>0||(drinks||[]).length>0;
-    if(!hasData){document.getElementById('ps-body').innerHTML='<div style="text-align:center;margin-top:28px"><div class="nd-t">No data yet</div><div class="nd-s">Nothing logged for '+(usr.name||'this user')+'</div></div>';return;}
-
-    // Drink trend
-    const thisW=(drinks||[]).slice(0,7).reduce((a,b)=>a+(b.nips||0),0);
-    const lastW=(drinks||[]).slice(7,14).reduce((a,b)=>a+(b.nips||0),0);
-    const nipDiff=thisW-lastW;const costSaved=Math.abs(nipDiff)*NIP_COST;
-    let drinkTrend='';
-    if((drinks||[]).length>=7){
-      if(nipDiff<-2)drinkTrend=`<div style="background:var(--gl);border-radius:var(--rs);padding:12px 14px;margin-bottom:12px;font-size:13px;line-height:1.7;color:var(--gd)">Down ${Math.abs(nipDiff)} nips vs last week. $${costSaved} less spent. At this rate, approximately ${Math.round(Math.abs(nipDiff)*0.03*52)} fewer litres of alcohol per year — your liver processes roughly one litre less toxin for every 33 nips cut.</div>`;
-      else if(nipDiff>2)drinkTrend=`<div style="background:var(--rl);border-radius:var(--rs);padding:12px 14px;margin-bottom:12px;font-size:13px;line-height:1.7;color:var(--re)">Up ${nipDiff} nips vs last week. $${costSaved} more spent. Trending in the wrong direction — this directly undermines fat loss, sleep and insulin sensitivity.</div>`;
-    }
-
-    const days=[];for(let i=0;i<7;i++){const dd=new Date();dd.setDate(dd.getDate()-i);days.push(dd.toISOString().slice(0,10));}
-    let body=drinkTrend+'<div style="font-family:var(--sm);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mi);margin-bottom:8px">Last 7 days</div>';
-    const uhDefs=userHabits[uid]||[];
-    days.forEach(date=>{
-      const w=(weights||[]).find(x=>x.logged_date===date);
-      const d=(drinks||[]).find(x=>x.logged_date===date);
-      const hDone=(habits||[]).filter(x=>x.logged_date===date&&x.completed).length;
-      const hAll=uhDefs.length;
-      const nips=(d&&d.nips)||0;const nipC=nips>4?'var(--re)':nips===4?'var(--am)':'var(--mi)';
-      const isToday=date===ts();
-      const noEntry=!w&&!d&&hDone===0;
-      body+=`<div class="day-row"><div class="day-lbl">${isToday?'Today':new Date(date+'T00:00:00').toLocaleDateString('en-AU',{weekday:'short',day:'numeric'})}</div><div style="flex:1">${noEntry?`<div style="font-family:var(--sm);font-size:11px;color:var(--bo);letter-spacing:.04em">Nothing logged</div>`:`<div class="day-kg">${w?w.weight_kg+' kg':'–'}</div><div class="day-meta">${nips>0?`<span style="color:${nipC}">${nips} nips</span> · `:''}${hDone}/${hAll} habits</div>`}</div></div>`;
-    });
-    document.getElementById('ps-body').innerHTML=body;
-  }catch(e){document.getElementById('ps-body').innerHTML='<div style="text-align:center;padding:28px 0"><div class="nd-t">Could not load</div></div>';}
-}
-
-// ── ONBOARDING ────────────────────────────────────────────────────
-let obData={};const OB_STEPS=['basics','dob','habits','targets'];
-function openOnboard(){
-  obData={habits:{},colour:'#5C8A4A'};
-  document.getElementById('ob-title').textContent='Add person';
-  document.getElementById('sh-onboard').classList.add('show');
-  renderObStep(0);
-}
-function renderObStep(idx){
-  const prog=document.getElementById('ob-prog');prog.innerHTML='';
-  OB_STEPS.forEach((s,i)=>{const d=document.createElement('div');d.className='ob-dot'+(i<idx?' done':i===idx?' active':'');prog.appendChild(d);});
-  const body=document.getElementById('ob-body');body.innerHTML='';
-  if(idx===0){
-    body.innerHTML=`
-      <div class="form-row"><div class="form-lbl">Full name</div><input class="inp" id="ob-name" placeholder="e.g. Sarah"></div>
-      <div class="form-row"><div class="form-lbl">Initials (shown on avatar, e.g. SWW)</div><input class="inp" id="ob-ini" placeholder="SWW" maxlength="4"></div>
-      <div class="form-row"><div class="form-lbl">Avatar colour</div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px" id="ob-colours">
-          ${['#5C8A4A','#3A6030','#4A7C8E','#7A6B4E','#6B5C8A','#8A4A4A','#0F0F0F'].map(c=>`<div class="colour-pick${obData.colour===c?' sel':''}" data-c="${c}" style="background:${c}" onclick="obPickColour(this)"></div>`).join('')}
-        </div>
-        <input type="hidden" id="ob-colour" value="${obData.colour}">
-      </div>
-      <div class="form-row"><div class="form-lbl">Do they have a Reframe account?</div>
-        <label style="display:flex;align-items:center;gap:10px;cursor:pointer;padding:10px 0">
-          <div class="toggle${obData.hasReframe!==false?' on':''}" id="ob-reframe-toggle" onclick="this.classList.toggle('on');obData.hasReframe=this.classList.contains('on');document.getElementById('ob-reframe-lbl').textContent=obData.hasReframe?'Yes — include Reframe habit':'No — skip Reframe habit'"></div>
-          <span style="font-size:14px" id="ob-reframe-lbl">${obData.hasReframe!==false?'Yes — include Reframe habit':'No — skip Reframe habit'}</span>
-        </label>
-      </div>
-      <button class="btn" style="width:100%" onclick="obNext(0)">Continue</button>`;
-    obData.hasReframe=true;
-    document.getElementById('ob-reframe-toggle').addEventListener('click',function(){
-      document.getElementById('ob-reframe-lbl').textContent=this.classList.contains('on')?'Yes — include Reframe habit':'No — skip Reframe habit';
-    });
-  }else if(idx===1){
-    body.innerHTML=`
-      <div style="font-size:14px;color:var(--mi);line-height:1.7;margin-bottom:20px">Date of birth unlocks age-aware commentary — personalised science and the occasional well-targeted barb. Optional but strongly recommended.</div>
-      <div class="form-row"><div class="form-lbl">Date of birth</div><input type="date" class="inp" id="ob-dob" value="${obData.dob||''}"></div>
-      <div style="display:flex;gap:10px">
-        <button class="btn-sec" onclick="renderObStep(0)">Back</button>
-        <button class="btn" style="flex:1" onclick="obNext(1)">Continue</button>
-      </div>`;
-  }else if(idx===2){
-    const a=obData.dob?age(obData.dob):null;
-    body.innerHTML=`
-      <div style="font-size:14px;color:var(--mi);line-height:1.7;margin-bottom:20px">Pick the habits that matter. Each one comes with the science behind it. They can be changed in Settings later.</div>
-      <div id="ob-habit-list"></div>
-      <div class="slbl" style="margin-top:16px">Daily steps target</div>
-      <div class="slider-wrap">
-        <div class="slider-val" id="ob-steps-val">${(obData.steps||6000).toLocaleString()}</div>
-        <input type="range" min="2000" max="10000" step="500" value="${obData.steps||6000}" oninput="obStepsSlide(this.value)">
-        <div class="slider-sci" id="ob-steps-sci"></div>
-      </div>
-      <div class="slbl">Daily drinks cap (nips)</div>
-      <div class="slider-wrap">
-        <div class="slider-val" id="ob-drinks-val">${obData.drinksCap||4}</div>
-        <input type="range" min="0" max="12" step="1" value="${obData.drinksCap||4}" oninput="obDrinksSlide(this.value)">
-        <div class="slider-sci" id="ob-drinks-sci"></div>
-      </div>
-      <div style="display:flex;gap:10px;margin-top:16px">
-        <button class="btn-sec" onclick="renderObStep(1)">Back</button>
-        <button class="btn" style="flex:1" onclick="obNext(2)">Continue</button>
-      </div>`;
-    // Render habit toggles
-    const habitList=document.getElementById('ob-habit-list');
-    Object.entries(HABIT_DEFS).forEach(([id,def])=>{
-      if(id==='steps'||id==='drinks')return;// handled by sliders
-      if(id==='reframe'&&!obData.hasReframe)return;
-      const enabled=obData.habits[id]!==false;
-      const row=document.createElement('div');row.className='habit-toggle';
-      row.innerHTML=`<div><div class="ht-name">${def.name.replace(/\{[^}]+\}/g,'…')}</div><div class="ht-freq">${def.freq}</div></div><div class="toggle${enabled?' on':''}" onclick="obToggleHabit('${id}',this)"></div>`;
-      habitList.appendChild(row);
-      if(obData.habits[id]===undefined)obData.habits[id]=true;
-    });
-    obStepsSlide(obData.steps||6000);
-    obDrinksSlide(obData.drinksCap||4);
-  }else if(idx===3){
-    body.innerHTML=`
-      <div class="form-row"><div class="form-lbl">Starting weight (kg)</div><input class="inp inp-num" type="number" id="ob-start" placeholder="e.g. 95" step="0.1" inputmode="decimal" value="${obData.startKg||''}" oninput="obData.startKg=this.value"></div>
-      <div class="form-row"><div class="form-lbl">Target weight (kg)</div><input class="inp inp-num" type="number" id="ob-target" placeholder="e.g. 80" step="0.1" inputmode="decimal" value="${obData.targetKg||''}" oninput="obData.targetKg=this.value"></div>
-      <div class="form-row"><div class="form-lbl">Target date</div><input type="date" class="inp" id="ob-tdate" value="${obData.targetDate||TDATE}" oninput="obData.targetDate=this.value"></div>
-      <div style="display:flex;gap:10px;margin-top:8px">
-        <button class="btn-sec" onclick="renderObStep(2)">Back</button>
-        <button class="btn" style="flex:1" onclick="saveNewUser()">Add to BravoHabit</button>
-      </div>`;
-  }
-}
-function obPickColour(el){document.querySelectorAll('.colour-pick').forEach(x=>x.classList.remove('sel'));el.classList.add('sel');obData.colour=el.dataset.c;document.getElementById('ob-colour').value=el.dataset.c;}
-function obToggleHabit(id,tog){tog.classList.toggle('on');obData.habits[id]=tog.classList.contains('on');}
-function obStepsSlide(v){
-  v=parseInt(v);obData.steps=v;document.getElementById('ob-steps-val').textContent=v.toLocaleString();
-  const sci=document.getElementById('ob-steps-sci');
-  if(v<4000){sci.className='slider-sci warn';sci.textContent=`${v} steps is a start — but research shows sedentary adults (under 5,000 steps/day) have significantly higher visceral fat, cardiovascular risk and insulin resistance. The body was designed to move. Do you want to be Mediocre Joe or Disciplined Daryl?`;}
-  else if(v<6000){sci.className='slider-sci';sci.textContent=`${v} steps/day keeps you in the active range. Healthy adults your age typically average 7,000–8,500 steps. You're within range — consider stretching the target.`;}
-  else if(v<8000){sci.className='slider-sci happy';sci.textContent=`${v} steps/day puts you in the genuinely active category. At this level, visceral fat responds measurably, insulin sensitivity improves and metabolic rate stays elevated throughout the day.`;}
-  else{sci.className='slider-sci happy';sci.textContent=`${v} steps/day. Excellent. This level is associated with significantly better cardiovascular outcomes, lower all-cause mortality and sustained fat loss independent of diet. This is the right call.`;}
-}
-function obDrinksSlide(v){
-  v=parseInt(v);obData.drinksCap=v;document.getElementById('ob-drinks-val').textContent=v;
-  const sci=document.getElementById('ob-drinks-sci');
-  if(v===0){sci.className='slider-sci happy';sci.textContent='Zero nips. Your liver, your sleep, your fat metabolism and your insulin sensitivity will all thank you. This is the highest-leverage single change available to most people.';}
-  else if(v<=2){sci.className='slider-sci happy';sci.textContent=`A cap of ${v} nips/day is a genuinely disciplined target. At this level, fat oxidation impact is minimal and sleep quality remains largely intact. Smart.`;}
-  else if(v<=4){sci.className='slider-sci';sci.textContent=`${v} nips/day. This is the working cap — meaningful accountability without extreme restriction. Note: a standard large glass of wine is 3–5 nips. Count the pour, not the glass.`;}
-  else if(v<=6){sci.className='slider-sci warn';sci.textContent=`${v} nips/day suppresses fat oxidation for most of the day and meaningfully disrupts sleep architecture. You can set this as your cap, but know that the science is clear on the cost.`;}
-  else{sci.className='slider-sci fury';sci.textContent=`${v} nips/day is heavy drinking by any clinical definition. This will undermine every other habit in the app. Are you certain this is the target you want to set for yourself?`;}
-}
-function obNext(idx){
-  if(idx===0){
-    const name=document.getElementById('ob-name').value.trim();
-    const ini=document.getElementById('ob-ini').value.trim().toUpperCase();
-    if(!name||!ini){toast('Please enter a name and initials');return;}
-    obData.name=name;obData.ini=ini;obData.colour=document.getElementById('ob-colour').value||'#5C8A4A';
-  }else if(idx===1){
-    obData.dob=document.getElementById('ob-dob').value||null;
-  }else if(idx===2){
-    // Steps and drinks captured by sliders
-  }
-  renderObStep(idx+1);
-}
-async function saveNewUser(){
-  console.log('saveNewUser start', JSON.stringify(obData));
-  var startEl=document.getElementById('ob-start');
-  var targetEl=document.getElementById('ob-target');
-  var tdateEl=document.getElementById('ob-tdate');
-  console.log('elements:', startEl, targetEl, tdateEl);
-  var startKg=parseFloat(startEl?startEl.value:obData.startKg);
-  var targetKg=parseFloat(targetEl?targetEl.value:obData.targetKg);
-  var targetDate=(tdateEl&&tdateEl.value)?tdateEl.value:(obData.targetDate||TDATE);
-  console.log('values:', startKg, targetKg, targetDate);
-  if(!startKg||isNaN(startKg)){toast('Enter a starting weight');return;}
-  if(!targetKg||isNaN(targetKg)){toast('Enter a target weight');return;}
-  var btn=document.querySelector('#ob-body button.btn');
-  if(btn){btn.disabled=true;btn.textContent='Saving…';}
-  var id=(obData.name||'user').toLowerCase().replace(/[^a-z0-9]/g,'')+'_'+Date.now().toString(36);
-  console.log('new user id:', id);
-  var payload={
-    id:id, display_name:obData.name, start_kg:startKg, target_kg:targetKg,
-    target_date:targetDate, daily_steps:obData.steps||6000,
-    wake_time:'6am', work_time:'9am'
-  };
-  console.log('posting payload:', JSON.stringify(payload));
-  try{
-    var result=await sb('users','POST',payload);
-    console.log('user saved OK:', result);
-  }catch(e){
-    console.error('sb users POST failed:', e.message, e);
-    if(btn){btn.disabled=false;btn.textContent='Add to BravoHabit';}
-    toast('Save failed: '+e.message.slice(0,80));
-    return;
-  }
-  console.log('adding to allUsers local');
-  allUsers.push({
-    id:id, name:obData.name, display_name:obData.name,
-    initials:obData.ini||'?', color:obData.colour||'#5C8A4A',
-    start_kg:startKg, target_kg:targetKg, target_date:targetDate,
-    dob:obData.dob||null, daily_steps:obData.steps||6000
-  });
-  userHabits[id]=[];
-  console.log('closing sheet');
-  closeSheet('sh-onboard');
-  console.log('rendering user screen');
-  renderUserScreen();
-  console.log('done - showing toast');
-  toast((obData.name||'User')+' added. Tap their name to sign in.');
-}
-
-
-
-// ── SETTINGS ──────────────────────────────────────────────────────
-function openSettings(){
-  document.getElementById('sh-settings').classList.add('show');
-  var body=document.getElementById('sh-settings-body');body.innerHTML='';
-  allUsers.forEach(function(usr){
-    var sec=document.createElement('div');sec.style.marginBottom='28px';
-    sec.innerHTML='<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">'
-      +'<div style="width:36px;height:36px;border-radius:50%;background:'+(usr.color||'#5C8A4A')+';display:flex;align-items:center;justify-content:center;font-family:var(--sm);font-size:10px;font-weight:500;color:#fff;letter-spacing:.06em">'+(usr.initials||'?')+'</div>'
-      +'<div style="font-family:var(--sf);font-size:17px;font-weight:700">'+(usr.name||usr.display_name)+'</div></div>'
-      +'<div class="form-row"><div class="form-lbl">Target weight (kg)</div><input class="inp inp-num" type="number" id="set-tgt-'+usr.id+'" value="'+(usr.target_kg||'')+'" step="0.1" inputmode="decimal"></div>'
-      +'<div class="form-row"><div class="form-lbl">Target date</div><input type="date" class="inp" id="set-tdate-'+usr.id+'" value="'+(usr.target_date||TDATE)+'"></div>'
-      +'<div class="form-row"><div class="form-lbl">Daily steps</div><input class="inp inp-num" type="number" id="set-steps-'+usr.id+'" value="'+(usr.daily_steps||6000)+'" inputmode="numeric"></div>'
-      +'<button class="btn" style="width:100%;margin-bottom:8px" onclick="saveSettings(\''+usr.id+'\')">Save '+(usr.name||'settings')+'</button>'
-      +'<div style="height:1px;background:var(--bo);margin-top:8px"></div>';
-    body.appendChild(sec);
-  });
-}
-
-async function saveSettings(uid){
-  var tgt=parseFloat(document.getElementById('set-tgt-'+uid).value);
-  var tdate=document.getElementById('set-tdate-'+uid).value;
-  var steps=parseInt(document.getElementById('set-steps-'+uid).value);
-  if(!tgt){toast('Enter a valid target');return;}
-  try{
-    await sb('users','POST',{id:uid,target_kg:tgt,target_date:tdate||TDATE,daily_steps:steps});
-    var usr=allUsers.find(function(x){return x.id===uid;});
-    if(usr){usr.target_kg=tgt;usr.target_date=tdate;usr.daily_steps=steps;}
-    toast('Settings saved.');
-    renderUserScreen();
-  }catch(e){toast('Could not save — '+e.message.slice(0,40));}
-}
-
 function goLogWeight(){
   closeM('m-honest');
   document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
@@ -1358,30 +981,200 @@ function goLogWeight(){
   renderWeightPage();
 }
 
+// ── TEAM ──────────────────────────────────────────────────────────
+async function loadTeam(){
+  var list=document.getElementById('team-list');
+  list.innerHTML='';
+  USER_ORDER.forEach(function(){var sk=document.createElement('div');sk.className='tskel';list.appendChild(sk);});
+  try{
+    var results=await Promise.all([
+      sb('weight_logs','GET',null,'?order=logged_date.desc&select=user_id,logged_date,weight_kg'),
+      sb('habit_logs','GET',null,'?logged_date=eq.'+ts()+'&select=user_id,habit_id,completed'),
+      sb('drink_logs','GET',null,'?logged_date=eq.'+ts()+'&select=user_id,nips'),
+    ]);
+    var weights=results[0]||[],habits=results[1]||[],drinks=results[2]||[];
+    list.innerHTML='';
+    USER_ORDER.forEach(function(uid){
+      var usr=USERS[uid];
+      var uw=weights.filter(function(w){return w.user_id===uid;}).sort(function(a,b){return b.logged_date.localeCompare(a.logged_date);});
+      var latest=uw[0];
+      var uh=habits.filter(function(h){return h.user_id===uid&&h.completed;});
+      var ud=drinks.find(function(d){return d.user_id===uid;});
+      var totalH=habitsForUser(uid).filter(function(h){return isActiveToday(h.id);}).length;
+      var nips=(ud&&ud.nips)||0;
+      var lost=latest?+(usr.startKg-latest.weight_kg).toFixed(1):null;
+      var daysSince=latest?dBetween(latest.logged_date,ts()):null;
+      var nipC=nips>4?'var(--re)':nips===4?'var(--am)':'var(--gd)';
+      var nipBg=nips>4?'var(--rl)':nips===4?'var(--al)':'var(--gl)';
+      var absent=daysSince!==null&&daysSince>1?' · '+daysSince+'d absent':'';
+      var noData=!latest&&uh.length===0&&nips===0;
+      var statsTxt=noData?'Nothing logged yet':(latest?latest.weight_kg+' kg':'–')+(lost&&lost>0?' · ↓'+lost.toFixed(1)+' kg':'')+' · '+uh.length+'/'+totalH+' habits'+absent;
+      var dots=habitsForUser(uid).filter(function(h){return isActiveToday(h.id);}).map(function(h){
+        return '<div class="tdot" style="background:'+(uh.some(function(x){return x.habit_id===h.id;})?usr.color:'var(--bo)')+'"></div>';
+      }).join('');
+      var card=document.createElement('div');card.className='tmem';
+      card.innerHTML='<div class="tav" style="background:'+usr.color+'">'+usr.initials+'</div>'
+        +'<div style="flex:1;min-width:0">'
+        +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px">'
+        +'<div class="tname">'+usr.name+'</div>'
+        +'<span class="tbadge" style="background:'+nipBg+';color:'+nipC+'">'+nips+' nips</span></div>'
+        +'<div class="tstats">'+statsTxt+'</div>'
+        +'<div class="tdots">'+dots+'</div></div>'
+        +'<div style="color:var(--bo);font-size:18px;margin-left:4px">›</div>';
+      card.onclick=function(){openProfile(uid);};
+      list.appendChild(card);
+    });
+  }catch(e){list.innerHTML='<div class="empty">Could not load — check connection</div>';}
+}
+
+// ── PROFILE SHEET ─────────────────────────────────────────────────
+async function openProfile(uid){
+  var usr=USERS[uid];
+  document.getElementById('ps-av').style.background=usr.color;
+  document.getElementById('ps-av').textContent=usr.initials;
+  document.getElementById('ps-name').textContent=usr.name;
+  document.getElementById('ps-sub').textContent='Target: '+usr.targetKg+' kg · '+usr.targetDate;
+  document.getElementById('ps-body').innerHTML='<div class="spin"></div>';
+  document.getElementById('sh-profile').classList.add('show');
+  try{
+    var results=await Promise.all([
+      sb('weight_logs','GET',null,'?user_id=eq.'+uid+'&order=logged_date.desc&limit=14&select=logged_date,weight_kg'),
+      sb('habit_logs','GET',null,'?user_id=eq.'+uid+'&order=logged_date.desc&select=logged_date,habit_id,completed'),
+      sb('drink_logs','GET',null,'?user_id=eq.'+uid+'&order=logged_date.desc&limit=14&select=logged_date,nips'),
+    ]);
+    var weights=results[0]||[],habits=results[1]||[],drinks=results[2]||[];
+    var latest=weights[0];
+    var lost=latest?+(usr.startKg-latest.weight_kg).toFixed(1):null;
+    var totalD=dBetween('2026-03-20',usr.targetDate);var elap=dBetween('2026-03-20',ts());
+    var exp2=+(usr.startKg-(usr.startKg-usr.targetKg)*(elap/totalD)).toFixed(1);
+    var diff2=latest?+(latest.weight_kg-exp2).toFixed(1):null;
+    var stC=diff2===null?'var(--mi)':diff2<0?'var(--gd)':diff2<2?'var(--am)':'var(--re)';
+    var stT=diff2===null?'No data':diff2<0?'Ahead':diff2<2?'Slightly behind':'Behind target';
+    document.getElementById('ps-stats').innerHTML=
+      '<div class="ss"><div class="ss-n">'+(latest?latest.weight_kg:'–')+'</div><div class="ss-l">kg now</div></div>'
+      +'<div class="ss"><div class="ss-n" style="color:'+(lost&&lost>0?'var(--gr)':'var(--mi)')+'">'+(lost&&lost>0?'↓'+lost.toFixed(1):'–')+'</div><div class="ss-l">kg lost</div></div>'
+      +'<div class="ss"><div class="ss-n" style="font-size:14px;color:'+stC+';margin-top:4px;line-height:1.2">'+stT+'</div><div class="ss-l">vs pace</div></div>';
+    if(!weights.length&&!habits.length&&!drinks.length){
+      document.getElementById('ps-body').innerHTML='<div style="text-align:center;margin-top:28px"><div style="font-family:var(--sf);font-size:18px;font-weight:600;margin-bottom:5px">No data yet</div><div style="font-family:var(--sm);font-size:11px;color:var(--mi);letter-spacing:.05em">Nothing logged for '+usr.name+'</div></div>';
+      return;
+    }
+    // Drink trend
+    var thisW=drinks.slice(0,7).reduce(function(a,b){return a+(b.nips||0);},0);
+    var lastW=drinks.slice(7,14).reduce(function(a,b){return a+(b.nips||0);},0);
+    var nipDiff=thisW-lastW;
+    var drinkTrend='';
+    if(drinks.length>=7){
+      if(nipDiff<-2)drinkTrend='<div style="background:var(--gl);border-radius:var(--rs);padding:12px 14px;margin-bottom:12px;font-size:13px;line-height:1.7;color:var(--gd)">Down '+Math.abs(nipDiff)+' nips vs last week. $'+Math.abs(nipDiff)*NIP_COST+' less spent. At this rate approximately '+Math.round(Math.abs(nipDiff)*0.03*52)+' fewer litres of alcohol per year.</div>';
+      else if(nipDiff>2)drinkTrend='<div style="background:var(--rl);border-radius:var(--rs);padding:12px 14px;margin-bottom:12px;font-size:13px;line-height:1.7;color:var(--re)">Up '+nipDiff+' nips vs last week. $'+(nipDiff*NIP_COST)+' more spent. Trending the wrong direction.</div>';
+    }
+    var days=[];for(var i=0;i<7;i++){var dd=new Date();dd.setDate(dd.getDate()-i);days.push(dd.toISOString().slice(0,10));}
+    var body=drinkTrend+'<div style="font-family:var(--sm);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mi);margin-bottom:8px">Last 7 days</div>';
+    days.forEach(function(date){
+      var w=weights.find(function(x){return x.logged_date===date;});
+      var d=drinks.find(function(x){return x.logged_date===date;});
+      var hDone=habits.filter(function(x){return x.logged_date===date&&x.completed;}).length;
+      var nips=(d&&d.nips)||0;var nipC=nips>4?'var(--re)':nips===4?'var(--am)':'var(--mi)';
+      var noEntry=!w&&!d&&hDone===0;
+      body+='<div class="day-row"><div class="day-lbl">'+(date===ts()?'Today':new Date(date+'T00:00:00').toLocaleDateString('en-AU',{weekday:'short',day:'numeric'}))+'</div>'
+        +'<div style="flex:1">'+(noEntry?'<div style="font-family:var(--sm);font-size:11px;color:var(--bo)">Nothing logged</div>'
+          :'<div class="day-kg">'+(w?w.weight_kg+' kg':'–')+'</div><div class="day-meta">'+(nips>0?'<span style="color:'+nipC+'">'+nips+' nips</span> · ':'')+hDone+'/'+HABITS.length+' habits</div>')
+        +'</div></div>';
+    });
+    document.getElementById('ps-body').innerHTML=body;
+  }catch(e){document.getElementById('ps-body').innerHTML='<div class="empty">Could not load</div>';}
+}
+
+// ── INIT ──────────────────────────────────────────────────────────
 async function initApp(){
   updateChip();
   document.getElementById('app-date').textContent=new Date().toLocaleDateString('en-AU',{weekday:'short',day:'numeric',month:'short'});
   document.getElementById('bd-date').value=ts();
-  await loadUserHabits();
   await Promise.all([loadTodayHabits(),loadTodayNips(),loadWeights()]);
   renderHabits();renderNips();renderHero();
   var tw=weightLogs.find(function(w){return w.logged_date===ts();});
   if(tw)document.getElementById('w-today-line').textContent='Today: '+tw.weight_kg+' kg';
 }
 
+
+// ── SETTINGS ──────────────────────────────────────────────────────
+function timeToInput(t){
+  // Convert "6am" / "4:30am" to HH:MM for time input
+  if(!t)return '06:00';
+  t=t.toLowerCase().trim();
+  var pm=t.indexOf('pm')>-1;
+  t=t.replace('am','').replace('pm','');
+  var parts=t.split(':');
+  var h=parseInt(parts[0]);var m=parseInt(parts[1])||0;
+  if(pm&&h!==12)h+=12;if(!pm&&h===12)h=0;
+  return (h<10?'0':'')+h+':'+(m<10?'0':'')+m;
+}
+function inputToTime(val){
+  // Convert HH:MM back to "6am" style
+  if(!val)return '6am';
+  var parts=val.split(':');var h=parseInt(parts[0]);var m=parseInt(parts[1])||0;
+  var pm=h>=12;var h12=h%12||12;
+  return h12+(m?':'+('0'+m).slice(-2):'')+(pm?'pm':'am');
+}
+function setStepsSlide(v){
+  v=parseInt(v);
+  document.getElementById('set-steps-val').textContent=v.toLocaleString();
+}
+function setDrinksSlide(v){
+  v=parseInt(v);
+  document.getElementById('set-drinks-val').textContent=v;
+}
+function openSettings(){
+  var usr=u();
+  document.getElementById('set-title').textContent=usr.name+' — Settings';
+  document.getElementById('set-sub').textContent='Changes apply immediately';
+  document.getElementById('set-target-kg').value=usr.targetKg||'';
+  document.getElementById('set-start-kg').value=usr.startKg||'';
+  document.getElementById('set-target-date').value=usr.targetDate||'2026-07-14';
+  var steps=usr.steps||6000;
+  document.getElementById('set-steps-range').value=steps;
+  document.getElementById('set-steps-val').textContent=steps.toLocaleString();
+  var drinks=usr.drinksCap||4;
+  document.getElementById('set-drinks-range').value=drinks;
+  document.getElementById('set-drinks-val').textContent=drinks;
+  document.getElementById('set-wake').value=timeToInput(usr.wake);
+  document.getElementById('set-lights-out').value=timeToInput(usr.lightsOut||'11pm');
+  document.getElementById('sh-settings').classList.add('show');
+}
+async function saveSettings(){
+  var usr=u();
+  var targetKg=parseFloat(document.getElementById('set-target-kg').value);
+  var startKg=parseFloat(document.getElementById('set-start-kg').value);
+  var targetDate=document.getElementById('set-target-date').value;
+  var steps=parseInt(document.getElementById('set-steps-range').value);
+  var drinks=parseInt(document.getElementById('set-drinks-range').value);
+  var wake=inputToTime(document.getElementById('set-wake').value);
+  var lightsOut=inputToTime(document.getElementById('set-lights-out').value);
+  if(targetKg)usr.targetKg=targetKg;
+  if(startKg)usr.startKg=startKg;
+  if(targetDate)usr.targetDate=targetDate;
+  usr.steps=steps;usr.drinksCap=drinks;usr.wake=wake;usr.lightsOut=lightsOut;
+  // Save to Supabase
+  try{
+    await sb('users','POST',{
+      id:me,target_kg:targetKg||usr.targetKg,start_kg:startKg||usr.startKg,
+      target_date:targetDate,daily_steps:steps,wake_time:wake,
+      lights_out:lightsOut,drinks_cap:drinks
+    });
+  }catch(e){console.warn('Settings save to DB failed:',e.message);}
+  closeSheet('sh-settings');
+  renderHabits();renderNips();renderHero();renderWeightPage();
+  setTimeout(renderWormChart,50);
+  toast('Settings saved.');
+}
+
+
 // ── BOOT ──────────────────────────────────────────────────────────
-allUsers=SEED_USERS.slice();
 renderUserScreen();
 loadSavedUser();
-if(me&&allUsers.find(function(x){return x.id===me;})){
+if(me&&USERS[me]){
   document.getElementById('us').classList.remove('show');
   initApp();
 }
-// Refresh from Supabase in background
-loadUsers().then(function(){
-  renderUserScreen();
-}).catch(function(e){console.warn('Supabase load failed, using seeds:',e.message);});
-
 </script>
 </body>
 </html>
