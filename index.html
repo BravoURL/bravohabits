@@ -1041,35 +1041,43 @@ function renderHero(){
   var cur=latest.weight_kg;
   var baseKg=usr.startKg||sorted[sorted.length-1].weight_kg||cur;
   var lost=+(baseKg-cur).toFixed(1);
-  // Use pace-based projection (same as weight tab) not linear from start date
+  // Pace-based projection — need at least 3 days span to make a judgement
   var tDate=usr.targetDate||'2026-07-14';
+  var daysLeft=Math.max(1,dBetween(ts(),tDate));
   var recent=sorted.slice().filter(function(w){return dBetween(w.logged_date,ts())<=21;});
-  var diff=0;// default on track
+  var pace=0,hasEnoughData=false;
   if(recent.length>=2){
     var rf=recent[0],rl=recent[recent.length-1];
     var rdays=dBetween(rf.logged_date,rl.logged_date);
-    var pace=rdays>0?(rf.weight_kg-rl.weight_kg)/rdays:0;
-    var daysLeft=Math.max(1,dBetween(ts(),tDate));
-    var projected=pace>0?Math.max(cur-pace*daysLeft,usr.targetKg):cur;
-    // diff = how far projected end is from target (positive = bad)
-    diff=+(projected-usr.targetKg).toFixed(1);
-  } else if(sorted.length===1){
-    // Only one entry — compare to linear expectation from that entry
-    var planStart=sorted[sorted.length-1].logged_date;
-    var totalD=Math.max(1,dBetween(planStart,tDate));
-    var elap=dBetween(planStart,ts());
-    var exp=+(usr.startKg-(usr.startKg-usr.targetKg)*(elap/totalD)).toFixed(1);
-    diff=+(cur-exp).toFixed(1);
+    if(rdays>=3){// need at least 3 days spread to assess pace meaningfully
+      pace=rdays>0?(rf.weight_kg-rl.weight_kg)/rdays:0;
+      hasEnoughData=true;
+    }
   }
   kgEl.textContent=cur.toFixed(1);
   var lostEl=document.getElementById('s-lost');lostEl.textContent=lost>0?lost.toFixed(1):'0.0';lostEl.style.color=lost>0?'var(--gr)':'var(--bk)';
   var streak=0;
   for(var i=0;i<sorted.length;i++){var ex2=new Date();ex2.setDate(ex2.getDate()-i);var ex2s=ex2.getFullYear()+'-'+('0'+(ex2.getMonth()+1)).slice(-2)+'-'+('0'+ex2.getDate()).slice(-2);if(sorted[i]&&sorted[i].logged_date===ex2s)streak++;else break;}
   var stEl=document.getElementById('s-streak');stEl.textContent=streak;stEl.style.color=streak>=7?'var(--gr)':streak>=3?'var(--am)':'var(--bk)';
-  if(diff<=-2){hero.className='hero good';badge.textContent='✓ Ahead of target';kgEl.style.color='var(--gd)';sub.textContent=Math.abs(diff).toFixed(1)+' kg ahead of pace — keep it up';msg.textContent='Ahead by '+Math.abs(diff).toFixed(1)+' kg. That is the compound effect of consistent days.'+(barb?' '+barb:'');}
-  else if(diff<=0){hero.className='hero good';badge.textContent='✓ On track';kgEl.style.color='var(--gd)';sub.textContent='Right on target pace';msg.textContent='On track. Every day you hold this line, 14 July gets closer.'+(barb?' '+barb:'');}
-  else if(diff<=2){hero.className='hero warn';badge.textContent='↗ Slightly behind';kgEl.style.color='var(--am)';sub.textContent=diff.toFixed(1)+' kg behind — fixable this week';msg.textContent=diff.toFixed(1)+' kg behind pace. One clean week closes this. Tighten the habits.'+(barb?' '+barb:'');}
-  else{hero.className='hero bad';badge.textContent='↓ Off track';kgEl.style.color='var(--re)';sub.textContent=diff.toFixed(1)+' kg behind — action needed now';msg.textContent=diff.toFixed(1)+' kg off pace. Something slipped. Identify it and fix it today — not tomorrow.'+(barb?' '+barb:'');}
+  if(!hasEnoughData){
+    // Not enough data to judge — show neutral starting state
+    hero.className='hero';badge.textContent='Getting started';kgEl.style.color='var(--bk)';
+    var toGo=+(cur-(usr.targetKg||cur)).toFixed(1);
+    sub.textContent=toGo>0?toGo.toFixed(1)+' kg to goal · '+daysLeft+' days':'Goal weight reached';
+    msg.textContent='Log your weight daily for at least 3 days and the app will start tracking your pace. The data needs time to be meaningful.'+(barb?' '+barb:'');
+  } else if(pace<=0){
+    // No downward movement — weight flat or going up
+    hero.className='hero warn';badge.textContent='↗ No movement yet';kgEl.style.color='var(--am)';
+    sub.textContent='Weight is flat or rising — check the habits';
+    msg.textContent='The data is not showing a downward trend yet. Review what is and is not happening. The habits drive the number.'+(barb?' '+barb:'');
+  } else {
+    var projected=Math.max(cur-pace*daysLeft,usr.targetKg||0);
+    var diff=+(projected-(usr.targetKg||cur)).toFixed(1);
+    if(diff<=-2){hero.className='hero good';badge.textContent='✓ Ahead of target';kgEl.style.color='var(--gd)';sub.textContent=Math.abs(diff).toFixed(1)+' kg ahead of pace — keep it up';msg.textContent='Ahead by '+Math.abs(diff).toFixed(1)+' kg. That is the compound effect of consistent days.'+(barb?' '+barb:'');}
+    else if(diff<=0){hero.className='hero good';badge.textContent='✓ On track';kgEl.style.color='var(--gd)';sub.textContent='Right on target pace';msg.textContent='On track. Every day you hold this line, 14 July gets closer.'+(barb?' '+barb:'');}
+    else if(diff<=2){hero.className='hero warn';badge.textContent='↗ Slightly behind';kgEl.style.color='var(--am)';sub.textContent=diff.toFixed(1)+' kg behind — fixable this week';msg.textContent=diff.toFixed(1)+' kg behind pace. One clean week closes this. Tighten the habits.'+(barb?' '+barb:'');}
+    else{hero.className='hero bad';badge.textContent='↓ Off track';kgEl.style.color='var(--re)';sub.textContent=diff.toFixed(1)+' kg behind — action needed now';msg.textContent=diff.toFixed(1)+' kg off pace. Something slipped. Identify it and fix it today — not tomorrow.'+(barb?' '+barb:'');}
+  }
 }
 function goLogWeight(){
   closeM('m-honest');
