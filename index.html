@@ -737,21 +737,27 @@ async function loadWeights(){
   catch(e){weightLogs=[];}
 }
 async function logWeightToday(){
+  if(!me){toast('No user selected — tap your name to sign in');return;}
   var inp=document.getElementById('w-today-inp');
+  if(!inp){toast('Input not found');return;}
   var v=parseFloat(inp.value);
-  if(!v||v<40||v>250){toast('Enter a valid weight');return;}
-  if(isLate()){document.getElementById('fury-t').textContent='Logging weight after 11pm?';document.getElementById('fury-b').textContent=FURY_LATE[0];document.getElementById('m-fury').classList.add('show');}
+  if(!v||v<40||v>250){toast('Enter a valid weight (e.g. 95.4)');return;}
+  toast('Saving...');
   try{
     await sb('weight_logs','POST',{user_id:me,logged_date:ts(),weight_kg:+v.toFixed(1)});
-    inp.value='';await loadWeights();renderHero();
+    inp.value='';
+    await loadWeights();
+    renderHero();
     document.getElementById('w-today-line').textContent='Today: '+v.toFixed(1)+' kg';
     if(!todayH['weigh']){
       todayH['weigh']=true;
-      await sb('habit_logs','POST',{user_id:me,logged_date:ts(),habit_id:'weigh',completed:true});
+      try{await sb('habit_logs','POST',{user_id:me,logged_date:ts(),habit_id:'weigh',completed:true});}catch(e2){}
       renderHabits();
     }
     toast(v.toFixed(1)+' kg logged.');
-  }catch(e){toast('Could not save: '+e.message.slice(0,50));}
+  }catch(e){
+    toast('Error: '+e.message.slice(0,80));
+  }
 }
 async function logWeight(dateOverride){
   var inp=document.getElementById(dateOverride?'bd-kg':'w-in');
