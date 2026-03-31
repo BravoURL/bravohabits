@@ -52,6 +52,11 @@ body{padding-bottom:calc(var(--nav)+env(safe-area-inset-bottom,0px))}
 .card{background:var(--wh);border:1px solid var(--bo);border-radius:var(--r);padding:16px 18px;margin-bottom:10px;box-shadow:var(--sh)}
 .slbl{font-family:var(--sm);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mi);margin:16px 0 8px}
 .slbl:first-child{margin-top:0}
+.form-lbl{font-family:var(--sm);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--mi)}
+.inp{background:var(--wm);border:1px solid var(--bo);border-radius:var(--rs);color:var(--bk);font-family:var(--ss);font-size:15px;padding:11px 13px;outline:none;width:100%}
+.inp:focus{border-color:var(--gr)}
+.inp-num{font-family:var(--sf);font-size:22px;text-align:center;-moz-appearance:textfield}
+.inp-num::-webkit-outer-spin-button,.inp-num::-webkit-inner-spin-button{-webkit-appearance:none}
 
 /* HERO */
 .hero{border-radius:18px;padding:22px 18px;margin-bottom:12px;border:1px solid var(--bo);background:var(--wm)}
@@ -231,7 +236,7 @@ body{padding-bottom:calc(var(--nav)+env(safe-area-inset-bottom,0px))}
     <div class="nip-row">
       <div>
         <div class="nip-big" id="nip-num">0</div>
-        <div class="nip-unit">of 4 cap</div>
+        <div class="nip-unit">of <span id="nip-cap">4</span> cap</div>
       </div>
       <div class="nip-ctrl">
         <button class="nip-btn" onclick="changeNips(1)">+</button>
@@ -348,8 +353,8 @@ body{padding-bottom:calc(var(--nav)+env(safe-area-inset-bottom,0px))}
 <!-- SETTINGS SHEET -->
 <div class="sh-ov" id="sh-settings">
   <div class="sheet">
-    <div class="handle"></div>
-    <div class="sheet-head" style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px 14px">
+    <div class="sh-handle"></div>
+    <div class="sh-head" style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px 14px">
       <div id="set-title" style="font-family:var(--sf);font-size:20px;font-weight:700">Settings</div>
       <div id="set-sub" style="font-family:var(--sm);font-size:11px;color:var(--mi);margin-top:2px;letter-spacing:.03em"></div>
       <button onclick="closeSheet('sh-settings')" style="background:var(--wm);border:1px solid var(--bo);border-radius:50%;width:32px;height:32px;cursor:pointer;color:var(--mi);font-size:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0">×</button>
@@ -414,8 +419,8 @@ var USERS={
   greg: {id:'greg', name:'Greg Wallis', initials:'GTW',color:'#7A6B4E',startKg:105,targetKg:105,targetDate:'2026-07-14',steps:6000,wake:'5am',work:'6am',dob:'1993-03-12',reframe:true},
   brent:   {id:'brent',   name:'Brent Wallis',        initials:'BWW',color:'#4A7C8E',startKg:96, targetKg:89, targetDate:'2026-07-14',steps:6000,wake:'5am',  work:'6am',dob:'1995-01-26',reframe:true, lightsOut:'11pm',drinksCap:4},
   gregrowe:{id:'gregrowe',name:'Greg Rowe',    initials:'GWR',color:'#6B5C8A',startKg:88, targetKg:88, targetDate:'2026-07-14',steps:7500,wake:'4:30am',work:'6am',dob:null,       reframe:false,lightsOut:'10pm',drinksCap:1},
-  elliot:  {id:'elliot',  name:'Elliot Slack', initials:'EJS',color:'#3A6B8A',startKg:77, targetKg:76, targetDate:'2026-07-14',steps:6000,wake:'6:30am',work:'9am',dob:null,       reframe:false,lightsOut:'10pm',drinksCap:4},
-  arne:    {id:'arne',    name:'Arne Hornsey', initials:'ASH',color:'#8A4A4A',startKg:null,targetKg:null,targetDate:null,        steps:6000,wake:'6am',  work:'9am',dob:null,       reframe:false,lightsOut:'11pm',drinksCap:22},
+  elliot:  {id:'elliot',  name:'Elliot Slack', initials:'EJS',color:'#3A6B8A',startKg:77, targetKg:77, targetDate:'2026-07-14',steps:6000,wake:'6am',  work:'9am',dob:'1998-10-01',reframe:false,lightsOut:'11pm',drinksCap:4},
+  arne:    {id:'arne',    name:'Arne Hornsey', initials:'ASH',color:'#8A4A4A',startKg:80,  targetKg:80,  targetDate:'2026-07-14',steps:6000,wake:'6am',  work:'9am',dob:'1988-04-01',reframe:false,lightsOut:'11pm',drinksCap:4},
 };
 var USER_ORDER=['arne','bill','brent','elliot','gregrowe','greg','leon'];
 
@@ -469,7 +474,7 @@ var FURY_ABSENT=['{days} days without logging. The plan requires daily data. Wit
 var AFFIRM=['Please solemnly confirm that {n} nips is accurate. Did you count every pour? That wine glass might have been 4 nips, not 1. Did you forget a roadie? Think carefully.','You know this is nips — not glasses, right? You can\'t pour 4 glasses at 4 nips each and log 4 nips guilt-free. We\'re onto that. Is {n} really the number?','{n} nips. Before you confirm — stretch your mind back through the evening. Was there anything missed? Honesty here is the whole point.'];
 
 // ── STATE ─────────────────────────────────────────────────────────
-var me=null, todayH={}, todayNips=0, weightLogs=[], pendingNip=false, cdTimer=null;
+var me=null, todayH={}, todayNips=0, weightLogs=[];
 
 // ── UTILS ─────────────────────────────────────────────────────────
 function ts(){return new Date().toISOString().slice(0,10);}
@@ -547,7 +552,6 @@ function toast(msg,dur){
 }
 function closeM(id){
   document.getElementById(id).classList.remove('show');
-  if(id==='m-reframe'&&cdTimer){clearInterval(cdTimer);cdTimer=null;}
 }
 function closeSheet(id){document.getElementById(id).classList.remove('show');}
 
@@ -555,13 +559,13 @@ function closeSheet(id){document.getElementById(id).classList.remove('show');}
 
 // ── PER-USER HABIT CONFIG ─────────────────────────────────────────
 var USER_HABITS={
-  bill:     ['sleep','wake','work','train','steps','reframe','weigh','drinks','record'],
-  leon:     ['sleep','wake','work','train','steps','reframe','weigh','drinks','record'],
-  greg:     ['sleep','wake','work','train','steps','reframe','weigh','drinks','record'],
-  brent:    ['sleep','wake','work','train','steps','reframe','weigh','drinks','record'],
-  gregrowe: ['sleep','wake','steps','weigh','drinks','record'],
-  elliot:   ['sleep','wake','steps','weigh','drinks','record'],
-  arne:     ['sleep','wake','steps','drinks','record'],
+  bill:     ['sleep','wake','work','steps','weigh','record'],
+  leon:     ['sleep','wake','work','steps','weigh','record'],
+  greg:     ['sleep','wake','work','steps','weigh','record'],
+  brent:    ['sleep','wake','work','steps','weigh','record'],
+  gregrowe: ['sleep','wake','steps','weigh','record'],
+  elliot:   ['sleep','wake','steps','weigh','record'],
+  arne:     ['sleep','wake','steps','weigh','record'],
 };
 
 function habitsForUser(uid){
@@ -681,16 +685,9 @@ async function loadTodayNips(){
 }
 async function changeNips(delta){
   if(delta>0&&isLate()){
-    document.getElementById('fury-t').textContent='Adding drinks after 11pm?';
+    document.getElementById('fury-t').textContent='Adding drinks after lights-out?';
     document.getElementById('fury-b').textContent=FURY_LATE[Math.floor(Math.random()*FURY_LATE.length)];
     document.getElementById('m-fury').classList.add('show');
-  }
-  if(delta>0&&!todayH['reframe']){
-    pendingNip=true;
-    document.getElementById('craving-tip').textContent=CRAVINGS[Math.floor(Math.random()*CRAVINGS.length)];
-    startCountdown();
-    document.getElementById('m-reframe').classList.add('show');
-    return;
   }
   await saveNips(Math.max(0,Math.min(22,todayNips+delta)));
 }
@@ -701,10 +698,12 @@ async function saveNips(n){
 function renderNips(){
   var n=todayNips;
   var el=document.getElementById('nip-num');el.textContent=n;
-  el.style.color=n>4?'var(--re)':n===4?'var(--am)':'var(--bk)';
+  var cap=u().drinksCap!=null?u().drinksCap:4;
+  document.getElementById('nip-cap').textContent=cap;
+  el.style.color=n>cap?'var(--re)':n===cap?'var(--am)':'var(--bk)';
   var fill=document.getElementById('nip-fill');
-  fill.style.width=Math.min(100,(n/4)*100)+'%';
-  fill.style.background=n>4?'var(--re)':n===4?'#C4773A':'var(--gr)';
+  fill.style.width=cap>0?Math.min(100,(n/cap)*100)+'%':'0%';
+  fill.style.background=n>cap?'var(--re)':n===cap?'#C4773A':'var(--gr)';
   var sci=document.getElementById('nip-sci');
   sci.textContent=NIP_SCI[Math.min(n,NIP_SCI.length-1)];
   sci.style.color=n>4?'var(--re)':n===4?'var(--am)':'var(--mi)';
@@ -963,7 +962,7 @@ function renderHero(){
     document.getElementById('s-lost').textContent='–';document.getElementById('s-streak').textContent='–';return;
   }
   var cur=latest.weight_kg;var lost=+(usr.startKg-cur).toFixed(1);
-  var totalD=dBetween('2026-03-20',usr.targetDate);var elap=dBetween('2026-03-20',ts());
+  var planStart=sorted.length?sorted[sorted.length-1].logged_date:'2026-03-20';var totalD=dBetween(planStart,usr.targetDate||'2026-07-14');var elap=dBetween(planStart,ts());
   var exp=+(usr.startKg-(usr.startKg-usr.targetKg)*(elap/totalD)).toFixed(1);
   var diff=+(cur-exp).toFixed(1);
   kgEl.textContent=cur.toFixed(1);
@@ -1049,7 +1048,7 @@ async function openProfile(uid){
     var weights=results[0]||[],habits=results[1]||[],drinks=results[2]||[];
     var latest=weights[0];
     var lost=latest?+(usr.startKg-latest.weight_kg).toFixed(1):null;
-    var totalD=dBetween('2026-03-20',usr.targetDate);var elap=dBetween('2026-03-20',ts());
+    var planStart=sorted.length?sorted[sorted.length-1].logged_date:'2026-03-20';var totalD=dBetween(planStart,usr.targetDate||'2026-07-14');var elap=dBetween(planStart,ts());
     var exp2=+(usr.startKg-(usr.startKg-usr.targetKg)*(elap/totalD)).toFixed(1);
     var diff2=latest?+(latest.weight_kg-exp2).toFixed(1):null;
     var stC=diff2===null?'var(--mi)':diff2<0?'var(--gd)':diff2<2?'var(--am)':'var(--re)';
