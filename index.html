@@ -22,7 +22,7 @@ input,textarea{-webkit-user-select:auto;user-select:auto}
   --shm:0 8px 24px rgba(0,0,0,.10);
 }
 html,body{background:var(--wm);color:var(--bk);font-family:var(--ss);font-size:15px;line-height:1.5;min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-body{padding-bottom:calc(var(--nav)+env(safe-area-inset-bottom,16px))}
+body{padding-bottom:calc(var(--nav)+env(safe-area-inset-bottom,0px)+48px)}
 
 /* ── USER SCREEN ── */
 #us{position:fixed;inset:0;background:var(--bk);z-index:200;display:none;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;gap:0}
@@ -51,7 +51,7 @@ body{padding-bottom:calc(var(--nav)+env(safe-area-inset-bottom,16px))}
 .nb.active{color:var(--gr)}
 
 /* ── PAGES ── */
-.page{display:none;max-width:480px;margin:0 auto;padding:0 0 16px}
+.page{display:none;max-width:480px;margin:0 auto;padding:0 0 40px}
 .page.active{display:block}
 
 /* ── DATE STRIP ── */
@@ -106,7 +106,7 @@ body{padding-bottom:calc(var(--nav)+env(safe-area-inset-bottom,16px))}
 .h-info-btn:active{background:var(--bo)}
 
 /* ── STREAK DOTS ROW ── */
-.streak-row{display:flex;padding:0 14px 12px;gap:0}
+.streak-row{display:flex;padding:4px 14px 12px;gap:0;align-items:flex-end}
 .s-wrap{display:flex;flex-direction:column;align-items:center;gap:3px;flex:1}
 .s-dot{width:11px;height:11px;border-radius:50%;transition:background .2s}
 .s-lbl{font-family:var(--sm);font-size:8px;font-weight:600;letter-spacing:.04em;color:var(--mi);transition:color .2s}
@@ -193,7 +193,7 @@ body{padding-bottom:calc(var(--nav)+env(safe-area-inset-bottom,16px))}
 .tskel{animation:shimmer 1.4s ease-in-out infinite}
 
 /* ── SETTINGS PAGE ── */
-.settings-page{padding:0 16px 24px}
+.settings-page{padding:0 16px 0}
 .scard{background:var(--wh);border:1px solid var(--bo);border-radius:var(--r);overflow:hidden;margin-bottom:12px;box-shadow:var(--sh)}
 .scard-head{padding:12px 16px;border-bottom:1px solid var(--bo);font-family:var(--sm);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--mi);font-weight:500}
 .srow{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--bo)}
@@ -272,6 +272,11 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
 .spin{width:30px;height:30px;border:3px solid var(--bo);border-top-color:var(--gr);border-radius:50%;animation:rot .8s linear infinite;margin:40px auto}
 @keyframes rot{to{transform:rotate(360deg)}}
 .empty{text-align:center;padding:32px 0;color:var(--mi);font-family:var(--sm);font-size:11px;letter-spacing:.06em}
+.burst{position:fixed;pointer-events:none;z-index:9999;font-size:28px;animation:burst-anim .8s ease-out forwards}
+@keyframes burst-anim{0%{transform:scale(0) translateY(0);opacity:1}60%{transform:scale(1.4) translateY(-60px);opacity:1}100%{transform:scale(1) translateY(-120px);opacity:0}}
+.confetti-piece{position:fixed;pointer-events:none;z-index:9998;width:8px;height:8px;border-radius:2px;animation:confetti-fall linear forwards}
+@keyframes confetti-fall{0%{transform:translateY(-20px) rotate(0deg);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
+.nav-spacer{height:90px;flex-shrink:0}
 .chip-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
 .chip-sm{font-family:var(--sm);font-size:10px;padding:4px 10px;border-radius:10px;border:1px solid var(--bo);background:var(--wm);cursor:pointer;color:var(--mi);transition:all .15s;letter-spacing:.04em}
 .chip-sm.active{background:var(--bk);color:var(--wh);border-color:var(--bk)}
@@ -301,6 +306,12 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
 <div id="page-today" class="page active">
   <div class="date-strip" id="date-strip"></div>
   <div id="hero-wrap"></div>
+  <div class="sec-lbl">Weight</div>
+  <div class="wlog-quick">
+    <input class="w-inp" type="number" id="w-today-inp" placeholder="kg — e.g. 95.4" step="0.1" min="40" max="250" inputmode="decimal">
+    <button class="btn" onclick="logWeightToday()">Log</button>
+  </div>
+  <div id="w-today-line" style="font-family:var(--sm);font-size:11px;color:var(--mi);letter-spacing:.03em;padding:6px 16px 4px;text-align:center"></div>
   <div class="sec-lbl">Drinks</div>
   <div class="drinks-card" id="drinks-card">
     <div class="drinks-header">
@@ -324,12 +335,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
   </div>
   <div class="sec-lbl">Habits</div>
   <div class="habit-list" id="habit-list"></div>
-  <div class="sec-lbl">Weight</div>
-  <div class="wlog-quick">
-    <input class="w-inp" type="number" id="w-today-inp" placeholder="kg — e.g. 95.4" step="0.1" min="40" max="250" inputmode="decimal">
-    <button class="btn" onclick="logWeightToday()">Log</button>
-  </div>
-  <div id="w-today-line" style="font-family:var(--sm);font-size:11px;color:var(--mi);letter-spacing:.03em;padding:6px 16px 0;text-align:center"></div>
+  <div class="nav-spacer"></div>
 </div>
 
 <!-- WEIGHT PAGE -->
@@ -359,6 +365,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
     </div>
     <div id="w-log"><div class="empty">No weights logged yet</div></div>
   </div>
+  <div class="nav-spacer"></div>
 </div>
 
 <!-- TEAM PAGE -->
@@ -366,11 +373,11 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
   <div class="lb-card" id="lb-card">
     <div class="lb-head">
       <span class="lb-title">Leaderboard</span>
-      <span class="lb-period">Rolling 7 days</span>
+      <span class="lb-period">Rolling 7 days — tap a name</span>
     </div>
     <div id="lb-body"><div class="spin"></div></div>
   </div>
-  <div class="mem-list" id="mem-list"></div>
+  <div class="nav-spacer"></div>
 </div>
 
 <!-- SETTINGS PAGE -->
@@ -550,6 +557,20 @@ var AGE_BARBS={
   '60s+':['At {age}, you are running the most important decade of maintenance your body will ever need.','The data on health outcomes at your age is clear: the habits in this app predict quality of life at 80. Not optional.','Every great man is defined by what he does when no one is watching. At {age}, you know this better than anyone.'],
 };
 var FURY_LATE=['It is past lights-out. Logging at this hour confirms the pattern. Late nights elevate cortisol, wreck sleep and make tomorrow harder.','Every hour past lights-out costs you tomorrow morning. Ghrelin spikes, leptin drops, insulin sensitivity worsens.'];
+var LATE_SLEEP_TICK=[
+  'You just ticked lights out — at {time}. Bold. Your peers can see this timestamp.',
+  'Lights out ticked at {time}. Sure. Totally believable. The data says otherwise.',
+  'Ticking lights out while clearly still awake at {time}. Points for audacity.',
+  'Lights out at {time}? The app is not fooled. Your liver is not resting. Your cortisol is not either.',
+  '{time} and you are logging lights out. This is the definition of lying to yourself. And your peers.',
+];
+var LATE_ALREADY_TICKED=[
+  'Lights out was ticked. It is now {time}. One of these things is not true.',
+  'You claimed lights out. It is {time}. Your phone disagrees. Your cortisol disagrees.',
+  'The app notes that lights out was logged, and it is now {time}. Just putting that out there for your peers to see.',
+  '{time}. Lights out already ticked. Either you sleep with your eyes open or someone is not being entirely honest.',
+  'Good morning/evening. It is {time}. You said you were in bed. The app has receipts.',
+];
 var FURY_ABSENT=['{days} days without logging. The plan requires daily data. Without it there is no accountability — just intention. Intention without action is nothing.','{days} days without a single entry. This is how plans die — not dramatically, but quietly through small omissions that compound.'];
 var AFFIRM=['Please confirm {n} nips is accurate. That wine glass might have been 5 nips. Did you forget a roadie? Think carefully.','You know this is nips — not glasses. Is {n} really the number?','{n} nips. Before you confirm — stretch your mind back through the evening. Was anything missed?'];
 
@@ -592,7 +613,7 @@ function fmtTime(t){
 }
 function getDayCap(dow){
   var dc=state.dayConfig[dow];
-  if(dc&&dc.drinksCap!==undefined&&dc.drinksCap!==null)return dc.drinksCap;
+  if(dc&&dc.drinksCap!==undefined&&dc.drinksCap!==null)return dc.drinksCap;// 0=AFD
   return u().drinksCap!=null?u().drinksCap:4;
 }
 function getDaySteps(dow){
@@ -660,6 +681,7 @@ function showPage(id,btn){
   if(btn)btn.classList.add('active');
   if(id==='team')loadTeam();
   if(id==='weight'){renderWeightPage();setTimeout(renderWormChart,60);}
+  if(id==='today')setTimeout(checkLateNight,500);
   if(id==='settings')renderSettings();
 }
 function toast(msg,dur){
@@ -706,7 +728,7 @@ async function loadDayData(){
       sb('drink_logs','GET',null,'?user_id=eq.'+me+'&logged_date=eq.'+date+'&select=nips,is_afd'),
     ]);
     state.todayH={};
-    (results[0]||[]).forEach(function(r){state.todayH[r.habit_id]={completed:r.completed,note:r.note||''};});
+    (results[0]||[]).forEach(function(r){state.todayH[r.habit_id]={completed:r.completed,note:r.note||'',declared:true};});
     var dr=results[1]&&results[1][0];
     state.todayNips=dr?dr.nips||0:0;
     state.isAFD=dr?!!dr.is_afd:false;
@@ -834,7 +856,7 @@ function renderDrinks(){
   var n=state.todayNips;
   var dow=getTodayDow();
   var cap=getDayCap(dow);
-  var isAFD=state.isAFD||(cap===-1);
+  var isAFD=state.isAFD||(cap===0);
   var num=document.getElementById('nip-num');
   var afdBtn=document.getElementById('afd-btn');
   var nipSci=document.getElementById('nip-sci');
@@ -910,7 +932,7 @@ async function toggleAFD(){
   if(state.isAFD)state.todayNips=0;
   renderDrinks();
   try{await sb('drink_logs','POST',{user_id:me,logged_date:state.viewDate,nips:0,is_afd:state.isAFD});}catch(e){}
-  if(state.isAFD)toast('AFD logged. Well done.');
+  if(state.isAFD){celebrate('afd');}
 }
 async function confirmDrinks(yes){
   closeM('m-dc');
@@ -946,9 +968,12 @@ async function renderHabits(){
     var done=hstate.completed;
     var hcolor=getHabitColor(h);
     var card=document.createElement('div');
-    card.className='hcard'+(done?' done':'');
-    if(done)card.style.background=hcolor+'18';
-    if(done)card.style.borderColor=hcolor+'33';
+    var declared=hstate.declared===true;
+    var notDone=declared&&!done;
+    card.className='hcard'+(done?' done':notDone?' fail':'');
+    card.id='hcard-'+h.id;
+    if(done){card.style.background=hcolor+'15';card.style.borderColor=hcolor+'30';}
+    else if(notDone){card.style.background='var(--rl)';card.style.borderColor='rgba(138,42,42,.2)';}
 
     // Streak
     var streak=0;
@@ -958,60 +983,107 @@ async function renderHabits(){
       else break;
     }
 
-    // Row
+    // Row — done/not-done binary
     var row=document.createElement('div');row.className='hcard-row';
-    var ckHtml='<div class="hck'+(done?' done':'')+'" style="'+(done?'background:'+hcolor+';border-color:'+hcolor:'border-color:var(--bo)')+'" onclick="toggleHabit(\''+h.id+'\')">'
-      +'<svg viewBox="0 0 14 14" fill="none"><polyline points="2,7 6,11 12,3" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
-      +'</div>';
-    var noteHtml=hstate.note?'<div class="h-note-preview">📝 '+hstate.note+'</div>':'';
-    var streakHtml=streak>1?'<span style="font-family:var(--sm);font-size:10px;font-weight:500;color:'+hcolor+';margin-left:4px">🔥 '+streak+'</span>':'';
-    row.innerHTML=ckHtml
-      +'<div class="h-info" onclick="toggleHabit(\''+h.id+'\')" style="cursor:pointer">'
-      +'<div class="h-name'+(done?' done':'')+'">'+habitName(h,me)+streakHtml+'</div>'
-      +(h.freq!=='Daily'?'<div style="font-family:var(--sm);font-size:10px;color:var(--mi);margin-top:1px">'+h.freq+'</div>':'')
-      +noteHtml
-      +'</div>'
-      +'<div class="h-actions">'
-      +(h.sci?'<button class="h-info-btn" onclick="openSci(\''+h.id+'\')">ⓘ</button>':'')
-      +'<button class="h-info-btn" onclick="openNote(\''+h.id+'\','+done+')" title="Note">📝</button>'
-      +'</div>';
+    var declared=hstate.declared===true;
+    var notDone=declared&&!done;
+    var streakHtml=streak>1?'<span style="font-family:var(--sm);font-size:10px;font-weight:500;color:'+hcolor+';margin-left:6px">🔥 '+streak+'</span>':'';
+    var noteHtml=hstate.note?'<div style="font-size:12px;color:var(--re);font-style:italic;margin-top:3px">📝 '+hstate.note+'</div>':'';
+    // Tick = always green, Cross = always red. Ghost when undeclared.
+    var hid2=h.id;
+    var GR='#4A7A38';var RE='#8A2A2A';
+    var tickStyle,crossStyle,tickInner,crossInner;
+    if(done){
+      tickStyle='background:'+GR+';border:2px solid '+GR;
+      crossStyle='background:transparent;border:1.5px solid #E4E1DB';
+      tickInner='<svg width="13" height="13" viewBox="0 0 13 13" fill="none"><polyline points="2,6.5 5.5,10 11,3" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      crossInner='<svg width="11" height="11" viewBox="0 0 11 11" fill="none"><line x1="2" y1="2" x2="9" y2="9" stroke="#E4E1DB" stroke-width="1.5" stroke-linecap="round"/><line x1="9" y1="2" x2="2" y2="9" stroke="#E4E1DB" stroke-width="1.5" stroke-linecap="round"/></svg>';
+    } else if(notDone){
+      tickStyle='background:transparent;border:1.5px solid #E4E1DB';
+      crossStyle='background:'+RE+';border:2px solid '+RE;
+      tickInner='<svg width="13" height="13" viewBox="0 0 13 13" fill="none"><polyline points="2,6.5 5.5,10 11,3" stroke="#E4E1DB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      crossInner='<svg width="11" height="11" viewBox="0 0 11 11" fill="none"><line x1="2" y1="2" x2="9" y2="9" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><line x1="9" y1="2" x2="2" y2="9" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg>';
+    } else {
+      // Undeclared — green ghost tick, red ghost cross
+      tickStyle='background:transparent;border:1.5px solid '+GR;
+      crossStyle='background:transparent;border:1.5px solid '+RE;
+      tickInner='<svg width="13" height="13" viewBox="0 0 13 13" fill="none"><polyline points="2,6.5 5.5,10 11,3" stroke="'+GR+'" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      crossInner='<svg width="11" height="11" viewBox="0 0 11 11" fill="none"><line x1="2" y1="2" x2="9" y2="9" stroke="'+RE+'" stroke-width="1.8" stroke-linecap="round"/><line x1="9" y1="2" x2="2" y2="9" stroke="'+RE+'" stroke-width="1.8" stroke-linecap="round"/></svg>';
+    }
+    row.innerHTML='<div style="display:flex;gap:6px;flex-shrink:0;align-items:center">'      +'<div class="hbtn-tick" style="width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;'+tickStyle+'" onclick="setHabitDone(\''+hid2+'\',true)">'+tickInner+'</div>'      +'<div class="hbtn-cross" style="width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;'+crossStyle+'" onclick="setHabitDone(\''+hid2+'\',false)">'+crossInner+'</div>'      +'</div>'      +'<div class="h-info">'      +'<div class="h-name" style="'+(done?'color:var(--mi)':notDone?'color:var(--re)':'')+'">'+habitName(h,me)+streakHtml+'</div>'      +(h.freq!=='Daily'?'<div style="font-family:var(--sm);font-size:10px;color:var(--mi);margin-top:1px">'+h.freq+'</div>':'')      +noteHtml      +'</div>'      +'<div class="h-actions">'      +(h.sci?'<button class="h-info-btn" onclick="openSci(\''+hid2+'\')">ⓘ</button>':'')      +'</div>';
     card.appendChild(row);
 
-    // Streak dots row
+    // Streak bar row — bar chart style, taller = done
     var dotRow=document.createElement('div');dotRow.className='streak-row';
-    weekDates.forEach(function(d){
+    weekDates.forEach(function(d,di){
       var dd=new Date(d+'T12:00:00');
       var completed=histLogs[h.id]&&histLogs[h.id][d];
       var isToday=d===ts();
-      var wrap=document.createElement('div');wrap.className='s-wrap';
-      var dot=document.createElement('div');dot.className='s-dot';
-      dot.style.background=completed?hcolor:'var(--bo)';
-      if(isToday)dot.style.boxShadow='0 0 0 2px var(--bo)';
-      var lbl=document.createElement('div');lbl.className='s-lbl'+(isToday?' today':'');
+      var notDoneDay=histLogs[h.id]&&histLogs[h.id][d]===false;
+      var wrap=document.createElement('div');
+      wrap.style.cssText='display:flex;flex-direction:column;align-items:center;gap:2px;flex:1;cursor:default';
+      var barH=completed?22:8;
+      var barColor=completed?hcolor:notDoneDay?'var(--re)':'var(--bo)';
+      var bar=document.createElement('div');
+      bar.style.cssText='width:100%;max-width:24px;border-radius:3px 3px 0 0;transition:height .3s;'
+        +'height:'+barH+'px;background:'+barColor+';'
+        +(isToday?'box-shadow:0 0 0 2px '+hcolor+'60':'')
+        +(completed?'opacity:1':'opacity:'+(isToday?'0.5':'0.3'));
+      var lbl=document.createElement('div');
+      lbl.style.cssText='font-family:var(--sm);font-size:8px;font-weight:'+(isToday?'700':'400')+';'
+        +'color:'+(isToday?'var(--bk)':'var(--mi)')+';letter-spacing:.04em';
       lbl.textContent=DAY_NAMES[dd.getDay()];
-      wrap.appendChild(dot);wrap.appendChild(lbl);
+      wrap.appendChild(bar);wrap.appendChild(lbl);
       dotRow.appendChild(wrap);
     });
+    // Streak count badge
+    if(streak>0){
+      var streakBadge=document.createElement('div');
+      streakBadge.style.cssText='position:absolute;top:10px;right:14px;font-family:var(--sm);font-size:11px;font-weight:600;color:'+hcolor+';display:flex;align-items:center;gap:3px';
+      streakBadge.innerHTML='🔥 '+streak+(streak>=7?' 🏆':streak>=14?' 💪':'');
+    }
+    card.style.position='relative';
     card.appendChild(dotRow);
     list.appendChild(card);
   });
 }
 
-async function toggleHabit(hid){
-  var hstate=state.todayH[hid]||{completed:false,note:''};
-  var now=!hstate.completed;
-  if(hid==='weigh'&&now){
+async function setHabitDone(hid,done){
+  var hstate=state.todayH[hid]||{completed:false,note:'',declared:undefined};
+  if(hid==='weigh'&&done){
     var logged=state.weightLogs.some(function(w){return w.logged_date===state.viewDate;});
     if(!logged){document.getElementById('m-honest').classList.add('show');return;}
   }
-  state.todayH[hid]={completed:now,note:hstate.note||''};
-  try{await sb('habit_logs','POST',{user_id:me,logged_date:state.viewDate,habit_id:hid,completed:now,note:hstate.note||null});}catch(e){}
-  renderHabits();
-  if(now&&Object.keys(state.todayH).filter(function(k){return state.todayH[k].completed;}).length===allHabitsForUser().filter(function(h){return isActiveOnDate(h.id,state.viewDate);}).length){
-    toast('All done. That is what execution looks like.');
-  }else{
-    toast(now?'Logged.':'Unmarked.');
+  // Sleep habit ticked after lights-out — shame them but still allow
+  if(hid==='sleep'&&done&&state.viewDate===ts()){
+    var usr2=u();var lo2=usr2.lightsOut||'23:00';
+    var loH2=parseInt(lo2.split(':')[0]);var loM2=parseInt(lo2.split(':')[1]||0);
+    var now2=new Date();var nH=now2.getHours();var nM=now2.getMinutes();
+    var late=(nH>loH2)||(nH===loH2&&nM>=loM2)||(nH<4);
+    if(late){
+      var t2=nH+':'+(nM<10?'0':'')+nM;
+      var msg2=LATE_SLEEP_TICK[Math.floor(Math.random()*LATE_SLEEP_TICK.length)].replace(/{time}/g,t2);
+      document.getElementById('fury-t').textContent='Ticking lights out at '+t2+'?';
+      document.getElementById('fury-b').textContent=msg2;
+      document.getElementById('m-fury').classList.add('show');
+      // Still proceed to save after showing
+    }
   }
+  // If marking not-done, auto-open note modal
+  if(!done){
+    state.todayH[hid]={completed:false,note:hstate.note||'',declared:true};
+    try{await sb('habit_logs','POST',{user_id:me,logged_date:state.viewDate,habit_id:hid,completed:false,note:hstate.note||null});}catch(e){}
+    updateHabitCard(hid);
+    openNoteFail(hid);
+    return;
+  }
+  state.todayH[hid]={completed:true,note:hstate.note||'',declared:true};
+  try{await sb('habit_logs','POST',{user_id:me,logged_date:state.viewDate,habit_id:hid,completed:true,note:hstate.note||null});}catch(e){}
+  updateHabitCard(hid);
+  var allHabs=allHabitsForUser().filter(function(h){return isActiveOnDate(h.id,state.viewDate);});
+  var allDone=allHabs.every(function(h){var s=state.todayH[h.id];return s&&s.completed;});
+  if(allDone){celebrate('all_done');}
+  else if(done){celebrate('habit',card);}
 }
 
 // ── NOTES ─────────────────────────────────────────────────────────
@@ -1019,7 +1091,25 @@ function openNote(hid,done){
   state.pendingNote={hid:hid,done:done};
   var h=allHabitsForUser().find(function(x){return x.id===hid;})||{};
   document.getElementById('note-title').textContent='Note — '+habitName(h,me);
-  document.getElementById('note-sub').textContent=done?'Well done. Add context if you like.':'Why not? Be honest with yourself.';
+  document.getElementById('note-sub').textContent=done?'Nice work. Add context if you like.':'Be honest — your peers will see this.';
+  var existing=(state.todayH[hid]&&state.todayH[hid].note)||'';
+  document.getElementById('note-inp').value=existing;
+  document.getElementById('m-note').classList.add('show');
+  setTimeout(function(){document.getElementById('note-inp').focus();},300);
+}
+function openNoteFail(hid){
+  state.pendingNote={hid:hid,done:false};
+  var h=allHabitsForUser().find(function(x){return x.id===hid;})||{};
+  var prompts=[
+    'What happened? Your teammates can see this.',
+    'Not done — own it. What got in the way?',
+    'Missed this one. Tell the group why.',
+    'This is the uncomfortable bit. What is your reason?',
+    'Your peers will see this note. Make it honest.',
+  ];
+  var prompt=prompts[Math.floor(Math.random()*prompts.length)];
+  document.getElementById('note-title').textContent='Not done — '+habitName(h,me);
+  document.getElementById('note-sub').textContent=prompt;
   var existing=(state.todayH[hid]&&state.todayH[hid].note)||'';
   document.getElementById('note-inp').value=existing;
   document.getElementById('m-note').classList.add('show');
@@ -1035,7 +1125,7 @@ async function saveNote(){
   try{
     await sb('habit_logs','POST',{user_id:me,logged_date:state.viewDate,habit_id:hid,completed:state.todayH[hid].completed,note:note||null});
   }catch(e){}
-  renderHabits();
+  updateHabitCard(hid);
   toast('Note saved.');
 }
 
@@ -1081,7 +1171,10 @@ async function logWeightToday(){
       try{await sb('habit_logs','POST',{user_id:me,logged_date:state.viewDate,habit_id:'weigh',completed:true,note:null});}catch(e){}
       renderHabits();
     }
-    toast(v.toFixed(1)+' kg logged.');
+    // Check if weight is down
+    var prevW=state.weightLogs.find(function(w){return w.logged_date!==state.viewDate;});
+    if(prevW&&v<prevW.weight_kg){celebrate('weight_down');}
+    else toast(v.toFixed(1)+' kg logged.');
   }catch(e){toast('Error: '+e.message.slice(0,60));}
 }
 async function logWeight(date){
@@ -1235,10 +1328,7 @@ function renderWormChart(){
 // ── TEAM / LEADERBOARD ────────────────────────────────────────────
 async function loadTeam(){
   var lbBody=document.getElementById('lb-body');
-  var memList=document.getElementById('mem-list');
   lbBody.innerHTML='<div class="spin"></div>';
-  memList.innerHTML='';
-  USER_ORDER.forEach(function(){var sk=document.createElement('div');sk.className='tskel';memList.appendChild(sk);});
   try{
     var weekAgo=new Date();weekAgo.setDate(weekAgo.getDate()-6);
     var wStart=localDate(weekAgo);
@@ -1318,7 +1408,7 @@ async function loadTeam(){
     scores.forEach(function(s,i){
       var usr=USERS[s.uid];
       var barColor=s.score>=70?'var(--gr)':s.score>=45?'#C4773A':'var(--re)';
-      var row=document.createElement('div');row.className='lb-row';
+      var row=document.createElement('div');row.className='lb-row';row.dataset.uid=s.uid;
       row.innerHTML='<div class="lb-rank">'+(medals[i]||i+1)+'</div>'
         +'<div class="lb-av" style="background:'+usr.color+'">'+usr.initials+'</div>'
         +'<div class="lb-info">'
@@ -1332,37 +1422,10 @@ async function loadTeam(){
       lbBody.appendChild(row);
     });
 
-    // Member cards
-    memList.innerHTML='';
-    USER_ORDER.forEach(function(uid){
-      var usr=USERS[uid];
-      var sc=scores.find(function(s){return s.uid===uid;})||{nips:0,isAFD:false,todayH:[],uw:[]};
-      var uw2=sc.uw;var latest3=uw2[0];
-      var nips3=sc.nips;var isAFD3=sc.isAFD;
-      var lost3=latest3?+(usr.startKg-latest3.weight_kg).toFixed(1):null;
-      var daysSince=latest3?dBetween(latest3.logged_date,ts()):null;
-      var nipCap=usr.drinksCap||4;
-      var nipC=isAFD3?'var(--gd)':nips3>nipCap?'var(--re)':nips3===nipCap?'var(--am)':'var(--gd)';
-      var nipBg=isAFD3?'var(--gl)':nips3>nipCap?'var(--rl)':nips3===nipCap?'var(--al)':'var(--gl)';
-      var nipTxt=isAFD3?'AFD':nips3+' nips';
-      var absent=daysSince!==null&&daysSince>1?' · '+daysSince+'d absent':'';
-      var statsTxt=(latest3?latest3.weight_kg+' kg':'No weight')+
-        (lost3&&lost3>0?' · ↓'+lost3.toFixed(1)+'kg':'')+
-        ' · '+sc.todayH.length+'/'+HABITS.filter(function(h){return isActiveOnDate(h.id,ts());}).length+' today'+absent;
-      var dots=HABITS.filter(function(h){return isActiveOnDate(h.id,ts());}).map(function(h){
-        return '<div class="mdot" style="background:'+(sc.todayH.some(function(x){return x.habit_id===h.id;})?usr.color:'var(--bo)')+'"></div>';
-      }).join('');
-      var card=document.createElement('div');card.className='mcard';
-      card.innerHTML='<div class="mav" style="background:'+usr.color+'">'+usr.initials+'</div>'
-        +'<div style="flex:1;min-width:0">'
-        +'<div style="display:flex;align-items:center;gap:6px;margin-bottom:2px">'
-        +'<div class="mname">'+usr.name+'</div>'
-        +'<span class="mbadge" style="background:'+nipBg+';color:'+nipC+'">'+nipTxt+'</span></div>'
-        +'<div class="mstats">'+statsTxt+'</div>'
-        +'<div class="mdots">'+dots+'</div></div>'
-        +'<div style="color:var(--bo);font-size:18px;margin-left:6px">›</div>';
-      card.onclick=function(){openProfile(uid);};
-      memList.appendChild(card);
+    // Make leaderboard rows tappable
+    lbBody.querySelectorAll('.lb-row').forEach(function(row){
+      row.style.cursor='pointer';
+      row.addEventListener('click',function(){openProfile(row.dataset.uid);});
     });
   }catch(e){lbBody.innerHTML='<div class="empty">Could not load</div>';console.error(e);}
 }
@@ -1428,9 +1491,25 @@ function renderSettings(){
     +'<div style="font-family:var(--sm);font-size:11px;color:var(--mi);margin-top:2px">Your personal settings</div></div>';
   body.appendChild(hdr);
 
+  // Health profile FIRST
+  var healthCard=document.createElement('div');healthCard.className='scard';
+  var a=getAge(usr.dob);
+  healthCard.innerHTML='<div class="scard-head">Health profile</div>'
+    +'<div class="srow"><div><div class="srow-label">Date of birth</div><div class="srow-sub">'+(a?'Age '+a:'Not set')+'</div></div><input type="date" class="inp" id="set-dob" style="width:auto" value="'+(usr.dob||'')+'"></div>'
+    +'<div class="srow"><div><div class="srow-label">Height (cm)</div></div><input class="inp-sm" type="number" id="set-height" value="'+(usr.height||'')+'" placeholder="175" inputmode="numeric" min="100" max="250" onchange="updateBMIPreview()"></div>'
+    +'<div class="scard-head" style="border-top:1px solid var(--bo)">Weight goal</div>'
+    +'<div class="srow"><div><div class="srow-label">Start weight (kg)</div><div class="srow-sub">With date — for trajectory accuracy</div></div><div style="display:flex;gap:5px;align-items:center"><input class="inp-sm" type="number" id="set-start" value="'+(usr.startKg||'')+'" step="0.1" inputmode="decimal" style="width:62px"><input type="date" class="inp" id="set-start-date" value="'+(usr.startDate||'2026-01-01')+'" style="font-size:11px;padding:7px 8px;width:130px"></div></div>'
+    +'<div class="srow"><div><div class="srow-label">Target weight (kg)</div></div><input class="inp-sm" type="number" id="set-target" value="'+(usr.targetKg||'')+'" step="0.1" inputmode="decimal"></div>'
+    +'<div class="srow"><div><div class="srow-label">Target date</div></div><input type="date" class="inp" id="set-tdate" style="width:auto" value="'+(usr.targetDate||'2026-07-14')+'"></div>'
+    +'<div id="bmi-section" style="padding:0 16px 12px"></div>';
+  body.appendChild(healthCard);
+  setTimeout(updateBMIPreview,50);
+
   // Weight goal
   body.appendChild(makeSettingsCard('Weight goal',[
-    makeSettingsRow('Start weight (kg)','<input class="inp-sm" type="number" id="set-start" value="'+(usr.startKg||'')+'" step="0.1" inputmode="decimal">'),
+    makeSettingsRow('Start weight (kg)','<div style="display:flex;gap:6px;align-items:center"><input class="inp-sm" type="number" id="set-start" value="'+(usr.startKg||'')+' " step="0.1" inputmode="decimal" style="width:70px"><input type="date" class="inp" id="set-start-date" value="'+(usr.startDate||usr.targetDate||'2026-01-01')+'" style="font-size:12px;padding:8px 10px"></div>'),
+    makeSettingsRow('About start weight','<div style="font-family:var(--sm);font-size:11px;color:var(--mi);line-height:1.6;max-width:200px">Set the date you started so the trajectory calculates correctly. Lost weight before joining? Enter that earlier weight and date.</div>'),
+
     makeSettingsRow('Target weight (kg)','<input class="inp-sm" type="number" id="set-target" value="'+(usr.targetKg||'')+'" step="0.1" inputmode="decimal">'),
     makeSettingsRow('Target date','<input type="date" class="inp" id="set-tdate" style="width:auto" value="'+(usr.targetDate||'2026-07-14')+'">'),
   ]));
@@ -1458,13 +1537,14 @@ function renderSettings(){
         +'<input class="day-input" type="number" id="set-steps-'+i+'" value="'+val+'" placeholder="–" inputmode="numeric" min="1000" max="20000"></div>';
     }).join('')
     +'</div>'
-    +'<div style="font-family:var(--sm);font-size:10px;color:var(--mi);padding:4px 0 8px">Leave blank to use default</div></div>';
+    +'<div id="set-steps-sci" style="font-size:12px;line-height:1.65;padding:10px 12px;border-radius:var(--rs);background:var(--wm);color:var(--mi);margin:0 0 8px"></div>'
+    +'<div style="font-family:var(--sm);font-size:10px;color:var(--mi);padding:4px 0 8px">Leave blank to use default for that day</div></div>';
   body.appendChild(stepsCard);
 
   // Drinks per day
   var drinksCard=document.createElement('div');drinksCard.className='scard';
   drinksCard.innerHTML='<div class="scard-head">Drinks cap per day</div>'
-    +'<div style="padding:10px 16px 4px"><div style="font-family:var(--sm);font-size:11px;color:var(--mi);margin-bottom:10px">Set -1 or type AFD for alcohol free days</div>'
+    +'<div style="padding:10px 16px 4px"><div style="font-family:var(--sm);font-size:11px;color:var(--mi);margin-bottom:10px">0 = Alcohol Free Day. Slide to set your default, then customise each day below.</div>'
     +'<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">'
     +'<span style="font-family:var(--sm);font-size:11px;color:var(--mi);min-width:60px">Default</span>'
     +'<input type="range" min="0" max="12" step="1" id="set-drinks-range" value="'+(usr.drinksCap||4)+'" style="flex:1" oninput="document.getElementById(\'set-drinks-val\').textContent=parseInt(this.value)">'
@@ -1473,12 +1553,13 @@ function renderSettings(){
     +'<div class="day-grid">'
     +DAY_FULL.map(function(d,i){
       var dc=state.dayConfig[i];
-      var val=dc&&dc.drinksCap!=null?(dc.drinksCap===-1?'AFD':dc.drinksCap):'';
+      var val=dc&&dc.drinksCap!=null?dc.drinksCap:'';
       return '<div class="day-cell"><div class="day-cell-lbl">'+d+'</div>'
-        +'<input class="day-input" id="set-drinks-'+i+'" value="'+val+'" placeholder="–"></div>';
+        +'<input class="day-input" type="number" id="set-drinks-'+i+'" value="'+val+'" placeholder="–" min="0" max="22" inputmode="numeric"></div>';
     }).join('')
     +'</div>'
-    +'<div style="font-family:var(--sm);font-size:10px;color:var(--mi);padding:4px 0 8px">Leave blank to use default. Type AFD for alcohol free day.</div></div>';
+    +'<div id="set-drinks-sci" style="font-size:12px;line-height:1.65;padding:10px 12px;border-radius:var(--rs);background:var(--wm);color:var(--mi);margin:0 0 8px"></div>'
+    +'<div style="font-family:var(--sm);font-size:10px;color:var(--mi);padding:4px 0 8px">0 = Alcohol Free Day. Leave blank to use default.</div></div>';
   body.appendChild(drinksCard);
 
   // Custom habits
@@ -1500,6 +1581,7 @@ function renderSettings(){
   var swBtn=document.createElement('button');swBtn.className='btn-sec';swBtn.style.width='100%';
   swBtn.textContent='Switch user';swBtn.onclick=switchUser;
   body.appendChild(swBtn);
+  var sp=document.createElement('div');sp.className='nav-spacer';body.appendChild(sp);
 }
 function makeSettingsCard(title,rows){
   var card=document.createElement('div');card.className='scard';
@@ -1572,16 +1654,238 @@ async function saveSettings(){
     var si=document.getElementById('set-steps-'+i);
     var di=document.getElementById('set-drinks-'+i);
     var sv=si?parseInt(si.value)||null:null;
-    var dv=di?(di.value.toUpperCase()==='AFD'?-1:(parseInt(di.value)||null)):null;
+    var dv=di&&di.value!==''?parseInt(di.value)||0:null;
     if(sv!==null||dv!==null){
       try{await sb('user_day_config','POST',{user_id:me,day_of_week:i,steps_target:sv,drinks_cap:dv});}catch(e){}
       if(!state.dayConfig[i])state.dayConfig[i]={};
       state.dayConfig[i].steps=sv;state.dayConfig[i].drinksCap=dv;
     }
   }
-  try{await sb('users','POST',{id:me,target_kg:targetKg,start_kg:startKg,target_date:targetDate,daily_steps:steps,wake_time:wake,lights_out:lo,drinks_cap:drinksCap});}catch(e){}
+  var startDateEl=document.getElementById('set-start-date');
+  var startDate=startDateEl?startDateEl.value:usr.startDate;
+  if(startDate)usr.startDate=startDate;
+  var dobEl=document.getElementById('set-dob');
+  var heightEl=document.getElementById('set-height');
+  var dob=dobEl?dobEl.value:usr.dob;
+  var height=heightEl?parseInt(heightEl.value)||usr.height:usr.height;
+  if(dob)usr.dob=dob;if(height)usr.height=height;
+  try{await sb('users','POST',{id:me,target_kg:targetKg,start_kg:startKg,target_date:targetDate,daily_steps:steps,wake_time:wake,lights_out:lo,drinks_cap:drinksCap,dob:dob||null});}catch(e){}
   renderDrinks();renderHero();
-  toast('Settings saved.');
+  toast('Settings saved ✓');
+}
+
+// ── SETTINGS SCIENCE ─────────────────────────────────────────────
+function updateStepsSci(v){
+  var el=document.getElementById('set-steps-sci');if(!el)return;
+  if(v<4000){el.style.background='var(--rl)';el.style.color='var(--re)';el.textContent=v.toLocaleString()+' steps/day is sedentary. Below 5,000 steps/day, visceral fat accumulates faster, cardiovascular risk rises, and insulin resistance worsens. The body was built to move.';}
+  else if(v<6000){el.style.background='var(--al)';el.style.color='var(--am)';el.textContent=v.toLocaleString()+' steps/day puts you in the active range, but below the threshold where fat loss compounds meaningfully. Consider stretching the target.';}
+  else if(v<8000){el.style.background='var(--gl)';el.style.color='var(--gd)';el.textContent=v.toLocaleString()+' steps/day — solid. At this level visceral fat responds measurably, insulin sensitivity improves, and resting metabolic rate stays elevated through the day.';}
+  else if(v<10000){el.style.background='var(--gl)';el.style.color='var(--gd)';el.textContent=v.toLocaleString()+' steps/day — excellent. Associated with significantly better cardiovascular outcomes and sustained fat loss independent of structured exercise.';}
+  else{el.style.background='var(--gl)';el.style.color='var(--gd)';el.textContent=v.toLocaleString()+' steps/day is exceptional. Top percentile of daily movement. The metabolic and longevity data at this level is compelling.';}
+}
+function updateDrinksSci(v){
+  var el=document.getElementById('set-drinks-sci');if(!el)return;
+  if(v===0){el.style.background='var(--gl)';el.style.color='var(--gd)';el.textContent='Zero nips every day — your liver, sleep quality, fat metabolism and insulin sensitivity all operate at their best. The single highest-leverage change available to most people.';}
+  else if(v<=2){el.style.background='var(--gl)';el.style.color='var(--gd)';el.textContent=v+' nips/day is a genuinely disciplined target. At this level fat oxidation impact is minimal and sleep quality remains largely intact.';}
+  else if(v<=4){el.style.background='var(--wm)';el.style.color='var(--mi)';el.textContent=v+' nips/day — the working cap. Meaningful accountability without extreme restriction. Remember: a large wine glass is 3–5 nips. Count the pour, not the glass.';}
+  else if(v<=6){el.style.background='var(--al)';el.style.color='var(--am)';el.textContent=v+' nips/day will suppress fat oxidation for most of the day and disrupt sleep architecture. You can set this cap — but the science is clear on the cost.';}
+  else{el.style.background='var(--rl)';el.style.color='var(--re)';el.textContent=v+' nips/day is heavy drinking by clinical definition. This directly undermines every other habit in this app. If this is the honest number, that honesty is the first step — and reducing it is the next.';}
+}
+function updateBMIPreview(){
+  var hEl=document.getElementById('set-height');
+  var usr2=u();
+  if(!hEl)return;
+  var h=parseFloat(hEl.value)||usr2.height;
+  var wt=usr2.startKg;
+  var tgt=usr2.targetKg;
+  if(!h||!wt)return;
+  var hm=h/100;
+  var curBMI=+(wt/(hm*hm)).toFixed(1);
+  var tgtBMI=tgt?+(tgt/(hm*hm)).toFixed(1):null;
+  var adv=document.getElementById('bmi-section');if(!adv)return;
+  var lines=[];
+  lines.push('Current BMI: '+curBMI+' — '+(curBMI<18.5?'Underweight':curBMI<25?'Healthy weight':curBMI<30?'Overweight':'Obese'));
+  if(tgtBMI){
+    lines.push('Target BMI: '+tgtBMI+' — '+(tgtBMI<18.5?'Underweight':tgtBMI<25?'Healthy weight':tgtBMI<30?'Overweight':'Obese'));
+    if(tgtBMI<17){lines.push('⚠️ Target weight is clinically underweight. This goal carries serious health risk — reconsider.');}
+    else if(tgtBMI<18.5){lines.push('Note: target weight sits in the underweight range. BMI is imperfect — muscle mass, age and body composition all matter — but a target below 18.5 BMI warrants care.');}
+    else if(tgtBMI>=18.5&&tgtBMI<25){lines.push('Target weight is in the healthy BMI range. That said, body composition matters more than the number — maintaining muscle while losing fat is the goal.');}
+    else if(tgtBMI>=25){lines.push('Target weight is still in the overweight BMI range. That may be appropriate depending on your muscle mass — but consider whether the target is ambitious enough.');}
+  }
+  lines.push('Note: BMI is a rough population metric, not a personal verdict. It ignores muscle mass, age, ethnicity and body composition. Use it as one data point, not the whole picture.');
+  adv.innerHTML=lines.map(function(l){return '<div style="margin-bottom:4px">'+l+'</div>';}).join('');
+}
+
+
+// ── CELEBRATIONS ─────────────────────────────────────────────────
+var _audioCtx=null;
+function getAudioCtx(){
+  if(!_audioCtx)_audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+  return _audioCtx;
+}
+
+function playBing(){
+  // Pleasant single bing for habit tick
+  try{
+    var ctx=getAudioCtx();
+    var osc=ctx.createOscillator();
+    var gain=ctx.createGain();
+    osc.connect(gain);gain.connect(ctx.destination);
+    osc.type='sine';
+    osc.frequency.setValueAtTime(880,ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(1320,ctx.currentTime+0.06);
+    gain.gain.setValueAtTime(0.18,ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.5);
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime+0.5);
+  }catch(e){}
+}
+
+function playCheer(){
+  // Ascending chord + noise burst for big celebrations
+  try{
+    var ctx=getAudioCtx();
+    var t=ctx.currentTime;
+    [[523,0],[659,0.06],[784,0.12],[1047,0.2]].forEach(function(pair){
+      var osc=ctx.createOscillator();
+      var g=ctx.createGain();
+      osc.connect(g);g.connect(ctx.destination);
+      osc.type='sine';
+      osc.frequency.value=pair[0];
+      g.gain.setValueAtTime(0,t+pair[1]);
+      g.gain.linearRampToValueAtTime(0.15,t+pair[1]+0.05);
+      g.gain.exponentialRampToValueAtTime(0.001,t+pair[1]+0.7);
+      osc.start(t+pair[1]);
+      osc.stop(t+pair[1]+0.8);
+    });
+  }catch(e){}
+}
+
+function pulseElement(el){
+  // Gentle pulse on the card
+  if(!el)return;
+  el.style.transition='transform .15s cubic-bezier(.34,1.8,.64,1)';
+  el.style.transform='scale(1.03)';
+  setTimeout(function(){el.style.transform='scale(1)';},180);
+}
+
+function confettiBurst(colors,count){
+  count=count||22;
+  for(var i=0;i<count;i++){
+    (function(i){
+      setTimeout(function(){
+        var piece=document.createElement('div');
+        piece.className='confetti-piece';
+        piece.style.left=(15+Math.random()*70)+'%';
+        piece.style.top='15%';
+        piece.style.background=colors[Math.floor(Math.random()*colors.length)];
+        piece.style.width=(6+Math.random()*7)+'px';
+        piece.style.height=(6+Math.random()*7)+'px';
+        piece.style.borderRadius=Math.random()>0.5?'50%':'2px';
+        piece.style.animationDuration=(0.9+Math.random()*0.9)+'s';
+        document.body.appendChild(piece);
+        setTimeout(function(){piece.remove();},2000);
+      },i*30);
+    })(i);
+  }
+}
+
+function emojiBurst(emoji,x,y){
+  var el=document.createElement('div');
+  el.className='burst';
+  el.textContent=emoji;
+  el.style.left=(x||window.innerWidth/2-20)+'px';
+  el.style.top=(y||window.innerHeight*0.45)+'px';
+  document.body.appendChild(el);
+  setTimeout(function(){el.remove();},900);
+}
+
+function celebrate(type,targetEl){
+  if(type==='habit'){
+    // Subtle: bing + pulse only, no confetti
+    playBing();
+    pulseElement(targetEl);
+    return;
+  }
+  if(type==='all_done'){
+    playCheer();
+    confettiBurst(['#F5C518','#E87C26','#4A7A38','#5A3A8A','#fff'],28);
+    emojiBurst('🏆');
+    toast('All habits done. That is what execution looks like.');
+    return;
+  }
+  if(type==='afd'){
+    playCheer();
+    confettiBurst(['#4A7A38','#A8D4A0','#F5C518','#fff','#E8F4E2'],26);
+    emojiBurst('🎉');
+    toast('Alcohol free day. Bonus points. ☀️');
+    return;
+  }
+  if(type==='weight_down'){
+    playCheer();
+    confettiBurst(['#2A4A7A','#4A7A38','#5A3A8A','#A8D4A0','#fff'],24);
+    emojiBurst('📉');
+    toast('Weight down. The plan is working.');
+    return;
+  }
+}
+
+
+function checkLateNight(){
+  // Only run on today
+  if(state.viewDate!==ts())return;
+  var usr=u();
+  var lo=usr.lightsOut||'23:00';
+  var loParts=lo.split(':');
+  var loH=parseInt(loParts[0]);
+  var loM=parseInt(loParts[1]||0);
+  var now=new Date();
+  var nowH=now.getHours();var nowM=now.getMinutes();
+  var isPastLights=(nowH>loH)||(nowH===loH&&nowM>=loM)||(nowH<4);
+  if(!isPastLights)return;
+  var timeStr=nowH+':'+(nowM<10?'0':'')+nowM;
+  var sleepState=state.todayH['sleep']||{completed:false};
+  if(sleepState.completed){
+    // Already ticked but still awake — shame them
+    var msg=LATE_ALREADY_TICKED[Math.floor(Math.random()*LATE_ALREADY_TICKED.length)].replace(/{time}/g,timeStr);
+    document.getElementById('fury-t').textContent='Still awake?';
+    document.getElementById('fury-b').textContent=msg;
+    document.getElementById('m-fury').classList.add('show');
+  }
+}
+
+// ── UPDATE SINGLE HABIT CARD (no scroll jump) ────────────────────
+function updateHabitCard(hid){
+  var card=document.getElementById('hcard-'+hid);
+  if(!card){renderHabits();return;}
+  var h=allHabitsForUser().find(function(x){return x.id===hid;});
+  if(!h)return;
+  var hstate=state.todayH[hid]||{completed:false,note:'',declared:false};
+  var done=hstate.completed;
+  var declared=hstate.declared===true;
+  var notDone=declared&&!done;
+  var hcolor=h.color||'#4A7A38';
+  var GR='#4A7A38';var RE='#8A2A2A';
+  if(done){card.style.background=hcolor+'15';card.style.borderColor=hcolor+'30';}
+  else if(notDone){card.style.background='var(--rl)';card.style.borderColor='rgba(138,42,42,.2)';}
+  else{card.style.background='';card.style.borderColor='';}
+  var tickBtn=card.querySelector('.hbtn-tick');
+  var crossBtn=card.querySelector('.hbtn-cross');
+  if(tickBtn){
+    if(done){tickBtn.style.background=GR;tickBtn.style.border='2px solid '+GR;tickBtn.innerHTML='<svg width="13" height="13" viewBox="0 0 13 13" fill="none"><polyline points="2,6.5 5.5,10 11,3" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';}
+    else{tickBtn.style.background='transparent';tickBtn.style.border='1.5px solid '+GR;tickBtn.innerHTML='<svg width="13" height="13" viewBox="0 0 13 13" fill="none"><polyline points="2,6.5 5.5,10 11,3" stroke="'+GR+'" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';}
+  }
+  if(crossBtn){
+    if(notDone){crossBtn.style.background=RE;crossBtn.style.border='2px solid '+RE;crossBtn.innerHTML='<svg width="11" height="11" viewBox="0 0 11 11" fill="none"><line x1="2" y1="2" x2="9" y2="9" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><line x1="9" y1="2" x2="2" y2="9" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg>';}
+    else{crossBtn.style.background='transparent';crossBtn.style.border='1.5px solid '+RE;crossBtn.innerHTML='<svg width="11" height="11" viewBox="0 0 11 11" fill="none"><line x1="2" y1="2" x2="9" y2="9" stroke="'+RE+'" stroke-width="1.8" stroke-linecap="round"/><line x1="9" y1="2" x2="2" y2="9" stroke="'+RE+'" stroke-width="1.8" stroke-linecap="round"/></svg>';}
+  }
+  var nameEl=card.querySelector('.h-name');
+  if(nameEl)nameEl.style.color=done?'var(--mi)':notDone?'var(--re)':'';
+  var existingNote=card.querySelector('.h-note-dyn');
+  if(hstate.note){
+    if(!existingNote){existingNote=document.createElement('div');existingNote.className='h-note-dyn';existingNote.style.cssText='font-size:12px;color:var(--re);font-style:italic;margin-top:3px';var info=card.querySelector('.h-info');if(info)info.appendChild(existingNote);}
+    existingNote.textContent='📝 '+hstate.note;
+  }else if(existingNote){existingNote.remove();}
 }
 
 // ── INIT ──────────────────────────────────────────────────────────
@@ -1594,6 +1898,7 @@ async function initApp(){
   await loadDayData();
   renderHero();
   renderToday();
+  setTimeout(checkLateNight,1500);// Check after render
   var bd=document.getElementById('bd-date');if(bd)bd.value=ts();
 }
 
